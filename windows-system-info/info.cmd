@@ -1,0 +1,1 @@
+type info.ps1 | powershell -OutputFormat Text -Command -
