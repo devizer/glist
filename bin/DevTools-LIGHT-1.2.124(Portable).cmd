@@ -1,0 +1,1 @@
+start https://raw.githubusercontent.com/devizer/glist/master/bin/DevTools-LIGHT-1.2.124(Portable).exe
