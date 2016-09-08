@@ -1,1 +1,1 @@
-https://raw.githubusercontent.com/devizer/glist/master/bin/DevTools-LIGHT(Portable).exe
+https://raw.githubusercontent.com/devizer/glist/master/bin/AdvTools-LIGHT(Portable).exe
