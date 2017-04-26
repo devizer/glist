@@ -1,0 +1,2 @@
+echo This cmd removes Hyper-V Hypervisor and Platforms, but does not affect Hyper-V GUI managment tools and PowerShell module
+echo Disable-WindowsOptionalFeature -Online -FeatureName "Microsoft-Hyper-V" -NoRestart | powershell -command -
