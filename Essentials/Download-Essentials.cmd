@@ -1,2 +1,2 @@
-rd /q /s %SystemDrive%\Temp\Essentials
+rd /q /s "%LocalAppData%\Temp\Essentials"
 powershell -File Download-Essentials.ps1 
