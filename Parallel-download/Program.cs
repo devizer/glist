@@ -15,7 +15,8 @@ internal class Program
         protected override WebRequest GetWebRequest(Uri uri)
         {
             WebRequest w = base.GetWebRequest(uri);
-            w.Timeout = 180 * 1000;
+            w.Timeout = 240 * 1000;
+            w.Proxy = WebProxy.GetDefaultProxy();
             return w;
         }
     }
@@ -37,7 +38,9 @@ internal class Program
         }
         catch (Exception ex)
         {
-            Write("Wrong arguments: " + Environment.NewLine + ex);
+            Write("Wrong arguments: " + Environment.NewLine + ex + 
+                Environment.NewLine + "USAGE: Parallel-Download.exe <target\folder> url1 url2 url3 ...");
+
             return 9999;
         }
     }
@@ -50,6 +53,8 @@ internal class Program
             Directory.CreateDirectory(TargetDir);
         }
         catch { }
+
+        Write("Target Dir: [{0}], {1}", TargetDir, Directory.Exists(TargetDir) ? "OK" : "Can't be created");
 
         List<string> urls = new List<string>();
         for (int i = 1; i < args.Length; i++) urls.Add(args[i]);

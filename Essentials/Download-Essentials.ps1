@@ -1,7 +1,8 @@
 $files=$("Essentials.7z.exe")
 $baseUrl="https://raw.githubusercontent.com/devizer/glist/master/Essentials/"
-$Temp="$($Env:LocalAppData)"
-$Essentials="$Temp\Temp\Essentials"
+$Temp="$($Env:LocalAppData)"; if ($Temp -eq "") { $Temp="$($Env:UserProfile)"; }
+$Temp="$Temp\Temp"
+$Essentials="$Temp\Essentials"
 Write-Host "Essentials folder: $Essentials"
 New-Item $Essentials -type directory -force -EA SilentlyContinue | out-null
 [System.Net.ServicePointManager]::ServerCertificateValidationCallback={$true};
@@ -12,4 +13,5 @@ pushd $Essentials
 cmd /c Essentials.7z.exe -y
 ri Essentials.7z.exe
 popd
-# Done: Essentials
+$_7_Zip="$Essentials\x64\7z.exe";  if ( -Not ("$($Env:PROCESSOR_ARCHITECTURE)" -eq "AMD64")) { $_7_Zip="$Essentials\x86\7z.exe"; }
+Write-Host "Architecture: $($Env:PROCESSOR_ARCHITECTURE). 7-Zip: $_7_Zip";
