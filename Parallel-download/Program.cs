@@ -98,7 +98,7 @@ internal class Program
 
             Thread t = new Thread(delegate (object o)
             {
-                if (position > 0) Thread.Sleep(position * 1200);
+                if (position > 0) Thread.Sleep(position * 800);
                 Stopwatch swThis = Stopwatch.StartNew();
                 Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
                 string targetFile = Path.Combine(TargetDir, Path.GetFileName(url));
