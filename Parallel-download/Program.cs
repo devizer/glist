@@ -70,7 +70,7 @@ internal class Program
         int retryNumer = 0;
         while (urls.Count > 0 && retryNumer < args.Length)
         {
-            if (retryNumer > 0) Write(Kind.Error, "{1}RETRY: {0}", retryNumer, Environment.NewLine);
+            if (retryNumer > 0) Write(Kind.Error, "RETRY: {0}", retryNumer);
             int prev = urls.Count;
             TryDownload(urls);
             int next = urls.Count;
