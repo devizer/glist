@@ -3,7 +3,7 @@ $baseUrl="https://raw.githubusercontent.com/devizer/glist/master/Essentials/"
 $Temp="$($Env:LocalAppData)"; if ($Temp -eq "") { $Temp="$($Env:UserProfile)"; }
 $Temp="$Temp\Temp"
 $Essentials="$Temp\Essentials"
-Write-Host "Essentials folder: $Essentials"
+Write-Host "Essentials folder: [$Essentials]" -foregroundcolor "magenta"
 New-Item $Essentials -type directory -force -EA SilentlyContinue | out-null
 [System.Net.ServicePointManager]::ServerCertificateValidationCallback={$true};
 foreach($file in $files) {
@@ -14,7 +14,7 @@ pushd $Essentials
 ri Essentials.7z.exe
 popd
 $_7_Zip="$Essentials\x64\7z.exe";  if ( -Not ("$($Env:PROCESSOR_ARCHITECTURE)" -eq "AMD64")) { $_7_Zip="$Essentials\x86\7z.exe"; }
-Write-Host "Architecture: $($Env:PROCESSOR_ARCHITECTURE). 7-Zip: $_7_Zip";
+Write-Host "Architecture: $($Env:PROCESSOR_ARCHITECTURE). 7-Zip: [$_7_Zip]" -foregroundcolor "magenta"; 
 
 
 # Done: Essentials
@@ -27,8 +27,8 @@ ri SQL-Express-2005-SP4-x86.7z*
 popd
 
 Write-Host "Installing .NET 3.5 and 4.5"
-Add-WindowsFeature Net-Framework-Core
-Add-WindowsFeature NET-Framework-45-Core
+Add-WindowsFeature Net-Framework-Core -EA SilentlyContinue
+Add-WindowsFeature NET-Framework-45-Core -EA SilentlyContinue
 pushd $Env:windir\microsoft.net
 Framework64\v2.0.50727\ngen.exe  queue pause
 Framework64\v4.0.30319\ngen.exe  queue pause

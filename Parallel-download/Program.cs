@@ -98,7 +98,7 @@ internal class Program
 
             Thread t = new Thread(delegate (object o)
             {
-                if (position > 0) Thread.Sleep(position * 800);
+                if (position > 1) Thread.Sleep((position-1) * 300);
                 Stopwatch swThis = Stopwatch.StartNew();
                 Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
                 string targetFile = Path.Combine(TargetDir, Path.GetFileName(url));
@@ -211,19 +211,33 @@ internal class Program
     {
         lock (Sync)
         {
-            ConsoleColor prevColor = Console.ForegroundColor;
-            ConsoleColor newColor = ConsoleColor.Gray;
-            if (kind == Kind.Bold) newColor = ConsoleColor.White;
-            if (kind == Kind.Error) newColor = ConsoleColor.Red;
-            if (kind == Kind.Done) newColor = ConsoleColor.Green;
+            /*
+                        ConsoleColor prevColor = Console.ForegroundColor;
+                        ConsoleColor newColor = ConsoleColor.Gray;
+                        if (kind == Kind.Bold) newColor = ConsoleColor.White;
+                        if (kind == Kind.Error) newColor = ConsoleColor.Red;
+                        if (kind == Kind.Done) newColor = ConsoleColor.Green;
 
-            Console.ForegroundColor = ConsoleColor.DarkGray;
+                        Console.ForegroundColor = ConsoleColor.DarkGray;
+                        var seconds = new DateTime(0).AddSeconds(Sw.Elapsed.TotalSeconds).ToString("H:mm:ss.f");
+                        Console.Write("{0,12} ", seconds);
+
+                        Console.ForegroundColor = newColor;
+                        Console.WriteLine("{0}", msg);
+                        Console.ForegroundColor = prevColor;
+            */
+
+            ConsoleColor prevColor = Console.ForegroundColor;
+            ConsoleColor newColor = ColorConsole.GetColor(kind);
+
+            Console.ForegroundColor = (Console.BackgroundColor == ConsoleColor.DarkGray) ? ConsoleColor.Gray: ConsoleColor.DarkGray;
             var seconds = new DateTime(0).AddSeconds(Sw.Elapsed.TotalSeconds).ToString("H:mm:ss.f");
             Console.Write("{0,12} ", seconds);
 
             Console.ForegroundColor = newColor;
             Console.WriteLine("{0}", msg);
             Console.ForegroundColor = prevColor;
+
         }
     }
 
@@ -246,13 +260,87 @@ internal class Program
         }
     }
 
-    enum Kind
-    {
-        Progress,
-        Done,
-        Error,
-        Bold,
-    }
 }
 
+public enum Kind
+{
+    Progress,
+    Done,
+    Error,
+    Bold,
+}
 
+public class ColorConsole 
+{
+
+
+
+    public static ConsoleColor GetColor(Kind style)
+    {
+        ConsoleColor color = GetColorForStyle(style);
+        ConsoleColor bg = Console.BackgroundColor;
+
+        if (color == bg || color == ConsoleColor.Red && bg == ConsoleColor.Magenta)
+            return bg == ConsoleColor.Black
+                ? ConsoleColor.White
+                : ConsoleColor.Black;
+
+        return color;
+    }
+
+    private static ConsoleColor GetColorForStyle(Kind style)
+    {
+        switch (Console.BackgroundColor)
+        {
+            case ConsoleColor.White:
+                switch (style)
+                {
+                    case Kind.Bold:
+                        return ConsoleColor.Black;
+                    case Kind.Done:
+                        return ConsoleColor.Green;
+                    case Kind.Error:
+                        return ConsoleColor.Red;
+                    case Kind.Progress:
+                        return ConsoleColor.Black;
+                    default:
+                        return ConsoleColor.Black;
+                }
+
+            case ConsoleColor.Cyan:
+            case ConsoleColor.Green:
+            case ConsoleColor.Red:
+            case ConsoleColor.Magenta:
+            case ConsoleColor.Yellow:
+                switch (style)
+                {
+                    case Kind.Bold:
+                        return ConsoleColor.Black;
+                    case Kind.Done:
+                        return ConsoleColor.Black;
+                    case Kind.Error:
+                        return ConsoleColor.Red;
+                    case Kind.Progress:
+                        return ConsoleColor.Black;
+                    default:
+                        return ConsoleColor.Black;
+                }
+
+            default:
+                switch (style)
+                {
+                    case Kind.Bold:
+                        return ConsoleColor.White;
+                    case Kind.Done:
+                        return ConsoleColor.Green;
+                    case Kind.Error:
+                        return ConsoleColor.Red;
+                    case Kind.Progress:
+                        return ConsoleColor.Gray;
+                    default:
+                        return ConsoleColor.Gray;
+                }
+        }
+    }
+
+}
