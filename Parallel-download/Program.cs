@@ -85,16 +85,20 @@ internal class Program
         List<ManualResetEvent> dones = new List<ManualResetEvent>();
         Errors = new Dictionary<string, List<Exception>>();
         Finished = new Dictionary<string, object>();
-        string n = Environment.NewLine;
+        string nl = Environment.NewLine;
+        int pos = 0;
         foreach (string u in urls)
         {
             string url = u;
             ManualResetEvent done = new ManualResetEvent(false);
             dones.Add(done);
             LastProgress[url] = Sw.ElapsedMilliseconds;
+            pos++;
+            int position = pos;
 
             Thread t = new Thread(delegate (object o)
             {
+                if (position > 0) Thread.Sleep(position * 1200);
                 Stopwatch swThis = Stopwatch.StartNew();
                 Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
                 string targetFile = Path.Combine(TargetDir, Path.GetFileName(url));
@@ -190,7 +194,7 @@ internal class Program
             {
                 Write(" **** " + url);
                 foreach (Exception exception in Errors[url])
-                    Write(exception + n);
+                    Write(exception + nl);
 
                 Write("");
             }
