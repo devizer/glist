@@ -41,9 +41,10 @@ popd
 
 $target="C:\SQL"
 pushd "$temp\SQL-Express-2008-x64"
-cmd /c setup.exe /QS /Action=Install /ADDCURRENTUSERASSQLADMIN /FEATURES=SQLENGINE /INSTANCENAME=SQL2008RTM /SECURITYMODE=SQL /SAPWD=``1qazxsw2 /TCPENABLED=1 /NPENABLED=1 /INDICATEPROGRESS  /SQLSVCACCOUNT="NT AUTHORITY\SYSTEM" /INSTANCEDIR="$target" /SQLSYSADMINACCOUNTS="BUILTIN\ADMINISTRATORS"
+# 2008 RTM QS setup fails, but fully quiet works fine!
+cmd /c setup.exe /Q /Action=Install /ADDCURRENTUSERASSQLADMIN /FEATURES=SQLENGINE /INSTANCENAME=SQL2008RTM /SECURITYMODE=SQL /SAPWD=``1qazxsw2 /TCPENABLED=1 /NPENABLED=1 /INDICATEPROGRESS  /SQLSVCACCOUNT="NT AUTHORITY\SYSTEM" /INSTANCEDIR="$target" /SQLSYSADMINACCOUNTS="BUILTIN\ADMINISTRATORS"
 popd
 
-Remove-Item -Recurse -Force "$temp\SQLEXPR-x86-ENU-2008-R2-SP2"
+Remove-Item -Recurse -Force "$temp\SQL-Express-2008-x64"
 $exe="$target\MSSQL10.SQL2008RTM\MSSQL\Binn\sqlservr.exe"
-& netsh firewall add allowedprogram `"$exe`" `"SQL Express 2008 x86`" ENABLE
+& netsh firewall add allowedprogram `"$exe`" `"SQL Express 2008 x64`" ENABLE
