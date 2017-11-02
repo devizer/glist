@@ -1,6 +1,6 @@
 $files=$("Essentials.7z.exe")
 $baseUrl="https://raw.githubusercontent.com/devizer/glist/master/Essentials/"
-$Temp="$($Env:LocalAppData)"
+$Temp="$($Env:LocalAppData)"; if ($Temp -eq "") { $Temp="$($Env:UserProfile)"; }
 $Essentials="$Temp\Temp\Essentials"
 Write-Host "Essentials folder: $Essentials"
 New-Item $Essentials -type directory -force -EA SilentlyContinue | out-null
@@ -20,9 +20,9 @@ foreach($part in @(1,2,3)) {
 }
 
 pushd $Temp
-cmd /c "$Essentials\Parallel-Download.exe" $pars
-cmd /c "$Essentials\x86\7z.exe" @("x", "-y", "SQLEXPR-x86-ENU-2008-R2-SP2.7z.exe.7z.001")
-cmd /c "$Essentials\x86\7z.exe" @("x", "-y", "SQLEXPR-x86-ENU-2008-R2-SP2.7z.exe")
+& "$Essentials\Parallel-Download.exe" $pars
+& "$Essentials\x86\7z.exe" @("x", "-y", "SQLEXPR-x86-ENU-2008-R2-SP2.7z.exe.7z.001")
+& "$Essentials\x86\7z.exe" @("x", "-y", "SQLEXPR-x86-ENU-2008-R2-SP2.7z.exe")
 ri SQLEXPR-x86-ENU-2008-R2-SP2.7z*
 popd
 
@@ -38,7 +38,7 @@ popd
 
 $target="C:\SQL"
 pushd "$temp\SQLEXPR-x86-ENU-2008-R2-SP2"
-cmd /c setup.exe /Action=Install /ADDCURRENTUSERASSQLADMIN /IACCEPTSQLSERVERLICENSETERMS /ENU /FEATURES=SQLENGINE /INSTANCENAME=SQL2008R2SP2 /SECURITYMODE=SQL /SAPWD=``1qazxsw2 /TCPENABLED=1 /NPENABLED=1 /INDICATEPROGRESS /QS /SQLSVCACCOUNT="NT AUTHORITY\SYSTEM" /INSTANCEDIR="$target" /SQLSYSADMINACCOUNTS="BUILTIN\ADMINISTRATORS"
+cmd /c .\setup.exe /Action=Install /ADDCURRENTUSERASSQLADMIN /IACCEPTSQLSERVERLICENSETERMS /ENU /FEATURES=SQLENGINE /INSTANCENAME=SQL2008R2SP2 /SECURITYMODE=SQL /SAPWD=``1qazxsw2 /TCPENABLED=1 /NPENABLED=1 /INDICATEPROGRESS /QS /SQLSVCACCOUNT="NT AUTHORITY\SYSTEM" /INSTANCEDIR="$target" /SQLSYSADMINACCOUNTS="BUILTIN\ADMINISTRATORS"
 popd
 
 Remove-Item -Recurse -Force "$temp\SQLEXPR-x86-ENU-2008-R2-SP2"

@@ -1,6 +1,6 @@
 $files=$("Essentials.7z.exe")
 $baseUrl="https://raw.githubusercontent.com/devizer/glist/master/Essentials/"
-$Temp="$($Env:LocalAppData)"
+$Temp="$($Env:LocalAppData)"; if ($Temp -eq "") { $Temp="$($Env:UserProfile)"; }
 $Essentials="$Temp\Temp\Essentials"
 Write-Host "Essentials folder: $Essentials"
 New-Item $Essentials -type directory -force -EA SilentlyContinue | out-null
@@ -14,11 +14,10 @@ ri Essentials.7z.exe
 popd
 # Done: Essentials
 
-$pars=@($Temp, "https://github.com/devizer/glist/raw/master/bin/sql-2005-SP4-x86/SQL-Express-2005-SP4-x86.7z.exe")
-
+$pars=@("`"$Temp`"", "https://github.com/devizer/glist/raw/master/bin/sql-2005-SP4-x86/SQL-Express-2005-SP4-x86.7z.exe")
 pushd $Temp
-cmd /c "$Essentials\Parallel-Download.exe" $pars
-cmd /c "$Essentials\x86\7z.exe" @("x", "-y", "SQL-Express-2005-SP4-x86.7z.exe")
+& "$Essentials\Parallel-Download.exe" $pars
+& "$Essentials\x86\7z.exe" @("x", "-y", "SQL-Express-2005-SP4-x86.7z.exe")
 ri SQL-Express-2005-SP4-x86.7z*
 popd
 
@@ -34,9 +33,9 @@ popd
 
 $target="C:\SQL"
 pushd "$temp\SQL-Express-2005-SP4-x86"
-cmd /c setup.exe /qb ADDLOCAL=SQL_Engine INSTANCENAME=SQL2005SP4 DISABLENETWORKPROTOCOLS=0 SECURITYMODE=SQL SAPWD=``1qazxsw2 INSTALLSQLDIR="$target"
+cmd /c .\setup.exe /qb ADDLOCAL=SQL_Engine INSTANCENAME=SQL2005SP4 DISABLENETWORKPROTOCOLS=0 SECURITYMODE=SQL SAPWD=``1qazxsw2 INSTALLSQLDIR="$target"
 popd
 
 Remove-Item -Recurse -Force "$temp\SQL-Express-2005-SP4-x86"
 $exe="$target\MSSQL.1\MSSQL\Binn\sqlservr.exe"
-cmd /c netsh firewall add allowedprogram `"$exe`" `"SQL Express 2005 SP4 x86`" ENABLE
+& netsh firewall add allowedprogram `"$exe`" `"SQL Express 2005 SP4 x86`" ENABLE
