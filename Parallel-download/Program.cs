@@ -321,7 +321,7 @@ public class ColorConsole
                     case Kind.Error:
                         return ConsoleColor.Red;
                     case Kind.Progress:
-                        return ConsoleColor.DarkGray;
+                        return ConsoleColor.Gray;
                     default:
                         return ConsoleColor.Black;
                 }
