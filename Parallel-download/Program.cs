@@ -10,12 +10,15 @@ using System.Threading;
 
 internal class Program
 {
+    private const int _TimeOut = 240;
+
     private class WReq : WebClient
     {
+
         protected override WebRequest GetWebRequest(Uri uri)
         {
             WebRequest w = base.GetWebRequest(uri);
-            w.Timeout = 240 * 1000;
+            w.Timeout = _TimeOut * 1000;
             w.Proxy = WebProxy.GetDefaultProxy();
             return w;
         }
@@ -32,6 +35,11 @@ internal class Program
     {
         Write("Downloader @ NET: " + Environment.Version);
         ServicePointManager.ServerCertificateValidationCallback += delegate { return true; };
+        var defaultConnectionLimit = Math.Max(args.Length-1, 2);
+        ServicePointManager.DefaultConnectionLimit = defaultConnectionLimit;
+        ServicePointManager.MaxServicePoints = defaultConnectionLimit;
+        ServicePointManager.MaxServicePointIdleTime = _TimeOut;
+
         try
         {
             return Exec(args);
@@ -39,7 +47,7 @@ internal class Program
         catch (Exception ex)
         {
             Write("Wrong arguments: " + Environment.NewLine + ex + 
-                Environment.NewLine + "USAGE: Parallel-Download.exe <target\folder> url1 url2 url3 ...");
+                Environment.NewLine + "USAGE: Parallel-Download.exe <target\\folder> url1 [url2] [url3] ...");
 
             return 9999;
         }
@@ -58,7 +66,6 @@ internal class Program
 
         List<string> urls = new List<string>();
         for (int i = 1; i < args.Length; i++) urls.Add(args[i]);
-        ServicePointManager.DefaultConnectionLimit = args.Length + 5;
 
         int retryNumer = 0;
         while (urls.Count > 0 && retryNumer < args.Length)
