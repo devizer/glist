@@ -33,7 +33,7 @@ internal class Program
 
     public static int Main(string[] args)
     {
-        Write("Downloader @ NET: " + Environment.Version);
+        Write(Kind.Progress,  "Downloader @ NET: {0}", Environment.Version);
         ServicePointManager.ServerCertificateValidationCallback += delegate { return true; };
         var defaultConnectionLimit = Math.Max(args.Length-1, 2);
         ServicePointManager.DefaultConnectionLimit = defaultConnectionLimit;
@@ -46,8 +46,8 @@ internal class Program
         }
         catch (Exception ex)
         {
-            Write("Wrong arguments: " + Environment.NewLine + ex + 
-                Environment.NewLine + "USAGE: Parallel-Download.exe <target\\folder> url1 [url2] [url3] ...");
+            Write(Kind.Error, "Wrong arguments: " + Environment.NewLine + ex);
+            Write(Kind.Bold, "USAGE: Parallel-Download.exe <target\\folder> url1 [url2] [url3] ...");
 
             return 9999;
         }
@@ -62,7 +62,7 @@ internal class Program
         }
         catch { }
 
-        Write("Target Dir: [{0}], {1}", TargetDir, Directory.Exists(TargetDir) ? "OK" : "Can't be created");
+        Write(Kind.Bold, "Target Dir: [{0}], {1}", TargetDir, Directory.Exists(TargetDir) ? "OK" : "Can't be created");
 
         List<string> urls = new List<string>();
         for (int i = 1; i < args.Length; i++) urls.Add(args[i]);
@@ -70,7 +70,7 @@ internal class Program
         int retryNumer = 0;
         while (urls.Count > 0 && retryNumer < args.Length)
         {
-            if (retryNumer > 0) Write("{1}RETRY: {0}", retryNumer, Environment.NewLine);
+            if (retryNumer > 0) Write(Kind.Error, "{1}RETRY: {0}", retryNumer, Environment.NewLine);
             int prev = urls.Count;
             TryDownload(urls);
             int next = urls.Count;
@@ -123,7 +123,7 @@ internal class Program
                                 TimeSpan eta = TimeSpan.FromSeconds(Math.Max(0, swThis.Elapsed.TotalSeconds / pc - swThis.Elapsed.TotalSeconds));
                                 p = string.Format(", {0:f0}% ETA {1}", pc * 100, eta);
                             }
-                            Write("{4} {0} of {1}K{2}: {3}", cur / 1024, tot / 1024, p, Path.GetFileName(url), inProgress);
+                            Write(Kind.Progress, "{4} {0} of {1}K{2}: {3}", cur / 1024, tot / 1024, p, Path.GetFileName(url), inProgress);
                             lock (Sync) LastProgress[url] = msec;
                         }
                     };
@@ -142,10 +142,10 @@ internal class Program
                         if (err != null)
                         {
                             AddError(url, err);
-                            Write("FAIL: " + targetFile);
+                            Write(Kind.Error, "FAIL: {0}", targetFile);
                             try
                             {
-                                File.WriteAllText(Path.GetFileNameWithoutExtension(targetFile) + ".DOWNLOAD ERROR.LOG", err.ToString());
+                                File.WriteAllText(Path.GetFileNameWithoutExtension(targetFile) + "(DOWNLOAD ERROR).LOG", err.ToString());
                             }
                             catch
                             {
@@ -159,19 +159,19 @@ internal class Program
                             }
                         }
                         else
-                            Write("OK: {0}", url);
+                            Write(Kind.Done, "OK: {0}", url);
 
                         lock (Sync) Finished[url] = null;
                         done.Set();
                     };
-                    Write("Started {0}", url);
+                    Write(Kind.Bold, "Started {0}", url);
                     wc.DownloadFileAsync(new Uri(url), targetFile);
                 }
                 catch (Exception ex)
                 {
                     Exception ex2 = new Exception("Failed to ENQUEUE " + url, ex);
                     AddError(url, ex2);
-                    Write(ex2.ToString());
+                    Write(Kind.Error, ex2.ToString());
                     done.Set();
                 }
                 finally
@@ -182,24 +182,24 @@ internal class Program
             t.Start();
         }
 
-        Write("{0} downloads started", dones.Count);
+        Write(Kind.Bold, "{0} downloads started", dones.Count);
         foreach (ManualResetEvent e in dones) e.WaitOne();
         if (Errors.Count > 0)
         {
-            Write("Errors details");
+            Write(Kind.Bold, "Errors details");
             string[] sorted = new string[Errors.Keys.Count];
             Errors.Keys.CopyTo(sorted, 0);
             Array.Sort(sorted);
             foreach (string url in sorted)
             {
-                Write(" **** " + url);
+                Write(Kind.Error, " **** {0}", url);
                 foreach (Exception exception in Errors[url])
-                    Write(exception + nl);
+                    Write(Kind.Error, "{0} {1}", exception, nl);
 
-                Write("");
+                Write(Kind.Progress, "");
             }
         }
-        Write("So Success: {0}, Failed: {1}", urls.Count - Errors.Count, Errors.Count);
+        Write(Kind.Bold, "So Success: {0}, Failed: {1}", urls.Count - Errors.Count, Errors.Count);
 
         foreach (string u in Finished.Keys)
             if (!Errors.ContainsKey(u))
@@ -207,14 +207,29 @@ internal class Program
 
     }
 
-    static void Write(string msg)
+    static void Write(Kind kind, string msg)
     {
-        lock (Sync) Console.WriteLine("{0} {1}", Sw.Elapsed, msg);
+        lock (Sync)
+        {
+            ConsoleColor prevColor = Console.ForegroundColor;
+            ConsoleColor newColor = ConsoleColor.Gray;
+            if (kind == Kind.Bold) newColor = ConsoleColor.White;
+            if (kind == Kind.Error) newColor = ConsoleColor.Red;
+            if (kind == Kind.Done) newColor = ConsoleColor.Green;
+
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            var seconds = new DateTime(0).AddSeconds(Sw.Elapsed.TotalSeconds).ToString("H:mm:ss.f");
+            Console.Write("{0,12} ", seconds);
+
+            Console.ForegroundColor = newColor;
+            Console.WriteLine("{0}", msg);
+            Console.ForegroundColor = prevColor;
+        }
     }
 
-    static void Write(string format, params object[] args)
+    static void Write(Kind kind, string format, params object[] args)
     {
-        Write(string.Format(format, args));
+        Write(kind, string.Format(format, args));
     }
 
     static void AddError(string url, Exception err)
@@ -229,6 +244,14 @@ internal class Program
             }
             list.Add(err);
         }
+    }
+
+    enum Kind
+    {
+        Progress,
+        Done,
+        Error,
+        Bold,
     }
 }
 

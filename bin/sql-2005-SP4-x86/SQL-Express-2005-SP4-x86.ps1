@@ -10,7 +10,7 @@ foreach($file in $files) {
  $d=new-object System.Net.WebClient; $d.DownloadFile("$baseurl/$file","$Essentials\$file");
 }
 pushd $Essentials
-cmd /c Essentials.7z.exe -y
+& .\Essentials.7z.exe -y
 ri Essentials.7z.exe
 popd
 $_7_Zip="$Essentials\x64\7z.exe";  if ( -Not ("$($Env:PROCESSOR_ARCHITECTURE)" -eq "AMD64")) { $_7_Zip="$Essentials\x86\7z.exe"; }
