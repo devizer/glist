@@ -33,7 +33,8 @@ pushd "$Env:windir\microsoft.net"
 popd
 
 pushd "$temp\LocalDB-Installer"
-msiexec /i SQL-LocalDB-$suffix.MSI IACCEPTSQLLOCALDBLICENSETERMS=YES /qn /L*v SqlLocaLDB-$suffix.log
+Write-Host "Installing SQL-LocalDB-$suffix.MSI ..."
+msiexec /i "SQL-LocalDB-$suffix.MSI" IACCEPTSQLLOCALDBLICENSETERMS=YES /qn /L*v SqlLocaLDB-$suffix.log
 popd
 
 Remove-Item -Force "$temp\LocalDB-Installer\*.MSI"
