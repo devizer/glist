@@ -1,1 +1,0 @@
-msiexec /i SqlLocaLDB-v11-x86.MSI IACCEPTSQLLOCALDBLICENSETERMS=YES /qn /L*v SqlLocaLDB-v11-x86.log
