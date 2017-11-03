@@ -33,10 +33,10 @@ Write-Host "Installing .NET 3.5 and 4.5"
 Add-WindowsFeature Net-Framework-Core -EA SilentlyContinue
 Add-WindowsFeature NET-Framework-45-Core -EA SilentlyContinue
 pushd "$Env:windir\microsoft.net"
-Framework64\v2.0.50727\ngen.exe  queue pause
-Framework64\v4.0.30319\ngen.exe  queue pause
-Framework\v2.0.50727\ngen.exe    queue pause
-Framework\v4.0.30319\ngen.exe    queue pause
+& Framework64\v2.0.50727\ngen.exe  queue pause
+& Framework64\v4.0.30319\ngen.exe  queue pause
+& Framework\v2.0.50727\ngen.exe    queue pause
+& Framework\v4.0.30319\ngen.exe    queue pause
 popd
 
 $target="C:\SQL"
