@@ -1,7 +1,7 @@
 #!/bin/bash
 f=mono-3.2.8-armhf.tar.bz2
-(command -v wget >> /dev/null) && wget --no-check-certificate -O $f https://raw.githubusercontent.com/devizer/glist/master/bin/$f
-if [ ! -f $f ]; then
+(command -v wget >> /dev/null) && wget --no-check-certificate -O $f https://raw.githubusercontent.com/devizer/glist/master/bin/404-$f
+if [ $? ]; then
 (command -v curl >> /dev/null) && curl -o $f https://raw.githubusercontent.com/devizer/glist/master/bin/$f
 fi
 tar xjf $f -C /
