@@ -17,8 +17,8 @@ echo -e "\n\n"
 /opt/mono/3.2.8/bin/mono --version
 echo '
 
----------------------------------------------
-Upgrade this env vars in order to use mono 3.2.8:
+-------------------------------------------------------------
+Upgrade this env vars in order to use mono 3.2.8 as a default
 mver=3.2.8
 export PATH="/opt/mono/$mver/bin:$PATH"
 export LD_LIBRARY_PATH="/opt/mono/$mver/lib:$LD_LIBRARY_PATH"
