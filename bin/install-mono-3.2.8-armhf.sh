@@ -6,7 +6,11 @@ if [ ! -f $f ]; then
 fi
 
 echo -e "\n\nExtracting $f into /opt/mono/3.2.8 ...................."
-tar xjf $f -C /
+if (command -v pv > /dev/null); then
+  pv $f | tar xjf - -C /
+else
+  tar xjf $f -C /
+fi
 rm $f
 
 echo -e "\n\n"
@@ -23,4 +27,6 @@ export PKG_CONFIG_PATH="/opt/mono/$mver/lib/pkgconfig:$PKG_CONFIG_PATH"
 
 # One Line Installer: 
 # wget -q -nv --no-check-certificate -O - https://raw.githubusercontent.com/devizer/glist/master/bin/install-mono-3.2.8-armhf.sh | bash
+# curl https://raw.githubusercontent.com/devizer/glist/master/bin/install-mono-3.2.8-armhf.sh | bash
+
 # https://raw.githubusercontent.com/devizer/glist/master/bin/install-mono-3.2.8-armhf.sh
