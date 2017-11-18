@@ -1,6 +1,6 @@
 #!/bin/bash
 f=mono-3.2.8-armhf.tar.bz2
-(command -v wget >> /dev/null) && wget --no-check-certificate -O $f https://raw.githubusercontent.com/devizer/glist/master/bin/404-$f
+(command -v wget >> /dev/null) && wget --no-check-certificate -O $f https://raw.githubusercontent.com/devizer/glist/master/bin/$f
 if [ $? ]; then
 (command -v curl >> /dev/null) && curl -o $f https://raw.githubusercontent.com/devizer/glist/master/bin/$f
 fi
@@ -18,3 +18,4 @@ mono --version | head -1'
 
 # One Line Installer: 
 # wget -q -nv --no-check-certificate -O - https://raw.githubusercontent.com/devizer/glist/master/bin/install-mono-3.2.8-armhf.sh | bash
+# https://raw.githubusercontent.com/devizer/glist/master/bin/install-mono-3.2.8-armhf.sh
