@@ -5,7 +5,7 @@ if [ ! $? -eq 0 ]; then
 (command -v curl >> /dev/null) && curl -o $f https://raw.githubusercontent.com/devizer/glist/master/bin/$f
 fi
 
-echo -e "\n\nExtracting $f into /opt/mono/3.2.8"
+echo -e "\n\nExtracting $f into /opt/mono/3.2.8 ...................."
 tar xjf $f -C /
 rm $f
 
