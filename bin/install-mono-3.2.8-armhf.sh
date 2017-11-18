@@ -4,10 +4,15 @@ f=mono-3.2.8-armhf.tar.bz2
 if [ $? ]; then
 (command -v curl >> /dev/null) && curl -o $f https://raw.githubusercontent.com/devizer/glist/master/bin/$f
 fi
+
+echo -e "\n\nExtracting $f into /opt/mono/3.2.8"
 tar xjf $f -C /
 rm $f
+
+echo -e "\n\n"
 /opt/mono/3.2.8/bin/mono --version
 echo '
+
 ---------------------------------------------
 Upgrade this env vars in order to use mono 3.2.8:
 mver=3.2.8
