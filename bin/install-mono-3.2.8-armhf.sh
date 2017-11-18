@@ -19,7 +19,7 @@ mver=3.2.8
 export PATH="/opt/mono/$mver/bin:$PATH"
 export LD_LIBRARY_PATH="/opt/mono/$mver/lib:$LD_LIBRARY_PATH"
 export PKG_CONFIG_PATH="/opt/mono/$mver/lib/pkgconfig:$PKG_CONFIG_PATH"
-mono --version | head -1'
+'
 
 # One Line Installer: 
 # wget -q -nv --no-check-certificate -O - https://raw.githubusercontent.com/devizer/glist/master/bin/install-mono-3.2.8-armhf.sh | bash
