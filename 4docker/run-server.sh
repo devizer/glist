@@ -1,0 +1,1 @@
+(docker rm -f server || true); docker run --name server -p 3306:3306 -p 27017:27017 -p 5432:5432 -p 6397:6397 -p 5672:5672 -p 15672:15672 servers 
