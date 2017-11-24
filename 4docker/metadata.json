@@ -1,0 +1,42 @@
+{
+[
+  "postgresql": {
+	"process": "postres",
+	"connection": "User ID=postgres; Password=postgres; Host=localhost; Port=5432; Database=postgres;",
+	"log": "/var/log/postgresql/postgresql-*-main.log",
+	"service": "postgres"
+  }
+  ,
+  "mysql": {
+	"process": "mysqld",
+	"connection": "Server=localhost; Uid=mysql; Pwd=mysql; Port=3306",
+	"log": "/var/log/mysql/error.log",
+	"service": "mysql"
+  }
+  ,
+  "redis": {
+	"process": "redis-server",
+	"connection": "localhost",
+	"log": "/var/log/redis/redis-server.log",
+	"service": "redis-server"
+  }
+  ,
+  "rabbitmq": {
+	"process": "rabbitmq-server",
+	"connection": "ampq://localhost",
+	"log": "/var/log/rabbitmq/rabbit@*.log",
+	"service": "rabbitmq-server"
+  }
+  ,
+  "mongodb": {
+	"process": "mongod",
+	"connection": "mongodb://localhost:27017",
+	"log": "/var/log/mongodb/mongodb.log",
+	"service": "mongodb"
+  },
+
+
+]
+}
+
+

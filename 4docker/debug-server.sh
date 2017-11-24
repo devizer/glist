@@ -1,2 +1,2 @@
-docker exec -it server bash -c "apt-get install -y mc nano lsof htop sudo; export TERM=xterm; bash"
+docker exec -it server bash -c "command -v nano || (apt-get install -y mc nano less lsof htop psmisc binutils sudo); export TERM=xterm; bash"
 
