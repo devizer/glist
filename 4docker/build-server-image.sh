@@ -17,7 +17,7 @@ EXPOSE 3306
 EXPOSE 5432
 
 # REDIS
-EXPOSE 6397
+EXPOSE 6379
 
 # RabbitMQ
 EXPOSE 5672 15672
@@ -49,7 +49,8 @@ RUN echo -e "\n\n----------- INSTALLING ssh with root login by password 'sandbox
 
 RUN # echo -e "\n\n----------- SKIP INSTALLING REDIS SERVER 2.8 -----------" \
   && apt-get -y install redis-server \
-  && (echo -e "\nmaxmemory 100M\nbind 0.0.0.0" >> /etc/redis/redis.conf) \
+  && (sed -i.bak '/bind/d' /etc/redis/redis.conf || true) \
+  && (echo -e "\nbind *\nmaxmemory 100M" >> /etc/redis/redis.conf) \
   && service redis-server restart \
   && echo REDIS \$(echo info | redis-cli | grep redis_version) \
   && service redis-server stop && apt-get clean
@@ -60,7 +61,10 @@ RUN echo -e "\n\n----------- INSTALLING REDIS SERVER 3.2 -----------" \
   && wget --no-check-certificate -O dotdeb.gpg https://www.dotdeb.org/dotdeb.gpg \
   && apt-key add dotdeb.gpg \
   && apt-get update && apt-get install -y redis-server \
+  && (sed -i.bak '/bind/d' /etc/redis/redis.conf || true) \
+  && (echo -e "\nbind *\nmaxmemory 100M" >> /etc/redis/redis.conf) \
   && service redis-server restart \
+  && (ps ax -o pid,pcpu,rss,vsz,args | grep redis-server | grep -v grep) || true \
   && echo REDIS \$(echo info | redis-cli | grep redis_version) \
   && service redis-server stop && apt-get clean
 
@@ -85,7 +89,7 @@ RUN echo -e "\n\n----------- INSTALLING MongoDB 3.4 -----------" \
   && apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 0C49F3730359A14518585931BC711F9BA15703C6 \
   && echo "deb http://repo.mongodb.org/apt/debian jessie/mongodb-org/3.4 main" > /etc/apt/sources.list.d/mongodb-org-3.4.list \
   && apt-get update && apt-get install -y mongodb-org-server \
-  && cp mongodb-server /etc/init.d/mongodb-server && update-rc.d mongodb-server -f defaults \
+  && cp mongodb-server /etc/init.d/mongodb-server && update-rc.d mongodb-server defaults \
   && apt-get clean
 
 
@@ -159,7 +163,7 @@ key_buffer_size = 1M
 bind-address = 0.0.0.0
 _MySQL_
 
-echo '
+echo '#!/bin/bash
 echo Starting 5 Services; \
   echo Starting netdata ...; \
   /opt/netdata/bin/netdata; \
@@ -184,6 +188,8 @@ done;
 ' > entry.sh
 chmod +x entry.sh
 
+
+
 echo '#!/bin/sh
 ### BEGIN INIT INFO
 # Provides:          mongod
@@ -194,24 +200,8 @@ echo '#!/bin/sh
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
 # Short-Description: An object/document-oriented database
-# Description:       MongoDB is a high-performance, open source, schema-free
-#                    document-oriented data store thats easy to deploy, manage
-#                    and use. Its network accessible, written in C++ and offers
-#                    the following features:
-#
-#                       * Collection oriented storage - easy storage of object-
-#                         style data
-#                       * Full index support, including on inner objects
-#                       * Query profiling
-#                       * Replication and fail-over support
-#                       * Efficient storage of binary data including large
-#                         objects (e.g. videos)
-#                       * Automatic partitioning for cloud-level scalability
-#
-#                    High performance, scalability, and reasonable depth of
-#                    functionality are the goals for the project.
+# Description:       MongoDB is a data store 
 ### END INIT INFO
-
 
 case "$1" in
   start)
@@ -235,6 +225,7 @@ case "$1" in
 esac
 ' > mongodb-server
 chmod +x mongodb-server
+
 
 
 docker rm -f server || true
