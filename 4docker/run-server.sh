@@ -1,1 +1,1 @@
-(docker rm -f server >/dev/null 2>&1 || true); docker run --name server -p 3306:3306 -p 27017:27017 -p 5432:5432 -p 6397:6397 -p 5672:5672 -p 15672:15672 -p 19999:19999 -p 4222:22 servers 
+(docker rm -f server >/dev/null 2>&1 || true); docker run --name server -p 3306:3306 -p 27017:27017 -p 5432:5432 -p 6397:6397 -p 5672:5672 -p 15672:15672 -p 19999:19999 -p 4222:22 -p 5001-5009:5001-5009 servers

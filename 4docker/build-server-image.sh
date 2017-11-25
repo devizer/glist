@@ -3,9 +3,12 @@
 cat << _Dockerfile_ > Dockerfile
 # help: https://cloud.google.com/appengine/docs/flexible/dotnet/customizing-the-dotnet-runtime
 FROM debian:jessie
-COPY . /app
-WORKDIR /app
+COPY . /prerequisites
+WORKDIR /prerequisites
 SHELL ["bash", "-c"]
+
+# Apps
+EXPOSE 5001 5002 5003 5004 5005
 
 # MySQL
 EXPOSE 3306
@@ -28,27 +31,47 @@ EXPOSE 19999
 # SSH
 EXPOSE 22
 
-ENV ASPNETCORE_URLS=http://+:8080
+ENV ASPNETCORE_URLS=http://+:5001
 
-# RUN (echo '#!/bin/bash' > /usr/sbin/policy-rc.d)
-
-RUN echo -e "\n\n----------- Installing dotnet sdk 2.0.2 -----------" \
- && apt-get update && apt-get -y install curl libunwind8 gettext apt-transport-https \
- && curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg \
- && mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg \
- && sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-debian-jessie-prod jessie main" > /etc/apt/sources.list.d/dotnetdev.list' \
- && apt-get update && apt-get install -y dotnet-sdk-2.0.3 \
- && dotnet new mvc -o dummy && rm -rf dummy
+# RUN (echo -e '#!/bin/bash\nexit 0' > /usr/sbin/policy-rc.d)
 
 # pre-intall regular tools
 RUN apt-get update && apt-get install wget curl xz-utils p7zip-full sudo procps binutils -y && apt-get clean 
 
-RUN echo -e "\n\n----------- INSTALLING ssh -----------" \
+RUN echo -e "\n\n----------- INSTALLING ssh with root login by password 'sandbox' -----------" \
+  && passwd -u root && echo 'root:sandbox'|chpasswd \
   && apt-get install -y openssh-server \
-  && passwd -u root \
-  && echo 'root:sandbox'|chpasswd \
-  && cp sshd_config /etc/ssh/sshd_config \
+  && (cat /etc/ssh/sshd_config | grep -v PermitRootLogin | grep -v PasswordAuthentication > .sshd_config) \
+  && (echo -e "\n\nPasswordAuthentication yes\nPermitRootLogin yes" >> .sshd_config) \
+  && cp .sshd_config /etc/ssh/sshd_config \
   && service ssh start 
+
+
+RUN # echo -e "\n\n----------- SKIP INSTALLING REDIS SERVER 2.8 -----------" \
+  && apt-get -y install redis-server \
+  && (echo -e "\nmaxmemory 100M\nbind 0.0.0.0" >> /etc/redis/redis.conf) \
+  && service redis-server restart \
+  && echo REDIS \$(echo info | redis-cli | grep redis_version) \
+  && service redis-server stop && apt-get clean
+
+
+RUN echo -e "\n\n----------- INSTALLING REDIS SERVER 3.2 -----------" \
+  && (echo 'deb http://packages.dotdeb.org jessie all' > /etc/apt/sources.list.d/dotdeb.list) \
+  && wget --no-check-certificate -O dotdeb.gpg https://www.dotdeb.org/dotdeb.gpg \
+  && apt-key add dotdeb.gpg \
+  && apt-get update && apt-get install -y redis-server \
+  && service redis-server restart \
+  && echo REDIS \$(echo info | redis-cli | grep redis_version) \
+  && service redis-server stop && apt-get clean
+
+
+RUN echo -e "\n\n----------- Installing dotnet sdk 2.0.3 -----------" \
+ && apt-get update && apt-get -y install curl libunwind8 gettext apt-transport-https \
+ && curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg \
+ && mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg \
+ && sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-debian-jessie-prod jessie main" > /etc/apt/sources.list.d/dotnetdev.list' \
+ && apt-get update && apt-get install -y dotnet-sdk-2.0.3 && apt-get clean \
+ && dotnet new mvc -o dummy && rm -rf dummy
 
 RUN echo -e "\n\n----------- INSTALLING NETDATA Latest -----------" \
   && mkdir -p /etc/netdata && mkdir -p /opt/netdata/etc/netdata \
@@ -62,6 +85,7 @@ RUN echo -e "\n\n----------- INSTALLING MongoDB 3.4 -----------" \
   && apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 0C49F3730359A14518585931BC711F9BA15703C6 \
   && echo "deb http://repo.mongodb.org/apt/debian jessie/mongodb-org/3.4 main" > /etc/apt/sources.list.d/mongodb-org-3.4.list \
   && apt-get update && apt-get install -y mongodb-org-server \
+  && cp mongodb-server /etc/init.d/mongodb-server && update-rc.d mongodb-server -f defaults \
   && apt-get clean
 
 
@@ -76,14 +100,6 @@ RUN echo -e "\n\n----------- INSTALLING FFMPEG Latest -----------" \
   && echo -e "\n\nFFPROBE VERSION" && ffprobe -version
 
 
-# pre-install REDIS server 2.8
-RUN echo -e "\n\n----------- INSTALLING REDIS SERVER 2.8 -----------" \
-  && apt-get -y install redis-server \
-  && (echo -e "\nmaxmemory 100M\nbind 0.0.0.0" >> /etc/redis/redis.conf) \
-  && service redis-server restart \
-  && echo REDIS \$(echo info | redis-cli | grep redis_version) \
-  && service redis-server stop && apt-get clean
-
 
 # pre-install MySQL Server 5.5 with root's password=root.
 # network access: --user=mysql --password=mysql
@@ -92,16 +108,17 @@ RUN echo -e "\n\n----------- INSTALLING MYSQL 5.5 -----------" \
   && (echo mysql-server-5.5 mysql-server/root_password password root | debconf-set-selections) \
   && (echo mysql-server-5.5 mysql-server/root_password_again password root | debconf-set-selections) \
   && (apt-get -y install mysql-server-5.5 && service mysql start) \
-  && (echo -e '\n[mysqld]\nmax_allowed_packet=128M \ninnodb_buffer_pool_size=1M \ntable_cache= 256 \nquery_cache_size= 1M \ncharacter_set_server = utf8 \nkey_buffer_size=1M \nbind-address = 0.0.0.0' >> /etc/mysql/my.cnf) && service mysql restart \
+  && (cat .my.cnf >> /etc/mysql/my.cnf) && service mysql restart \
   && echo MySQL VERSION && mysql --user=root --password=root -e 'Show Variables Like "%VERSION%";' -t \
   && mysql --user=root --password=root -e "CREATE USER 'mysql'@'%' IDENTIFIED BY 'mysql'; GRANT ALL PRIVILEGES ON *.* TO 'mysql'@'%' WITH GRANT OPTION; FLUSH PRIVILEGES;" \
   && service mysql stop && apt-get clean
+
 
 # Peer authentication failed for user "postgre"?
 RUN echo -e "\n\n----------- INSTALLING Postgre 9.4 -----------" \
   && (apt-get -y install postgresql) \
   && (echo -e "\nlisten_addresses = '*' " >> /etc/postgresql/9.4/main/postgresql.conf) \
-  && (echo -e "\n\nlocal all all  trust\nhost all all 255.255.255.255/0 trust" >  /etc/postgresql/9.4/main/pg_hba.conf) \
+  && (echo -e "\n\nlocal all all  trust\nhost all all 255.255.255.255/0 trust" > /etc/postgresql/9.4/main/pg_hba.conf) \
   && service postgresql restart \
   && echo -e "\n\nPOSTGRESQL VERSION: " && psql postgres postgres -c 'SELECT Version();' \
   && service postgresql stop && apt-get clean
@@ -124,8 +141,9 @@ RUN echo -e "\n\n----------- INSTALLING Rabbit MQ Server 3.6 -----------" \
   && service rabbitmq-server stop \
   && rm -f \$rabbit_file && apt-get clean
 
-ENTRYPOINT bash entry.sh
 
+
+ENTRYPOINT bash entry.sh
 
 _Dockerfile_
 
@@ -136,6 +154,7 @@ innodb_buffer_pool_size = 1M
 table_cache = 256
 query_cache_size = 1M
 character_set_server = utf8
+collation_server = utf8_general_ci
 key_buffer_size = 1M
 bind-address = 0.0.0.0
 _MySQL_
@@ -148,17 +167,14 @@ echo Starting 5 Services; \
   service redis-server start; \
   service mysql start; \
   service rabbitmq-server start; \
-  echo Starting Mongo DB Server ...; \
-  mkdir -p /var/lib/mongodb/data; mkdir -p /var/log/mongodb; \
-  (rm -f /var/lib/mongodb/data/mongod.lock || true); \
-  (nohup mongod --bind_ip 0.0.0.0 --port 27017 --dbpath /var/lib/mongodb/data --journal --smallfiles --nssize 8 --wiredTigerCacheSizeGB 1 --logpath /var/log/mongod.log > /var/log/mongodb-startup.log & ); \
+  service mongodb-server start; \
   service ssh start; \
   echo Enjoy the simplest monitor below :\)
 
 while true; do 
   ps axc > svc
   list="|"
-  for s in mysqld mongod rabbitmq-server postgres redis-server; do
+  for s in sshd mysqld mongod rabbitmq-server postgres redis-server; do
     list="$list $s"
     if [ -z "$(cat svc | grep $s)" ]; then list="$list: -- | "; else list="$list: ON | "; fi
   done
@@ -168,44 +184,59 @@ done;
 ' > entry.sh
 chmod +x entry.sh
 
-echo '
-Port 22
-ListenAddress ::
-ListenAddress 0.0.0.0
-Protocol 2
-HostKey /etc/ssh/ssh_host_rsa_key
-HostKey /etc/ssh/ssh_host_dsa_key
-HostKey /etc/ssh/ssh_host_ecdsa_key
-HostKey /etc/ssh/ssh_host_ed25519_key
-UsePrivilegeSeparation yes
-KeyRegenerationInterval 3600
-ServerKeyBits 1024
-SyslogFacility AUTH
-LogLevel INFO
-LoginGraceTime 120
-PermitRootLogin yes
-StrictModes yes
-RSAAuthentication yes
-PubkeyAuthentication yes
-IgnoreRhosts yes
-RhostsRSAAuthentication no
-HostbasedAuthentication no
-PermitEmptyPasswords yes
-ChallengeResponseAuthentication no
-PasswordAuthentication yes
+echo '#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          mongod
+# Required-Start:    $network $local_fs $remote_fs
+# Required-Stop:     $network $local_fs $remote_fs
+# Should-Start:      $named
+# Should-Stop:
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: An object/document-oriented database
+# Description:       MongoDB is a high-performance, open source, schema-free
+#                    document-oriented data store thats easy to deploy, manage
+#                    and use. Its network accessible, written in C++ and offers
+#                    the following features:
+#
+#                       * Collection oriented storage - easy storage of object-
+#                         style data
+#                       * Full index support, including on inner objects
+#                       * Query profiling
+#                       * Replication and fail-over support
+#                       * Efficient storage of binary data including large
+#                         objects (e.g. videos)
+#                       * Automatic partitioning for cloud-level scalability
+#
+#                    High performance, scalability, and reasonable depth of
+#                    functionality are the goals for the project.
+### END INIT INFO
 
-X11Forwarding yes
-X11DisplayOffset 10
-PrintMotd no
-PrintLastLog yes
-TCPKeepAlive yes
-#UseLogin no
 
-AcceptEnv LANG LC_*
-Subsystem sftp /usr/lib/openssh/sftp-server
-UsePAM yes
-' > sshd_config
+case "$1" in
+  start)
+      echo Starting MogoDB 3.4 ...
+      mkdir -p /var/lib/mongodb/data; mkdir -p /var/log/mongodb; \
+      (rm -f /var/lib/mongodb/data/mongod.lock || true); \
+      (nohup mongod --bind_ip 0.0.0.0 --port 27017 --dbpath /var/lib/mongodb/data --journal --smallfiles --nssize 8 --wiredTigerCacheSizeGB 1 --logpath /var/log/mongod.log > /var/log/mongodb-startup.log 2>&1 & ) ;
+      sleep 1
+    ;;
+  stop)
+      echo shutting down MogoDB 3.4 ...
+      killall mongod
+      sleep 1
+    ;;
+  restart)
+    $0 stop
+    $0 start
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|restart}"
+esac
+' > mongodb-server
+chmod +x mongodb-server
+
 
 docker rm -f server || true
 docker rmi servers || true
-time (sudo docker build -t servers .)
+time (sudo docker build -t servers . | tee image-build.log)
