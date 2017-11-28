@@ -131,21 +131,19 @@ RUN printf '\n\n\n'; figlet -t -- ' RABBITMQ  *  3.6' \
   && service rabbitmq-server stop \
   && rm -f \$rabbit_file && apt-get clean
 
-
-
-ENTRYPOINT bash entry.sh
+CMD bash start-services.sh
 
 _Dockerfile_
 
 cat << _MySQL_ > .my.cnf
 [mysqld]
 max_allowed_packet = 128M
-innodb_buffer_pool_size = 1M
-table_cache = 256
-query_cache_size = 1M
+innodb_buffer_pool_size = 4M
+table_cache = 512
+query_cache_size = 4M
 character_set_server = utf8
 collation_server = utf8_general_ci
-key_buffer_size = 1M
+key_buffer_size = 8M
 bind-address = 0.0.0.0
 
 # log-error = /var/lib/mysql/logs/mysql-error.log
@@ -174,8 +172,8 @@ while true; do
   echo $(date) $list
   sleep 3; 
 done;
-' > entry.sh
-chmod +x entry.sh
+' > start-services.sh
+chmod +x start-services.sh
 
 
 
