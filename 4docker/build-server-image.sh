@@ -216,5 +216,5 @@ chmod +x mongodb-server
 
 
 docker rm -f server || true
-docker rmi servers || true
-time (sudo docker build -t servers . | tee image-build.log)
+docker rmi devizervlad/devsandbox || true
+time (sudo docker build -t devizervlad/devsandbox . | tee image-build.log)
