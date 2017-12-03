@@ -21,6 +21,7 @@ RUN apt-get update && apt-get install wget curl xz-utils p7zip-full sudo procps 
 # pre-install MySQL Server 5.5 with root's password=root.
 # network access: --user=mysql --password=mysql
 # mysql --user=root --password=root --host=127.0.0.1 --port=3306 -e 'Show Variables Like "%VERSION%";'
+# ----------------------------- MySQL 5.5 -----------------------------
 RUN printf '\n\n\n'; figlet -t -- ' MySQL  *  5.5' \
   && (echo mysql-server-5.5 mysql-server/root_password password root | debconf-set-selections) \
   && (echo mysql-server-5.5 mysql-server/root_password_again password root | debconf-set-selections) \
@@ -32,6 +33,7 @@ RUN printf '\n\n\n'; figlet -t -- ' MySQL  *  5.5' \
   && service mysql stop && apt-get clean
 
 
+# ----------------------------- .NET SDK 5.5 -----------------------------
 RUN printf '\n\n\n'; figlet -t -- '.Net  *  SDK' \
  && export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1 \
  && export DOTNET_CLI_TELEMETRY_OPTOUT=1 \
@@ -43,6 +45,7 @@ RUN printf '\n\n\n'; figlet -t -- '.Net  *  SDK' \
  && dotnet new mvc -o dummy && rm -rf dummy
 
 
+# ----------------------------- SSH (root:sandbox) -----------------------------
 RUN printf '\n\n\n'; figlet -t -- ' ==*  SSH  *==' \
   && passwd -u root && echo 'root:sandbox'|chpasswd \
   && apt-get install -y openssh-server \
@@ -52,6 +55,7 @@ RUN printf '\n\n\n'; figlet -t -- ' ==*  SSH  *==' \
   && service ssh start 
 
 
+# ----------------------------- REDIS 2.8 -----------------------------
 RUN # printf '\n\n\n'; figlet -t -- ' ==*  REDIS  2.8  *==' \
   && apt-get -y install redis-server \
   && (sed -i.bak '/bind/d' /etc/redis/redis.conf || true) \
@@ -61,6 +65,7 @@ RUN # printf '\n\n\n'; figlet -t -- ' ==*  REDIS  2.8  *==' \
   && service redis-server stop && apt-get clean
 
 
+# ----------------------------- REDIS 3.2 -----------------------------
 RUN printf '\n\n\n'; figlet -t -- ' REDIS  *  3.2' \
   && (echo 'deb http://packages.dotdeb.org jessie all' > /etc/apt/sources.list.d/dotdeb.list) \
   && wget --no-check-certificate -O dotdeb.gpg https://www.dotdeb.org/dotdeb.gpg \
@@ -75,6 +80,7 @@ RUN printf '\n\n\n'; figlet -t -- ' REDIS  *  3.2' \
 
 
 
+# ----------------------------- NETDATA (Latest) -----------------------------
 RUN printf '\n\n\n'; figlet -t -- ' *  NETDATA  *' \
   && mkdir -p /etc/netdata && mkdir -p /opt/netdata/etc/netdata \
   && (echo -e 'mysqld: mysqld \nmongod: mongod \n rabbitmq-server: rabbitmq-server \n postgres: postgres \n redis-server: redis-server' > /etc/netdata/apps_groups.conf) \
@@ -83,6 +89,7 @@ RUN printf '\n\n\n'; figlet -t -- ' *  NETDATA  *' \
 
 
 # pre-install mongodb-server 3.4
+# ----------------------------- MongoDB 3.4 -----------------------------
 RUN printf '\n\n\n'; figlet -t -- ' Mongo  *  3.4' \
   && apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 0C49F3730359A14518585931BC711F9BA15703C6 \
   && echo "deb http://repo.mongodb.org/apt/debian jessie/mongodb-org/3.4 main" > /etc/apt/sources.list.d/mongodb-org-3.4.list \
@@ -92,6 +99,7 @@ RUN printf '\n\n\n'; figlet -t -- ' Mongo  *  3.4' \
 
 
 # pre-intall: FFMPEG latest
+# ----------------------------- FFMPEG (Latest) -----------------------------
 RUN printf '\n\n\n'; figlet -t -- ' *  FFMPEG  *' \
   && wget --no-check-certificate -O ffmpeg-release-64bit-static.tar.xz https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-64bit-static.tar.xz \
   && time (tar -xJf ffmpeg-release-64bit-static.tar.xz) \
@@ -105,6 +113,7 @@ RUN printf '\n\n\n'; figlet -t -- ' *  FFMPEG  *' \
 
 
 # Peer authentication failed for user "postgre"?
+# ----------------------------- PostgreSQL 9.4 -----------------------------
 RUN printf '\n\n\n'; figlet -t -- ' PostgreSQL  *  9.4' \
   && (apt-get -y install postgresql) \
   && (echo -e "\nlisten_addresses = '*' " >> /etc/postgresql/9.4/main/postgresql.conf) \
@@ -115,6 +124,7 @@ RUN printf '\n\n\n'; figlet -t -- ' PostgreSQL  *  9.4' \
 
 
 # pre-install RabbitMQ 3.6.14 from
+# ----------------------------- Rabbit MQ 3.6 -----------------------------
 # https://github.com/rabbitmq/rabbitmq-server/releases/download/rabbitmq_v3_6_14/
 RUN printf '\n\n\n'; figlet -t -- ' RABBITMQ  *  3.6' \
   && rabbit_file=rabbitmq-server_3.6.14-1_all.deb \
@@ -151,7 +161,7 @@ bind-address = 0.0.0.0
 _MySQL_
 
 echo '#!/bin/bash
-echo Starting 5 Services; \
+echo Starting 7 Services; \
   echo Starting netdata ...; \
   /opt/netdata/bin/netdata; \
   service postgresql start; \
