@@ -28,6 +28,20 @@ mono '$f' "$@"
 ' | sudo tee $cmd
 chmod +x $cmd
 
+f=/usr/lib/NUGET-2.8.6.exe
+url=https://dist.nuget.org/win-x86-commandline/v2.8.6/nuget.exe
+cmd=/usr/bin/nuget2
+echo -e "\n ---------- Installing nuget (2.8.6) as [$cmd]"
+(command -v wget >> /dev/null) && sudo wget --no-check-certificate -O $f $url
+if [ ! -f $f ]; then
+  (command -v curl >> /dev/null) && sudo curl -o $f $url
+fi
+
+echo '#!/bin/sh
+mono '$f' "$@"
+' | sudo tee $cmd
+chmod +x $cmd
+
 #  old:
 #  #!/bin/sh
 #  exec /usr/bin/cli /usr/lib/nuget/NuGet.exe "$@"
