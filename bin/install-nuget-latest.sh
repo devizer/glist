@@ -59,6 +59,29 @@ mono /usr/lib/nuget-2.12/NuGet.exe "$@"
 ' | sudo tee $cmd
 chmod +x $cmd
 
+
+if [ -n "$(command -v mozroots 2>/dev/null)" ]; then
+  echo Import Certificates using mozroot
+  mozroots --import --sync
+else
+  echo "WARNING! mozroot utility didn't find."
+fi
+
+if [ -n "$(command -v mozroots 2>/dev/null)" ]; then
+  echo Installing actual certificates
+  printf "\n ----- Installing [go.microsoft.com] certificate -----\n"
+  printf "Y\n" | certmgr -ssl https://go.microsoft.com
+  printf "Y\n" | certmgr -ssl https://go.microsoft.com
+  printf "\n ----- Installing [nugetgallery.blob.core.windows.net] certificate -----\n"
+  printf "Y\n" | certmgr -ssl https://nugetgallery.blob.core.windows.net
+  printf "Y\n" | certmgr -ssl https://nugetgallery.blob.core.windows.net
+  printf "\n ----- Installing [nuget.org] certificate -----\n"
+  printf "Y\n" | certmgr -ssl https://nuget.org   
+  printf "Y\n" | certmgr -ssl https://nuget.org
+else
+  echo "WARNING! certmgr utility didn't find."
+fi
+
 #  old:
 #  #!/bin/sh
 #  exec /usr/bin/cli /usr/lib/nuget/NuGet.exe "$@"
