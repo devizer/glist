@@ -1,0 +1,8 @@
+Windows: 
+http://atakala.com/Browser/Item.aspx?user_id=amos&dict_id=83
+
+Another
+/usr/share/fonts/truetype/<Family-or-Name>
+/usr/local/share/fonts/truetype/<Family-or-Name>
+
+fc-cache -f -r
