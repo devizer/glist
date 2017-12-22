@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-cd /tmp
+pushd /tmp
 for f in Roboto Fira OpenSans liberation ubuntu-font-family Google-SuperFamilies; do
   echo $f
   wget --no-check-certificate -O $f.zip https://raw.githubusercontent.com/devizer/glist/master/fonts/$f.zip
   unzip -o $f.zip -d fontfiles/
-  rm -f $f
+  rm -f $f.zip
 done
 
 pushd fontfiles
@@ -16,6 +16,8 @@ for i in $(ls -d */); do
   sudo cp -rf "./$dir" $target/truetype/
   rm -rf $dir
 done
+popd
+popd
 
 fc-cache -f -v
 
