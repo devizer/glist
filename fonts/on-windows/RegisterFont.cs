@@ -18,6 +18,7 @@ namespace RegisterFont
             else
             {
                 string file = args[0];
+                file = new FileInfo(file).FullName;
                 try
                 {
                     if (!File.Exists(file))
@@ -26,6 +27,8 @@ namespace RegisterFont
                     int count = AddFontResource(file);
                     if (count == 0)
                         throw new Exception("None fonts added");
+
+                    WriteProfileString("fonts", Path.GetFileNameWithoutExtension(file) + "(TrueType)", file);
 
                     Console.WriteLine("Registered {0} font(s) using '{1}' file", count, file);
                     return 0;
