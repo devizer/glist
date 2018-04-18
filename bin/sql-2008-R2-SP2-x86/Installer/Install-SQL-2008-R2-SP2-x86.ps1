@@ -19,7 +19,7 @@ Write-Host "Architecture: $($Env:PROCESSOR_ARCHITECTURE). 7-Zip: [$_7_Zip]" -for
 
 $pars=@($Temp)
 foreach($part in @(1,2,3)) { 
-   $pars += "https://raw.githubusercontent.com/devizer/glist/master/bin/sql-2008-R2-SP2-x64/SQLEXPR-x86-ENU-2008-R2-SP2.7z.exe.7z.00$part"; 
+   $pars += "https://raw.githubusercontent.com/devizer/glist/master/bin/sql-2008-R2-SP2-x86/SQLEXPR-x86-ENU-2008-R2-SP2.7z.exe.7z.00$part"; 
 }
 
 pushd $Temp
