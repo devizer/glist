@@ -1,0 +1,54 @@
+﻿Microsoft (R) SQL Server Installer
+Copyright (c) 2018 Microsoft.  All rights reserved.
+
+
+SQL Server Installer command line options
+
+C:\Users\Administrator\Downloads\SQLServer2017-SSEI-Expr.exe [/ENU] [/Help] [/IAcceptSqlServerLicenseTerms] [/Quiet] [/HideProgressBar] [/Verbose] [/ConfigurationFile=C:\Configuration.ini] [/Action=Install] [/Language=en-US] [/MediaType=Expr] [/InstallPath=c:\Program Files\Microsoft SQL Server] [/MediaPath=C:\SetupMedia]
+
+SQLServer2017-SSEI-Expr.exe /ENU /Q /Action=Download /MEDIATYPE=Core /MEDIAPATH=W:\Temp\SQL2017E
+
+ACTION                    Indicates the workflow when performing a unattended operation.
+                          Allowed Values      : Install, Download
+                          Supported Actions   : Any
+
+CONFIGURATIONFILE         Specifies the ConfigurationFile to use.
+                          Supported Actions   : Install
+
+ENU                       Use this parameter to install the English version of SQL Server on a localized operating system.
+                          Supported Actions   : Any
+
+HELP                      Displays the usage options for unattended operations.
+                          Alias               : ?
+                          Supported Actions   : Any
+
+HIDEPROGRESSBAR           Indicates a progress bar should not be displayed in an unattended install.
+                          Alias               : HP
+                          Supported Actions   : Any
+
+IACCEPTSQLSERVERLICENSETERMS Required to acknowledge acceptance of the license terms.
+                          Supported Actions   : Install
+
+INSTALLPATH               Specifies the data directory for SQL Server data files.
+                          Supported Actions   : Install
+
+LANGUAGE                  Language choice for Install or Download operations.
+                          Alias               : Lang
+                          Allowed Values      : zh-CN, zh-TW, en-US, fr-FR, de-DE, it-IT, ja-JP, ko-KR, pt-BR, ru-RU, es-ES
+                          Supported Actions   : Any
+
+MEDIAPATH                 Location where SQL Server setup media will be downloaded and extracted to.
+                          Supported Actions   : Any
+
+MEDIATYPE                 Indicates the type of media to download when /Action=Download
+                          Alias               : MT
+                          Allowed Values      : Core, Advanced, LocalDB
+                          Supported Actions   : Download
+
+QUIET                     Specifies that SQL Server Installer runs in a quiet mode without any user interface. This is used for unattended operations.
+                          Alias               : Q
+                          Supported Actions   : Any
+
+VERBOSE                   Logs verbose output to the console.
+                          Alias               : V
+                          Supported Actions   : Any
