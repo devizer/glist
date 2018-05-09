@@ -1,15 +1,17 @@
 @echo off
 
-set KEY=SQL-Express-2016-SP2-x64
-echo DOWNLOADING %KEY%.exe
-set url=https://download.microsoft.com/download/9/2/B/92BAD988-00C5-4F68-811E-B7FFBE009B00/SQLServer2016SP2-KB4052908-x64-ENU.exe
+echo DOWNLOADING SQL Express %v% BOOTSTRAPPER
+set v=2016
+set KEY=SQL-Express-%v%-SP-x64
+set url=https://raw.githubusercontent.com/devizer/glist/master/bin/SQL-Express/bin/SQLServer%v%-SSEI-Expr.exe
 set outfile=%AppData%\Temp\%KEY%.exe
 mkdir "%AppData%\Temp" 1>nul 2>&1
 echo [System.Net.ServicePointManager]::ServerCertificateValidationCallback={$true}; $d=new-object System.Net.WebClient; $d.DownloadFile("$Env:url","$Env:outfile") | powershell -command -
 
-echo Extracting %KEY%.exe
-"%outfile%" /qs /x:"%AppData%\Temp\%KEY%"
-del /F /Q "%outfile%"
+echo DOWNLOADING SQL Express %v%
+%outfile% /ENU /Q /Action=Download /MEDIATYPE=Core /MEDIAPATH="%AppData%\Temp\%KEY%"
+
+exit /b 1
 
 "%AppData%\Temp\%KEY%\Setup.exe" /QUIETSIMPLE /ENU /INDICATEPROGRESS /ACTION=Install ^
   /IAcceptSQLServerLicenseTerms /IACCEPTROPENLICENSETERMS ^

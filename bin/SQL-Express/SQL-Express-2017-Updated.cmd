@@ -1,20 +1,20 @@
 @echo off
 
-C:\Users\Administrator\Downloads\SQLServer2017-SSEI-Expr.exe
-echo Y | SQLServer2017-SSEI-Expr.exe /ENU /Q /Action=Download /MEDIATYPE=Core /MEDIAPATH=W:\Temp\SQL2017E
-
-set KEY=SQL-Express-2017-SP2-x64
-echo DOWNLOADING %KEY%.exe
-set url=https://download.microsoft.com/download/9/2/B/92BAD988-00C5-4F68-811E-B7FFBE009B00/SQLServer2016SP2-KB4052908-x64-ENU.exe
+set v=2017
+set KEY=SQL-Express-%v%-SP-x64
+echo DOWNLOADING SQL Express %v% BOOTSTRAPPER
+set url=https://raw.githubusercontent.com/devizer/glist/master/bin/SQL-Express/bin/SQLServer%v%-SSEI-Expr.exe
 set outfile=%AppData%\Temp\%KEY%.exe
 mkdir "%AppData%\Temp" 1>nul 2>&1
 echo [System.Net.ServicePointManager]::ServerCertificateValidationCallback={$true}; $d=new-object System.Net.WebClient; $d.DownloadFile("$Env:url","$Env:outfile") | powershell -command -
 
-echo Extracting %KEY%.exe
-"%outfile%" /qs /x:"%AppData%\Temp\%KEY%"
-del /F /Q "%outfile%"
+echo DOWNLOADING SQL Express %v%
+echo Y | "%outfile%" /ENU /Q /Action=Download /MEDIATYPE=Core /MEDIAPATH="%AppData%\Temp\%KEY%"
+set file=SQLEXPR_x64_ENU.exe
+dir "%AppData%\Temp\%KEY%\SQLEXPR_x64_ENU.exe"
+"%AppData%\Temp\%KEY%\SQLEXPR_x64_ENU.exe" /qs /x:"%AppData%\Temp\%KEY%\extracted"
 
-"%AppData%\Temp\%KEY%\Setup.exe" /QUIETSIMPLE /ENU /INDICATEPROGRESS /ACTION=Install ^
+"%AppData%\Temp\%KEY%\extracted\Setup.exe" /QUIETSIMPLE /ENU /INDICATEPROGRESS /ACTION=Install ^
   /IAcceptSQLServerLicenseTerms /IACCEPTROPENLICENSETERMS ^
   /UpdateEnabled=True ^
   /FEATURES=SQLENGINE,REPLICATION,SQL,RS,Tools,LocalDB ^
