@@ -5,4 +5,4 @@ set outfile=%AppData%\Temp\%KEY%.exe
 mkdir "%AppData%\Temp" 1>nul 2>&1
 echo [System.Net.ServicePointManager]::ServerCertificateValidationCallback={$true}; $d=new-object System.Net.WebClient; $d.DownloadFile("$Env:url","$Env:outfile") | powershell -command -
 
-"%output%" /install /passive /norestart
+"%outfile%" /install /passive /norestart
