@@ -1,5 +1,5 @@
 set archive=sql-express-all.7z.exe
-set url=https://raw.githubusercontent.com/devizer/glist/master/bin/SQL-Express/windows-core/
+set url=https://raw.githubusercontent.com/devizer/glist/master/bin/SQL-Express/windows-core/%archive%
 set outdir=%AppData%\Temp\SQL-Express-All
 set outfile=%outdir%\%archive%
 mkdir "%outdir%" 1>nul 2>&1
