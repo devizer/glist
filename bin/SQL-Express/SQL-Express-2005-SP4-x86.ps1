@@ -26,7 +26,7 @@ pushd $Temp
 ri SQL-Express-2005-SP4-x86.7z*
 popd
 
-Write-Host "Installing .NET 3.5 and 4.5"
+Write-Host "Installing .NET 3.5 and 4.5. Perfimissions are required"
 Add-WindowsFeature Net-Framework-Core -EA SilentlyContinue
 Add-WindowsFeature NET-Framework-45-Core -EA SilentlyContinue
 Install-WindowsFeature Net-Framework-Core -EA SilentlyContinue

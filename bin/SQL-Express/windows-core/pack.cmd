@@ -1,0 +1,1 @@
+"C:\Program Files\7-Zip\7zG.exe" a sql-express-all.zip -r- ..\*.ps1 ..\*.cmd
