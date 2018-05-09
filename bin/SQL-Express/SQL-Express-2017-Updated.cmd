@@ -18,7 +18,7 @@ dir "%AppData%\Temp\%KEY%\SQLEXPR_x64_ENU.exe"
   /IAcceptSQLServerLicenseTerms /IACCEPTROPENLICENSETERMS ^
   /UpdateEnabled=True ^
   /FEATURES=SQLENGINE,REPLICATION,SQL,RS,Tools,LocalDB ^
-  /INSTANCENAME="SQL2014SP1" ^
+  /INSTANCENAME="SQL2017" ^
   /INSTANCEDIR="%SystemDrive%\SQL" ^
   /SECURITYMODE="SQL" ^
   /SAPWD="`1qazxsw2" ^
