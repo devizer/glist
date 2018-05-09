@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Globalization;
 using System.Reflection;
+using Microsoft.Extensions.Configuration;
+
 namespace GitInfo
 {
     class Program
@@ -16,6 +18,15 @@ namespace GitInfo
             Console.WriteLine($"ISO: {DateTime.Now.ToString("O")}");
             Console.WriteLine($"iso: {DateTime.Now.ToString("o")}");
             Console.WriteLine($"Git Info: {AssemblyGitInfoAttribute.GetGitInfo(Assembly.GetExecutingAssembly())}");
+
+            var builder = new ConfigurationBuilder();
+            builder.AddUserSecrets<Program>();
+
+            Program p = new Program();
+            p.Configuration = builder.Build();
         }
+
+        public IConfigurationRoot Configuration { get; set; }
+
     }
 }
