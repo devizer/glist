@@ -3,7 +3,7 @@
 set v=2017
 set KEY=SQL-Express-%v%-SP-x64
 echo DOWNLOADING SQL Express %v% BOOTSTRAPPER
-set url=https://raw.githubusercontent.com/devizer/glist/master/bin/bin/sql-2017-Express/SQLServer2017-SSEI-Expr.exe
+set url=https://raw.githubusercontent.com/devizer/glist/master/bin/sql-2017-Express/SQLServer2017-SSEI-Expr.exe
 set outfile=%AppData%\Temp\%KEY%.exe
 mkdir "%AppData%\Temp" 1>nul 2>&1
 echo [System.Net.ServicePointManager]::ServerCertificateValidationCallback={$true}; $d=new-object System.Net.WebClient; $d.DownloadFile("$Env:url","$Env:outfile") | powershell -command -
