@@ -15,7 +15,7 @@ del /F /Q "%outfile%"
   /IAcceptSQLServerLicenseTerms /IACCEPTROPENLICENSETERMS ^
   /UpdateEnabled=True ^
   /FEATURES=SQLENGINE,REPLICATION,SQL,RS,Tools,LocalDB ^
-  /INSTANCENAME="SQL2014SP1" ^
+  /INSTANCENAME="SQL_2016_SP2" ^
   /INSTANCEDIR="%SystemDrive%\SQL" ^
   /SECURITYMODE="SQL" ^
   /SAPWD="`1qazxsw2" ^

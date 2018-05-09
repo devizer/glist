@@ -7,4 +7,4 @@ call SQL-Express-2014-SP1.cmd
 call SQL-Express-2016-Updated.cmd
 call SQL-Express-2017-Updated.cmd 
 
-echo get-wmiobject win32_service ^| where {$_.Name.ToLower().IndexOf("sql") -ge 0 } ^| ft Name, DisplayName, StartMode, State | powershell -c -
+type list-sql-services.ps1 | powershell -c -

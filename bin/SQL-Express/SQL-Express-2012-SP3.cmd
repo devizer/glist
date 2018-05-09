@@ -15,7 +15,7 @@ del /F /Q "%outfile%"
   /IAcceptSQLServerLicenseTerms ^
   /UpdateEnabled=True ^
   /FEATURES=SQLENGINE,REPLICATION,SQL,RS,Tools,LocalDB ^
-  /INSTANCENAME="SQL2012SP3" ^
+  /INSTANCENAME="SQL_2012_SP3" ^
   /INSTANCEDIR="%SystemDrive%\SQL" ^
   /SECURITYMODE="SQL" ^
   /SAPWD="`1qazxsw2" ^

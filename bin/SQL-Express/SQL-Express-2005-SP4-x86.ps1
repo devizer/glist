@@ -41,7 +41,7 @@ popd
 
 $target="C:\SQL"
 pushd "$temp\SQL-Express-2005-SP4-x86"
-cmd /c .\setup.exe /qb ADDLOCAL=SQL_Engine INSTANCENAME=SQL2005SP4 DISABLENETWORKPROTOCOLS=0 SECURITYMODE=SQL SAPWD=``1qazxsw2 INSTALLSQLDIR="$target"
+cmd /c .\setup.exe /qb ADDLOCAL=SQL_Engine INSTANCENAME=SQL_2005_SP4 DISABLENETWORKPROTOCOLS=0 SECURITYMODE=SQL SAPWD=``1qazxsw2 INSTALLSQLDIR="$target"
 popd
 
 Remove-Item -Recurse -Force "$temp\SQL-Express-2005-SP4-x86"

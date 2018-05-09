@@ -1,21 +1,23 @@
 @echo off
 
-set KEY=SQL-Express-2014-SP1-x64
-echo DOWNLOADING %KEY%.exe
-set url=https://download.microsoft.com/download/1/5/6/156992E6-F7C7-4E55-833D-249BD2348138/ENU/x64/SQLEXPR_x64_ENU.exe
+echo DOWNLOADING SQL Express %v% BOOTSTRAPPER
+set v=2016
+set KEY=SQL-Express-%v%-SP-x64
+set url=https://raw.githubusercontent.com/devizer/glist/master/bin/sql-2016-express/SQLServer2016-SSEI-Expr.exe
 set outfile=%AppData%\Temp\%KEY%.exe
 mkdir "%AppData%\Temp" 1>nul 2>&1
 echo [System.Net.ServicePointManager]::ServerCertificateValidationCallback={$true}; $d=new-object System.Net.WebClient; $d.DownloadFile("$Env:url","$Env:outfile") | powershell -command -
 
-echo Extracting %KEY%.exe
-"%outfile%" /qs /x:"%AppData%\Temp\%KEY%"
-del /F /Q "%outfile%"
+echo DOWNLOADING SQL Express %v%
+%outfile% /ENU /Q /Action=Download /MEDIATYPE=Core /MEDIAPATH="%AppData%\Temp\%KEY%"
+
+exit /b 1
 
 "%AppData%\Temp\%KEY%\Setup.exe" /QUIETSIMPLE /ENU /INDICATEPROGRESS /ACTION=Install ^
-  /IAcceptSQLServerLicenseTerms ^
+  /IAcceptSQLServerLicenseTerms /IACCEPTROPENLICENSETERMS ^
   /UpdateEnabled=True ^
   /FEATURES=SQLENGINE,REPLICATION,SQL,RS,Tools,LocalDB ^
-  /INSTANCENAME="SQL_2014_SP1" ^
+  /INSTANCENAME="SQL2014SP1" ^
   /INSTANCEDIR="%SystemDrive%\SQL" ^
   /SECURITYMODE="SQL" ^
   /SAPWD="`1qazxsw2" ^
