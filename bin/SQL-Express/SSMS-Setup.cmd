@@ -1,4 +1,4 @@
-﻿set KEY=SSMS-Setup
+set KEY=SSMS-Setup
 echo DOWNLOADING SSMS-Setup
 set url=https://download.microsoft.com/download/0/D/2/0D26856F-E602-4FB6-8F12-43D2559BDFE4/SSMS-Setup-ENU.exe
 set outfile=%AppData%\Temp\%KEY%.exe
