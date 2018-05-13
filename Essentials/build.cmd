@@ -1,5 +1,5 @@
 pushd ..\Parallel-Download
-msbuild /t:Rebuild /p:Consfiguration=Debug
+%WinDir%\Microsoft.NET\Framework64\v4.0.30319\msbuild /t:Rebuild /p:Consfiguration=Debug
 xcopy /y bin\Debug\*.* ..\Essentials\*.*
 popd
 
