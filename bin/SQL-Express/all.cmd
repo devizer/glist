@@ -1,3 +1,4 @@
+type sql-dev-2017.ps1 | powershell -c -
 call SQL-Express-2017-Updated.cmd 
 call SQL-Express-2016-Updated.cmd
 call SQL-Express-2014-SP1.cmd
