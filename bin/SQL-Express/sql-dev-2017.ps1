@@ -1,8 +1,8 @@
 $v=2017
 $KEY="SQL-Dev-$v-SP-x64"
-Write-Host "DOWNLOADING SQL $v BOOTSTRAPPER"
 $url="https://download.microsoft.com/download/5/A/7/5A7065A2-C81C-4A31-9972-8A31AC9388C1/SQLServer2017-SSEI-Dev.exe"
 $outfile="${Env:AppData}\Temp\$KEY.exe"
+Write-Host "DOWNLOADING SQL $v BOOTSTRAPPER into `"$outfile`""
 New-Item "${Env:AppData}\Temp" -type directory -force -EA SilentlyContinue | out-null
 
 '
@@ -54,7 +54,9 @@ BROWSERSVCSTARTUPTYPE="Manual"
 [System.Net.ServicePointManager]::ServerCertificateValidationCallback={$true}; $d=new-object System.Net.WebClient; 
 $d.DownloadFile("$url","$outfile")
 
-& cmd /c "$outfile" /ENU /IAcceptSqlServerLicenseTerms /Quiet /Verbose /ConfigurationFile="${Env:AppData}\Temp\2017-DEV.ini" /Action=Install /Language=en-US /InstallPath="${Env:SystemDrive}\SQL"
+pushd "${Env:AppData}\Temp"
+& cmd /c $KEY.exe /ENU /IAcceptSqlServerLicenseTerms /Quiet /Verbose /ConfigurationFile=.\2017-DEV.ini /Action=Install /Language=en-US /InstallPath="${Env:SystemDrive}\SQL"
+popd
 
 & cmd /c rd /q /s "${Env:SystemDrive}\SQLServer2017Media\Developer_ENU"
 

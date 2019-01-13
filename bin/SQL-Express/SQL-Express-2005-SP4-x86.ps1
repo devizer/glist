@@ -39,7 +39,7 @@ pushd $Env:windir\microsoft.net
 & Framework\v4.0.30319\ngen.exe    queue pause
 popd
 
-$target="C:\SQL"
+$target="${Env:SystemDrive}\SQL"
 pushd "$temp\SQL-Express-2005-SP4-x86"
 cmd /c .\setup.exe /qb ADDLOCAL=SQL_Engine INSTANCENAME=SQL_2005_SP4 DISABLENETWORKPROTOCOLS=0 SECURITYMODE=SQL SAPWD=``1qazxsw2 INSTALLSQLDIR="$target"
 popd
