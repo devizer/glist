@@ -55,7 +55,7 @@ BROWSERSVCSTARTUPTYPE="Manual"
 $d.DownloadFile("$url","$outfile")
 
 pushd "${Env:AppData}\Temp"
-& cmd /c $KEY.exe /ENU /IAcceptSqlServerLicenseTerms /Quiet /Verbose /ConfigurationFile=.\2017-DEV.ini /Action=Install /Language=en-US /InstallPath="${Env:SystemDrive}\SQL"
+& cmd /c "$KEY.exe" /ENU /IAcceptSqlServerLicenseTerms /Quiet /Verbose /ConfigurationFile=.\2017-DEV.ini /Action=Install /Language=en-US /InstallPath="${Env:SystemDrive}\SQL"
 popd
 
 & cmd /c rd /q /s "${Env:SystemDrive}\SQLServer2017Media\Developer_ENU"
