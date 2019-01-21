@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# Here is one line installer 
+# wget -q -nv -O - https://raw.githubusercontent.com/devizer/glist/master/bin/megatools/install.sh | bash
+
 if [ "$(command -v megatools)" == "" ]; then
   echo "Installing megatools for ARMv7 | AARCH64"
   if [[ $(uname -m) == armv7* ]]; then arch=arm32; else arch=arm64; fi; echo "ARM Architecture: $arch"
@@ -13,6 +16,3 @@ if [ "$(command -v megatools)" == "" ]; then
   rm -rf $work
 fi
 megatools --version | grep 'command line tools'
-
-
-
