@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Here is one line installer 
-# wget -q -nv -O - https://raw.githubusercontent.com/devizer/glist/master/bin/megatools/install.sh | bash
+# wget -q -nv --no-check-certificate -O - https://raw.githubusercontent.com/devizer/glist/master/bin/megatools/install.sh | bash
 
 if [ "$(command -v megatools)" == "" ]; then
   echo "Installing megatools for ARMv7 | AARCH64"
