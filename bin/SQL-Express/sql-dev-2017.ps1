@@ -4,6 +4,7 @@ $url="https://download.microsoft.com/download/5/A/7/5A7065A2-C81C-4A31-9972-8A31
 $outfile="${Env:AppData}\Temp\$KEY.exe"
 Write-Host "DOWNLOADING SQL $v BOOTSTRAPPER into `"$outfile`""
 New-Item "${Env:AppData}\Temp" -type directory -force -EA SilentlyContinue | out-null
+$sys=$Env:SystemDrive; if (-not $sys) { $sys="C:\" }; $sys=$sys.ToUpper().TrimEnd([char]92);
 
 '
 [OPTIONS]
@@ -23,8 +24,10 @@ X86="False"
 INSTANCENAME="SQL_DEV_2017"
 INSTANCEID="SQL_DEV_2017"
 SQLTELSVCACCT="NT Service\SQLTELEMETRY$SQL_DEV_2017"
-SQLTELSVCSTARTUPTYPE="Manual"
-INSTANCEDIR="C:\SQL"
+SQLTELSVCSTARTUPTYPE="Disabled"
+INSTANCEDIR="' + $sys + '\SQL"
+INSTALLSHAREDDIR="' + $sys + '\SQL\x64"
+INSTALLSHAREDWOWDIR="' + $sys + '\SQL\x86"
 AGTSVCACCOUNT="NT AUTHORITY\SYSTEM"
 AGTSVCSTARTUPTYPE="Manual"
 COMMFABRICPORT="0"
