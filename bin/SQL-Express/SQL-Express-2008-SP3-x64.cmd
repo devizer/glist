@@ -12,6 +12,7 @@ echo Extracting %KEY%.exe
 "%outfile%" /q /x:"%AppData%\Temp\%KEY%"
 del /F /Q "%outfile%"
 
+rem # https://docs.microsoft.com/en-us/previous-versions/sql/sql-server-2008/ms144259(v=sql.100)
 "%AppData%\Temp\%KEY%\Setup.exe" /QS /INDICATEPROGRESS /Action=Install ^
   /ADDCURRENTUSERASSQLADMIN ^
   /FEATURES=SQLENGINE ^
@@ -19,8 +20,8 @@ del /F /Q "%outfile%"
   /SECURITYMODE=SQL /SAPWD=`1qazxsw2 ^
   /SQLSVCACCOUNT="NT AUTHORITY\SYSTEM" ^
   /INSTANCEDIR="%SystemDrive%\SQL" ^
-  /INSTALLSHAREDDIR="%SystemDrive%\SQL\x64" ^
-  /INSTALLSHAREDWOWDIR="%SystemDrive%\SQL\x86" ^
+  /INSTALLSHAREDDIR="%SystemDrive%\SQL\x64b" ^
+  /INSTALLSHAREDWOWDIR="%SystemDrive%\SQL\x86b" ^
   /SQLSYSADMINACCOUNTS="BUILTIN\ADMINISTRATORS" ^
   /TCPENABLED=1 /NPENABLED=1 
 
