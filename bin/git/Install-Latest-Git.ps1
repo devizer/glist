@@ -9,6 +9,7 @@ New-Item $git_path -type directory -force -EA SilentlyContinue | out-null
 [System.Net.ServicePointManager]::ServerCertificateValidationCallback={$true};
 $d=new-object System.Net.WebClient; $d.DownloadFile("$baseUrl","$download_path\PortableGit-$suffix.7z.exe");
 
+$prev_path=[Environment]::GetEnvironmentVariable("PATH", [EnvironmentVariableTarget]::User)
 $new_path = ";$download_path\PortableGit\bin;$download_path\PortableGit\cmd;$download_path\PortableGit\usr\bin"
 $Env:PATH += $new_path
 
@@ -23,6 +24,5 @@ popd
 
 & git --version
 
-$prev_path=[Environment]::GetEnvironmentVariable("PATH", [EnvironmentVariableTarget]::User)
 [Environment]::SetEnvironmentVariable("PATH", $prev_path + ";$new_path", [EnvironmentVariableTarget]::User)
 
