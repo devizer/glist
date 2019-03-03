@@ -2,6 +2,8 @@
 # Origin: https://megatools.megous.com/builds/experimental/
 # Here is one line installer 
 # wget -q -nv --no-check-certificate -O - https://raw.githubusercontent.com/devizer/glist/master/bin/megatools/install.sh | bash
+# Dependencies:
+# sudo apt-get install musl gettext zlib1g openssl nghttp2 libcurl3 libffi6 libglib2.0-0
 
 if [ "$(command -v megatools)" == "" ]; then
   echo "Installing megatools for ARMv7 | AARCH64 | X64 Linux"
