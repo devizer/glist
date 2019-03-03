@@ -1,2 +1,2 @@
 # glist
-tiny scrips
+tiny or not so scrips
