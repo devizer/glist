@@ -1,5 +1,6 @@
 call windows-version-vars-apply.cmd
 
+set url=
 If Defined IS_WINDOWS_6_1_OR_ABOVE (
   rem Ver 16.5.3 
   set url=https://download.microsoft.com/download/9/3/3/933EA6DD-58C5-4B78-8BEC-2DF389C72BE0/SSMS-Setup-ENU.exe
