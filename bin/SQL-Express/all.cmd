@@ -1,7 +1,13 @@
 @echo off
-netsh advfirewall firewall add rule name="All ICMP V4" protocol=icmpv4:any,any dir=in action=allow
-netsh advfirewall firewall add rule name="Open Port 1433 (SQL Server)" dir=in action=allow protocol=TCP localport=1433
 call windows-version-vars-apply.cmd
+
+If Defined IS_WINDOWS_6_1_OR_ABOVE (
+  netsh advfirewall firewall add rule name="All ICMP V4" protocol=icmpv4:any,any dir=in action=allow
+  netsh advfirewall firewall add rule name="Open Port 1433 (SQL Servers)" dir=in action=allow protocol=TCP localport=1433
+) Else (
+  netsh firewall set icmpsetting type=ALL mode=enable
+  netsh firewall add portopening TCP 1433 "Open Port 1433 (SQL Servers)"
+)
 
 If Defined IS_WINDOWS_6_2_OR_ABOVE (If Defined IS_X64_WINDOWS (
   title [1/10] SQL Server 2017 Developer Edition
