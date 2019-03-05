@@ -7,7 +7,7 @@ function Get-CrossPlatformInfo()
   $info = @{
     IsCore = ($PSVersionTable.PSEdition -eq "Core");
     IsWindows = ("Win32NT" -eq [Environment]::OSVersion.Platform);
-    IsNanoServer = $false;
+    # IsNanoServer = $false;
     Platform = "Unknown";
   }
   
