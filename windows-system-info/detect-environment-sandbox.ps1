@@ -7,14 +7,19 @@ function GetCrossPlatformInfo()
   }
   # Platform is one of: Windows | Linux | Darwin | FreeBSD | Unix (unknown)
   if ($info.IsWindows) { $info.Platform = "Windows" } else { $info.Platform = "Unix (unknown)"; try { $info.Platform = ((uname -s) | out-string 2>$null).Trim(@([char] 13, [char] 10, [char]32)) } catch {} }
+  # $info
 
-  $ret = @{
-     Kind="Desktop"; 
-     IsCore=$false; 
-     Description="Classic powershell on Windows XP ... Server 2019 including Server Core)";
-     Platform=$info.Plaform;
-  };
-  
+
+  # @{IsDesktop=$isDesktop; IsWindows=$isWindows; IsNanoServer=$isNanoServer };
+
+  if ((get-command "Get-ComputerInfo" -errorAction SilentlyContinue) -and ("Nano Server" -eq ((get-computerinfo -Property WindowsInstallationType).WindowsInstallationType))) {
+    if ("Nano Server" -eq ((get-computerinfo -Property WindowsInstallationType).WindowsInstallationType)) { 
+      $ret.Kind = "Nano"; 
+      $ret.Description = "Nano Server"
+    }
+  }
+
+  $ret = @{Kind="Desktop"; IsCore=$false; Description="Classic powershell on Windows XP ... Server 2019 including Server Core)"};
   if ($PSVersionTable.PSEdition -eq "Core") { 
     $ret = @{Kind=$null; IsCore=$true; Description=$null};
     # Either pwsh or Nano Server.
@@ -34,7 +39,7 @@ function GetCrossPlatformInfo()
       else
       {
         $ret.Kind="Unix-Core";
-        $ret.Description="pwsh core on Unix (either Linux or MacOS)"
+        $ret.Description="pwsh core on Unix (either linux or MacOS)"
       }
     }
   }
