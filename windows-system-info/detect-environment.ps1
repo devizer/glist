@@ -11,8 +11,8 @@ function GetCrossPlatformInfo()
   $ret = @{
      Kind="Desktop"; 
      IsCore=$false; 
-     Description="Classic powershell on Windows XP ... Server 2019 including Server Core)";
-     Platform=$info.Plaform;
+     Description="Classic powershell on Windows XP ... Server 2019+ including Server Core)";
+     Platform=$info.Platform;
   };
   
   if ($PSVersionTable.PSEdition -eq "Core") { 
