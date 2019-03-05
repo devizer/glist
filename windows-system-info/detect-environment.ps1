@@ -1,20 +1,19 @@
 function GetCrossPlatformInfo()
 {
-  # true if classic powershell.exe, but not a Nano Server
-$info = @{
-  IsDesktop = -not ($PSVersionTable.PSEdition -eq "Core");
-  IsWindows = ("Win32NT" -eq [Environment]::OSVersion.Platform);
-  IsNanoServer = ((get-command "Get-ComputerInfo" -errorAction SilentlyContinue) -and ("Nano Server" -eq ((get-computerinfo -Property WindowsInstallationType).WindowsInstallationType)));
-}
-# Platform is one of: Windows | Linux | Darwin | FreeBSD | Unix
-if ($info.IsWindows) { $info.Platform = "Windows" } else { $info.Platform = "Unix (unknown)"; try { $info.Platform = ((uname -s) | out-string 2>$null).Trim(@([char] 13, [char] 10, [char]32)) } catch {} }
-$info
+  $info = @{
+    IsDesktop = -not ($PSVersionTable.PSEdition -eq "Core");
+    IsWindows = ("Win32NT" -eq [Environment]::OSVersion.Platform);
+    IsNanoServer = ((get-command "Get-ComputerInfo" -errorAction SilentlyContinue) -and ("Nano Server" -eq ((get-computerinfo -Property WindowsInstallationType).WindowsInstallationType)));
+  }
+  # Platform is one of: Windows | Linux | Darwin | FreeBSD | Unix (unknown)
+  if ($info.IsWindows) { $info.Platform = "Windows" } else { $info.Platform = "Unix (unknown)"; try { $info.Platform = ((uname -s) | out-string 2>$null).Trim(@([char] 13, [char] 10, [char]32)) } catch {} }
+  # $info
 
 
-  @{IsDesktop=$isDesktop; IsWindows=$isWindows; IsNanoServer=$isNanoServer };
+  # @{IsDesktop=$isDesktop; IsWindows=$isWindows; IsNanoServer=$isNanoServer };
 
   if ((get-command "Get-ComputerInfo" -errorAction SilentlyContinue) -and ("Nano Server" -eq ((get-computerinfo -Property WindowsInstallationType).WindowsInstallationType))) {
-    if ("Nano Server" -eq ((get-computerinfo -Property WindowsInstallationType).WindowsInstallationType) { 
+    if ("Nano Server" -eq ((get-computerinfo -Property WindowsInstallationType).WindowsInstallationType)) { 
       $ret.Kind = "Nano"; 
       $ret.Description = "Nano Server"
     }
@@ -46,5 +45,5 @@ $info
   }
   return $ret;
 }
-$environment
-if ($PSVersionTable.PSEdition -eq "Core") { Write-Host "Core"; }
+GetCrossPlatformInfo
+# if ($PSVersionTable.PSEdition -eq "Core") { Write-Host "Core"; }

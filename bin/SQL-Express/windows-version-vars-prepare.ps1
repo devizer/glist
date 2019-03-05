@@ -4,6 +4,10 @@ function AddVar { param([string]$var, [string]$value)
   ${Env:$var}=$value
 }
 
+function BoolAsValue { param([bool]$bool)
+  if ($bool) { "true"; } else { "" };
+}
+
 $todo = @(
   @{ Major = 5; Minor = 0 }, # 2000
   @{ Major = 5; Minor = 1 }, # XP x86
@@ -29,9 +33,19 @@ foreach($check in $todo) {
   AddVar $var $value
 }
 
-$is64 = (gwmi Win32_ComputerSystem).SystemType.IndexOf("64") -gt 0;
+$is64 = (Get-WMIObject Win32_ComputerSystem).SystemType.IndexOf("64") -ge 0;
 if ($is64) { $v86=""; $v64="true"; } else { $v86="true"; $v64=""; }
 AddVar "IS_X86_WINDOWS" $v86
 AddVar "IS_X64_WINDOWS" $v64
+
+$win_10_release_id = (Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion').ReleaseId
+AddVar "WINDOWS_10_RELEASE_ID" $win_10_release_id
+
+$productType=""
+$productTypeRaw = (Get-WMIObject Win32_OperatingSystem).ProductType
+AddVar "IS_WINDOWS_SERVER" (BoolAsValue (-not ($productTypeRaw -eq 1)))
+AddVar "IS_WINDOWS_WORKSTATION" (BoolAsValue ($productTypeRaw -eq 1))
+AddVar "IS_DOMAIN_CONTROLLER" (BoolAsValue ($productTypeRaw -eq 2))
+
 
 "DONE: [$($report_Cmd)] was updated."
