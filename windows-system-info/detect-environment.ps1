@@ -7,8 +7,8 @@ function Get-CrossPlatformInfo()
   $info = @{
     IsCore = ($PSVersionTable.PSEdition -eq "Core");
     IsWindows = ("Win32NT" -eq [Environment]::OSVersion.Platform);
-    IsNanoServer = $false;
     Platform = "Unknown";
+    IsNanoServer = $false;
     IsMacOS = $false;
     IsRedHatDerivative = $false;
     IsDebianDerivative = $false;
@@ -30,7 +30,9 @@ function Get-CrossPlatformInfo()
   }
 
   $info.IsMacOS = ($info.Platform -eq "Darwin");
-  if ($info.Platform -eq "Linux") {
+
+  $info.IsLinux = ($info.Platform -eq "Linux");
+  if ($info.IsLinux) {
     if (Test-Path "/etc/SuSE-release") { $info.IsSuseDerivative = $true; }
     if (Test-Path "/etc/debian_version") { $info.IsDebianDerivative = $true; }
     if (Test-Path "/etc/redhat-release") { $info.IsRedHatDerivative = $true; }
