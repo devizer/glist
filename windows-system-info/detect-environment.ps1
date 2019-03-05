@@ -1,5 +1,5 @@
 #!/usr/bin/env pwsh
-# [string] Platform: "Windows", "NanoServer", "Linux", "Darwin", "FreeBSD", "Unix (unknown)"
+# [string] Platform: "Windows", "Linux", "Darwin", "FreeBSD", "Unix (unknown)"
 # [bool] IsCore
 # [bool] IsWindows
 function Get-CrossPlatformInfo()
