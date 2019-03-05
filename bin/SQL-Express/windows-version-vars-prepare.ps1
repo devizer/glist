@@ -41,6 +41,9 @@ AddVar "IS_X64_WINDOWS" $v64
 $win_10_release_id = (Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion').ReleaseId
 AddVar "WINDOWS_10_RELEASE_ID" $win_10_release_id
 
+$installationType = (Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion').InstallationType
+AddVar "IS_NANO_SERVER" (BoolAsValue ($installationType -eq "Nano Server"))
+
 $productType=""
 $productTypeRaw = (Get-WMIObject Win32_OperatingSystem).ProductType
 AddVar "IS_WINDOWS_SERVER" (BoolAsValue (-not ($productTypeRaw -eq 1)))
