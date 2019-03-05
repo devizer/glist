@@ -16,7 +16,7 @@ function GetCrossPlatformInfo()
   };
   
   if ($PSVersionTable.PSEdition -eq "Core") { 
-    $ret = @{Kind=$null; IsCore=$true; Description=$null};
+    $ret = @{Kind=$null; IsCore=$true; Description=$null;Platform=$info.Platform;};
     # Either pwsh or Nano Server.
     # First, check nano server
     if (get-command "Get-ComputerInfo" -errorAction SilentlyContinue) {
