@@ -16,7 +16,7 @@ $todo = @(
   @{ Major = 6; Minor = 1 }, # 7, Server 2008 R2
   @{ Major = 6; Minor = 2 }, # 8, Server 2012
   @{ Major = 6; Minor = 3 }, # 8.1, Server 2012 R2
-  @{ Major =10; Minor = 0 }  # 10, Server 2016
+  @{ Major =10; Minor = 0 }  # 10, Server 2016, Nano Server
 );
 $major = [System.Environment]::OSVersion.Version.Major;
 $minor = [System.Environment]::OSVersion.Version.Minor;
