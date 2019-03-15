@@ -61,4 +61,4 @@ cmd /c msiexec /i "SQL-LocalDB-$suffix.MSI" IACCEPTSQLLOCALDBLICENSETERMS=YES /q
 Write-Host "Log file is $download_To/SqlLocaLDB-$suffix.log"
 popd
 
-Remove-Item -Force "$download_To\*.MSI"
+Remove-Item -Force "$download_To\*.MSI" -errorAction SilentlyContinue

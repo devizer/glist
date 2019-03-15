@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Net;
+using System.Reflection;
 using System.Threading;
 
 internal class Program
@@ -33,7 +34,8 @@ internal class Program
 
     public static int Main(string[] args)
     {
-        Write(Kind.Progress,  "Downloader @ NET: {0}", Environment.Version);
+        string protocol = ApplyTls12();
+        Write(Kind.Progress,  "Downloader @ NET: {0}, Secure Protocol: {1}", Environment.Version, protocol);
         ServicePointManager.ServerCertificateValidationCallback += delegate { return true; };
         var defaultConnectionLimit = Math.Max(args.Length-1, 2);
         ServicePointManager.DefaultConnectionLimit = defaultConnectionLimit;
@@ -52,6 +54,28 @@ internal class Program
             return 9999;
         }
     }
+
+    static string ApplyTls12()
+    {
+        string ret = "default";
+        try
+        {
+            ret = ServicePointManager.SecurityProtocol.ToString();
+            FieldInfo protocolTypeField = typeof(SecurityProtocolType).GetField("Tls12");
+            if (protocolTypeField != null)
+            {
+                SecurityProtocolType protocolType = (SecurityProtocolType) protocolTypeField.GetValue(null);
+                ServicePointManager.SecurityProtocol = protocolType;
+                ret = protocolType.ToString();
+            }
+        }
+        catch
+        {
+        }
+
+        return ret;
+    }
+
 
     private static int Exec(string[] args)
     {
