@@ -45,12 +45,14 @@ if (Get-Command Add-WindowsFeature -errorAction SilentlyContinue)
     Add-WindowsFeature NET-Framework-45-Core -EA SilentlyContinue
 }
 
+
 Write-Host "Suspending .NET NGEN Queue"
 pushd "$Env:windir\microsoft.net"
-$__ = (& Framework64\v2.0.50727\ngen.exe  queue pause 2>&1)
-$__ = (& Framework64\v4.0.30319\ngen.exe  queue pause 2>&1)
-$__ = (& Framework\v2.0.50727\ngen.exe    queue pause 2>&1)
-$__ = (& Framework\v4.0.30319\ngen.exe    queue pause 2>&1)
+foreach($ngen in @("Framework64\v2.0.50727\ngen.exe", "Framework64\v4.0.30319\ngen.exe", "Framework\v2.0.50727\ngen.exe", "Framework\v4.0.30319\ngen.exe")) {
+  if (Test-Path $ngen) { 
+    $__ = (& $ngen queue pause 2>&1)
+  }
+}
 popd
 
 pushd "$download_To"
