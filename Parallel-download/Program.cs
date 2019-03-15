@@ -91,14 +91,15 @@ internal class Program
         List<string> urls = new List<string>();
         for (int i = 1; i < args.Length; i++) urls.Add(args[i]);
 
-        int retryNumer = 0;
-        while (urls.Count > 0 && retryNumer < args.Length)
+        int retryNumber = 0;
+        var retryLimit = args.Length + 3;
+        while (urls.Count > 0 && retryNumber < retryLimit)
         {
-            if (retryNumer > 0) Write(Kind.Error, "RETRY: {0}", retryNumer);
+            if (retryNumber > 0) Write(Kind.Error, "RETRY: {0}", retryNumber);
             int prev = urls.Count;
             TryDownload(urls);
             int next = urls.Count;
-            retryNumer++;
+            retryNumber++;
         }
 
         return Errors.Count;
