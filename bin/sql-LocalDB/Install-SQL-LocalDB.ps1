@@ -29,23 +29,6 @@ function Download-Essentials {
   }
 }
 
-function ShowLocalDbVersion
-{
-    # Powershell 2.0 compatible
-    try {
-      $con = new-object System.Data.SqlClient.SqlConnection("Server=(localdb)\mssqllocaldb;Integrated Security=SSPI; Connection Timeout=9")
-      $sql = "Select Cast(ServerProperty('Edition') as nvarchar) + ' ' + Cast(ServerProperty('ProductVersion') as nvarchar)"
-      $cmd = new-object System.Data.SqlClient.SqlCommand($sql, $con)
-      $con.Open()
-      $rdr = $cmd.ExecuteReader()
-      $__ = $rdr.Read()
-      Write-Host "LocalDB Version: $($rdr.GetString(0))"
-      $con.Close()
-    } catch { 
-      Write-Host "(localdb)\mssqllocaldb is not accessible $($_.Exception.GetType().Name) $($_.Exception.Message)"
-    }
-}
-
 function GetMsiExitCodeDescription {
   param([int] $exitCode)
   $descriptions = @(
@@ -116,6 +99,25 @@ function GetMsiExitCodeDescription {
   }
   return "$exitCode"
 }
+
+function ShowLocalDbVersion
+{
+    # Powershell 2.0 compatible
+    try {
+      $con = new-object System.Data.SqlClient.SqlConnection("Server=(localdb)\mssqllocaldb;Integrated Security=SSPI; Connection Timeout=9")
+      $sql = "Select Cast(ServerProperty('Edition') as nvarchar) + ' ' + Cast(ServerProperty('ProductVersion') as nvarchar)"
+      $cmd = new-object System.Data.SqlClient.SqlCommand($sql, $con)
+      $con.Open()
+      $rdr = $cmd.ExecuteReader()
+      $__ = $rdr.Read()
+      Write-Host "LocalDB Version: $($rdr.GetString(0))"
+      $con.Close()
+    } catch { 
+      Write-Host "(localdb)\mssqllocaldb is not accessible $($_.Exception.GetType().Name) $($_.Exception.Message)"
+    }
+}
+
+
 
 $Essentials = Download-Essentials;
 
