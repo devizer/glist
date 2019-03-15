@@ -20,7 +20,7 @@ Write-Host "Architecture: $($Env:PROCESSOR_ARCHITECTURE). 7-Zip: $_7_Zip";
 
 # $suffix="v13-x64"; if ( -Not ("$($Env:PROCESSOR_ARCHITECTURE)" -eq "AMD64")) { $suffix="v11-x86"; }
 $suffix="v14-x64"; if ( -Not ("$($Env:PROCESSOR_ARCHITECTURE)" -eq "AMD64")) { $suffix="v12-x86"; }
-$pars=@("`"$Temp\LocalDB-Installer`"", "https://raw.githubusercontent.com/devizer/glist/master/bin/sql-LocalDB/SQL-LocalDB-$suffix.msi")
+$pars=@("`"$Temp\LocalDB-Installer`"", "https://raw.githubusercontent.com/devizer/glist/master/bin/sql-LocalDB/Sql-LocalDB-$suffix.msi")
 pushd $Temp
 & "$Essentials\Parallel-Download.exe" $pars
 popd
