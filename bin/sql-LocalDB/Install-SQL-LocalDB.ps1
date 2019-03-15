@@ -31,6 +31,7 @@ function Download-Essentials {
 
 function ShowLocalDbVersion
 {
+    # Powershell 2.0 compatible
     try {
       $con = new-object System.Data.SqlClient.SqlConnection("Server=(localdb)\mssqllocaldb;Integrated Security=SSPI; Connection Timeout=9")
       $sql = "Select Cast(ServerProperty('Edition') as nvarchar) + ' ' + Cast(ServerProperty('ProductVersion') as nvarchar)"
@@ -41,7 +42,7 @@ function ShowLocalDbVersion
       Write-Host "LocalDB Version: $($rdr.GetString(0))"
       $con.Close()
     } catch { 
-      Write-Host "(localdb)\mssqllocaldb is not avaiable $($_.Exception.GetType().Name) $($_.Exception.Message)"
+      Write-Host "(localdb)\mssqllocaldb is not accessible $($_.Exception.GetType().Name) $($_.Exception.Message)"
     }
 }
 
