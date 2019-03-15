@@ -1,3 +1,5 @@
+# One Line Installer
+# @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/devizer/glist/master/bin/sql-LocalDB/Install-SQL-LocalDB.ps1'))"
 $files=$("Essentials.7z.exe")
 $baseUrl="https://raw.githubusercontent.com/devizer/glist/master/Essentials/"
 $Temp="$($Env:LocalAppData)"; if ($Temp -eq "") { $Temp="$($Env:UserProfile)"; }
@@ -18,7 +20,7 @@ Write-Host "Architecture: $($Env:PROCESSOR_ARCHITECTURE). 7-Zip: $_7_Zip";
 
 # $suffix="v13-x64"; if ( -Not ("$($Env:PROCESSOR_ARCHITECTURE)" -eq "AMD64")) { $suffix="v11-x86"; }
 $suffix="v14-x64"; if ( -Not ("$($Env:PROCESSOR_ARCHITECTURE)" -eq "AMD64")) { $suffix="v12-x86"; }
-$pars=@("`"$Temp\LocalDB-Installer`"", "https://raw.githubusercontent.com/devizer/glist/master/bin/sql-LocalDB/SQL-LocalDB-$suffix.MSI")
+$pars=@("`"$Temp\LocalDB-Installer`"", "https://raw.githubusercontent.com/devizer/glist/master/bin/sql-LocalDB/SQL-LocalDB-$suffix.msi")
 pushd $Temp
 & "$Essentials\Parallel-Download.exe" $pars
 popd
