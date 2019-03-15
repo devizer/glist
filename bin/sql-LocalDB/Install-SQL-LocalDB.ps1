@@ -16,7 +16,8 @@ popd
 $_7_Zip="$Essentials\x64\7z.exe";  if ( -Not ("$($Env:PROCESSOR_ARCHITECTURE)" -eq "AMD64")) { $_7_Zip="$Essentials\x86\7z.exe"; }
 Write-Host "Architecture: $($Env:PROCESSOR_ARCHITECTURE). 7-Zip: $_7_Zip";
 
-$suffix="v13-x64"; if ( -Not ("$($Env:PROCESSOR_ARCHITECTURE)" -eq "AMD64")) { $suffix="v11-x86"; }
+# $suffix="v13-x64"; if ( -Not ("$($Env:PROCESSOR_ARCHITECTURE)" -eq "AMD64")) { $suffix="v11-x86"; }
+$suffix="v14-x64"; if ( -Not ("$($Env:PROCESSOR_ARCHITECTURE)" -eq "AMD64")) { $suffix="v12-x86"; }
 $pars=@("`"$Temp\LocalDB-Installer`"", "https://raw.githubusercontent.com/devizer/glist/master/bin/sql-LocalDB/SQL-LocalDB-$suffix.MSI")
 pushd $Temp
 & "$Essentials\Parallel-Download.exe" $pars
