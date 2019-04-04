@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Here is one line installer 
-# wget -q -nv --no-check-certificate -O - https://raw.githubusercontent.com/devizer/glist/master/bin/install-dotnet-and-nodejs.sh | bash
+# wget -q -nv --no-check-certificate -O - https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-and-nodejs.sh | bash
 
 set -e
 set -u
