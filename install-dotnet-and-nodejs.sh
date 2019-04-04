@@ -41,7 +41,6 @@ header "The current OS architecture" $arch
 
 eval links='$'links_$arch
 eval link_node='$'link_node_$arch
-eval link_pwsh='$'link_pwsh_$arch
 
 function extract () {
   url=$1
