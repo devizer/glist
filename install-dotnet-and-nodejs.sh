@@ -124,7 +124,7 @@ function install_dotnet() {
 }
 
 # powershell with a execution (+x) fix
-function _install_pwsh() {
+function install_pwsh() {
   sudo rm -rf /opt/powershell >/dev/null 2>&1
   extract $link_pwsh "/opt/powershell" 'skip-pwsh-symlinks'
   # There is a bug with official powershell distribution. It is a fix:
