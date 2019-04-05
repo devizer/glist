@@ -123,6 +123,7 @@ while [ $# -ne 0 ]; do
     param="$1"
     case "$param" in
         dotnet|node|pwsh)
+            echo Enqueued installation of $param
             eval _$param=yes
             _nothing=
             ;;
@@ -130,7 +131,6 @@ while [ $# -ne 0 ]; do
             echo "Unknown argument \`$param\`"
     esac
 
-    echo Parameter: $param
     shift
 done
 if [[ ! -z "$_dotnet" ]]; then install_dotnet; fi
