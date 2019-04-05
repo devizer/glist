@@ -124,7 +124,7 @@ while [ $# -ne 0 ]; do
     case "$param" in
         dotnet|node|pwsh)
             eval '$'_$param=yes
-            nothing=
+            _nothing=
             ;;
         *)
             echo "Unknown argument \`$param\`"
@@ -135,7 +135,7 @@ while [ $# -ne 0 ]; do
 done
 if [[ "$_dotnet" ]]; then install_dotnet; fi
 if [[ "$_node" ]]; then install_node; fi
-if [[ "$nothing" ]]; then 
+if [[ "$_nothing" ]]; then 
   echo 'usage:
 wget -q -nv --no-check-certificate -O - https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-and-nodejs.sh | bash -s dotnet node pwsh
 '
