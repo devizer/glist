@@ -4,7 +4,7 @@
 
 set -e
 set -u
-echo '.NET SDK 2.*/3.0, node 10.5.2 and powershell 6.1/6.2 installer for x64, arm and arm64. 
+echo '.NET SDK 2.*/3.0, node 10.5.3 and powershell 6.1/6.2 generic binaries installer for x64, arm and arm64. 
 System requirements: GLIBC_2.17+, GLIBCXX_3.4.20+'
 
 # ARM 64
@@ -89,31 +89,62 @@ function add_symlinks() {
   popd >/dev/null
 }
 
-counter=0;total=4; for dotnet_url in $links; do total=$((total+2)); done
+counter=0;total=2; for dotnet_url in $links; do total=$((total+2)); done
 
 # node, npm and yarn
-sudo rm -rf /opt/node >/dev/null 2>&1
-extract $link_node "/opt/node" 'skip-symlinks'
+function install_node() {
+  sudo rm -rf /opt/node >/dev/null 2>&1
+  extract $link_node "/opt/node" 'skip-symlinks'
 
-# adding support for global packages
-npm=$(ls -1 /opt/node/node*/bin/npm)
-nodePath=$(dirname $(ls /opt/node/node*/bin/node))
-export PATH="$nodePath:$PATH"
-printf "\n\n"'export PATH="'$nodePath':$PATH"'"\n\n" | tee -a ~/.bashrc >/dev/null
+  # adding support for global packages
+  npm=$(ls -1 /opt/node/node*/bin/npm)
+  nodePath=$(dirname $(ls /opt/node/node*/bin/node))
+  export PATH="$nodePath:$PATH"
+  printf "\n\n"'export PATH="'$nodePath':$PATH"'"\n\n" | tee -a ~/.bashrc >/dev/null
 
-header "Upgrading and installing" 'npm & yarn (latest)'
-sudo bash -c "PATH=\"$nodePath:$PATH\"; npm install yarn npm npm-check-updates --global"
-sudo rm -rf ~/.npm
-add_symlinks 'node*/bin/*' /opt/node
+  header "Upgrading and installing" 'npm & yarn (latest)'
+  sudo bash -c "PATH=\"$nodePath:$PATH\"; npm install yarn npm npm-check-updates --global"
+  sudo rm -rf ~/.npm
+  add_symlinks 'node*/bin/*' /opt/node
+}
 
 # dotnet support upgrade by overwriting prev versions
-for dotnet_url in $links; do
-  extract $dotnet_url "/opt/dotnet" 'dotnet'
+function install_dotnet() {
+  for dotnet_url in $links; do
+    extract $dotnet_url "/opt/dotnet" 'dotnet'
+  done
+}
+
+_dotnet=
+_node=
+_pwsh=
+_nothing=true
+while [ $# -ne 0 ]; do
+    param="$1"
+    case "$param" in
+        dotnet|node|pwsh)
+            eval '$'_$param=yes
+            nothing=
+            ;;
+        *)
+            echo "Unknown argument \`$param\`"
+    esac
+
+    echo Parameter: $param
+    shift
 done
+if [[ "$_dotnet" ]]; install_dotnet; fi
+if [[ "$_node" ]]; install_node; fi
+if [[ "$nothing" ]]; then 
+  echo 'usage:
+wget -q -nv --no-check-certificate -O - https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-and-nodejs.sh | bash -s dotnet node pwsh
+'
 
 sudo rm -rf /tmp/dotnet-tmp >/dev/null 2>&1 || true
-dotnet --info
-header "Installed node:" "$(node --version)"
-header "Installed npm:" "$(npm --version)"
-header "Installed yarn:" "$(yarn --version)"
-header "Installed dotnet:" "$(dotnet --version)"
+[[ ! -z "(command -v node)" ]] && header "Installed node:" "$(node --version)" || echo node is not found
+[[ ! -z "(command -v npm)" ]] && header "Installed npm:" "$(npm --version)" || echo npm is not found
+[[ ! -z "(command -v yarn)" ]] && header "Installed yarn:" "$(yarn --version)" || echo yarn is not found
+[[ ! -z "(command -v dotnet)" ]] && header "Installed dotnet:" "$(dotnet --version):" || echo dotnet is not found
+dotnet --list-sdks
+
+
