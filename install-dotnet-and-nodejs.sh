@@ -133,9 +133,9 @@ while [ $# -ne 0 ]; do
     echo Parameter: $param
     shift
 done
-if [[ "$_dotnet" ]]; then install_dotnet; fi
-if [[ "$_node" ]]; then install_node; fi
-if [[ "$_nothing" ]]; then 
+if [[ ! -z "$_dotnet" ]]; then install_dotnet; fi
+if [[ ! -z "$_node" ]]; then install_node; fi
+if [[ ! -z "$_nothing" ]]; then 
   echo 'usage:
 wget -q -nv --no-check-certificate -O - https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-and-nodejs.sh | bash -s dotnet node pwsh
 '
