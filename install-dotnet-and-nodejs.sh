@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Here is one line installer 
-# wget -q -nv --no-check-certificate -O - https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-and-nodejs.sh | bash
+# wget -q -nv --no-check-certificate -O - https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-and-nodejs.sh | bash -s dotnet node pwsh
 
 set -e
 set -u
@@ -133,12 +133,13 @@ while [ $# -ne 0 ]; do
     echo Parameter: $param
     shift
 done
-if [[ "$_dotnet" ]]; install_dotnet; fi
-if [[ "$_node" ]]; install_node; fi
+if [[ "$_dotnet" ]]; then install_dotnet; fi
+if [[ "$_node" ]]; then install_node; fi
 if [[ "$nothing" ]]; then 
   echo 'usage:
 wget -q -nv --no-check-certificate -O - https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-and-nodejs.sh | bash -s dotnet node pwsh
 '
+fi
 
 sudo rm -rf /tmp/dotnet-tmp >/dev/null 2>&1 || true
 [[ ! -z "(command -v node)" ]] && header "Installed node:" "$(node --version)" || echo node is not found
