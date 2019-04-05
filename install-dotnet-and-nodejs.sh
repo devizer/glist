@@ -4,7 +4,8 @@
 
 set -e
 set -u
-echo '.NET SDK 2.*/3.0, node 10.5.3 and powershell 6.1/6.2 generic binaries installer for x64, arm and arm64. 
+echo '.NET SDK 2.*/3.0, node 10.5.3 and powershell 6.1/6.2 generic binaries installer. 
+Supported architectures: Linux x64, armv7 (32-bit), aarch64 (64-bit) and MacOS 10.12+
 System requirements: GLIBC_2.17+, GLIBCXX_3.4.20+'
 
 # ARM 64
@@ -133,8 +134,8 @@ while [ $# -ne 0 ]; do
     esac
     shift
 done
-if [[ ! -z "$_dotnet" ]]; then install_dotnet; fi
 if [[ ! -z "$_node" ]]; then install_node; fi
+if [[ ! -z "$_dotnet" ]]; then install_dotnet; fi
 if [[ ! -z "$_nothing" ]]; then 
   echo 'usage:
 wget -q -nv --no-check-certificate -O - https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-and-nodejs.sh | bash -s dotnet node pwsh
@@ -142,10 +143,10 @@ wget -q -nv --no-check-certificate -O - https://raw.githubusercontent.com/devize
 fi
 
 sudo rm -rf /tmp/dotnet-tmp >/dev/null 2>&1 || true
-[[ ! -z "(command -v node)" ]] && header "Installed node:" "$(node --version)" || echo node is not found
-[[ ! -z "(command -v npm)" ]] && header "Installed npm:" "$(npm --version)" || echo npm is not found
-[[ ! -z "(command -v yarn)" ]] && header "Installed yarn:" "$(yarn --version)" || echo yarn is not found
-[[ ! -z "(command -v dotnet)" ]] && header "Installed dotnet:" "$(dotnet --version):" || echo dotnet is not found
-dotnet --list-sdks
+[[ ! -z "$(command -v node)" ]]   && header "Installed node:" "$(node --version)"                            || echo node is not found
+[[ ! -z "$(command -v npm)" ]]    && header "Installed npm:" "$(npm --version)"                              || echo npm is not found
+[[ ! -z "$(command -v yarn)" ]]   && header "Installed yarn:" "$(yarn --version)"                            || echo yarn is not found
+[[ ! -z "$(command -v dotnet)" ]] && (header "Installed dotnet:" "$(dotnet --version):"; dotnet --list-sdks) || echo dotnet is not found
+
 
 
