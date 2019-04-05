@@ -129,8 +129,8 @@ while [ $# -ne 0 ]; do
             ;;
         *)
             echo "Unknown argument \`$param\`"
+            ;;
     esac
-
     shift
 done
 if [[ ! -z "$_dotnet" ]]; then install_dotnet; fi
