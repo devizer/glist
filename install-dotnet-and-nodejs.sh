@@ -42,9 +42,6 @@ export link_pwsh_osx='https://github.com/PowerShell/PowerShell/releases/download
 
 function header() { LightGreen='\033[1;32m';Yellow='\033[1;33m';RED='\033[0;31m'; NC='\033[0m'; printf "${LightGreen}$1${NC} ${Yellow}$2${NC}\n"; }
 
-if [[ $(uname -m) == armv7* ]]; then arch=arm32; else arch=arm64; fi; if [[ $(uname -m) == x86_64 ]]; then arch=x64; fi; if [[ $(uname -s) == Darwin ]]; then arch=osx; fi;
-header "The current OS architecture" $arch
-
 # if [ -f check-links.sh ]; then (. check-links.sh); fi; exit
 
 eval links='$'links_$arch
@@ -60,7 +57,7 @@ function extract () {
   
   # DOWNLOADING
   counter=$((counter+1))
-  header "[$counter / $total] Downloading" $filename
+  header "[Step $counter] Downloading" $filename
   if [[ "$(command -v curl)" == "" ]]; then
     sudo wget --no-check-certificate -O /tmp/dotnet-tmp/$filename $url
   else
@@ -71,7 +68,7 @@ function extract () {
   
   # EXTRACTING
   counter=$((counter+1))
-  header "[$counter / $total] Extracting" $filename
+  header "[Step $counter] Extracting" $filename
   if [[ $filename =~ .tar.gz$ ]]; then tarcmd=xzf; else tarcmd=xJf; fi
   if [[ ! -z "$(command -v pv)" ]]; then
     pv /tmp/dotnet-tmp/$filename | sudo tar $tarcmd -
@@ -97,7 +94,7 @@ function add_symlinks() {
   popd >/dev/null
 }
 
-counter=0;total=2; for dotnet_url in $links; do total=$((total+2)); done
+counter=0;total=4; for dotnet_url in $links; do total=$((total+2)); done
 
 # node, npm and yarn
 function install_node() {
@@ -151,14 +148,20 @@ while [ $# -ne 0 ]; do
     esac
     shift
 done
-if [[ ! -z "$_node" ]]; then install_node; fi
-if [[ ! -z "$_dotnet" ]]; then install_dotnet; fi
-if [[ ! -z "$_pwsh" ]]; then install_pwsh; fi
+
 if [[ ! -z "$_nothing" ]]; then 
-  echo 'usage:
+  echo '
+usage:
 wget -q -nv --no-check-certificate -O - https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-and-nodejs.sh | bash -s dotnet node pwsh
 '
 fi
+
+if [[ $(uname -m) == armv7* ]]; then arch=arm32; else arch=arm64; fi; if [[ $(uname -m) == x86_64 ]]; then arch=x64; fi; if [[ $(uname -s) == Darwin ]]; then arch=osx; fi;
+header "The current OS architecture" $arch
+
+if [[ ! -z "$_node" ]]; then install_node; fi
+if [[ ! -z "$_dotnet" ]]; then install_dotnet; fi
+if [[ ! -z "$_pwsh" ]]; then install_pwsh; fi
 
 sudo rm -rf /tmp/dotnet-tmp >/dev/null 2>&1 || true
 [[ ! -z "$(command -v node)" ]]   && header "Installed node:" "$(node --version)"                            || echo node is not found
