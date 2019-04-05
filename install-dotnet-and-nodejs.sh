@@ -43,6 +43,7 @@ export link_pwsh_osx='https://github.com/PowerShell/PowerShell/releases/download
 function header() { LightGreen='\033[1;32m';Yellow='\033[1;33m';RED='\033[0;31m'; NC='\033[0m'; printf "${LightGreen}$1${NC} ${Yellow}$2${NC}\n"; }
 
 if [[ $(uname -m) == armv7* ]]; then arch=arm32; else arch=arm64; fi; if [[ $(uname -m) == x86_64 ]]; then arch=x64; fi; if [[ $(uname -s) == Darwin ]]; then arch=osx; fi;
+header "The current OS architecture" $arch
 # if [ -f check-links.sh ]; then (. check-links.sh); fi; exit
 
 eval links='$'links_$arch
@@ -156,8 +157,6 @@ usage:
 wget -q -nv --no-check-certificate -O - https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-and-nodejs.sh | bash -s dotnet node pwsh
 '
 fi
-
-header "The current OS architecture" $arch
 
 if [[ ! -z "$_node" ]]; then install_node; fi
 if [[ ! -z "$_dotnet" ]]; then install_dotnet; fi
