@@ -10,7 +10,7 @@ System requirements: GLIBC_2.17+, GLIBCXX_3.4.20+'
 
 # ARM 64
 export links_arm64='
-https://download.visualstudio.microsoft.com/download/pr/7d8f3f4c-9a90-42c5-956f-45f673384d3f/14d686d853a964025f5c54db237ff6ef/dotnet-sdk-2.2.105-linux-x64.tar.gz
+https://download.visualstudio.microsoft.com/download/pr/f2e3d68d-dc7e-4a4e-afce-6588572a19d8/d3b822d4387d2d2721eb853108b5251b/dotnet-sdk-2.2.105-linux-arm64.tar.gz
 https://download.visualstudio.microsoft.com/download/pr/4cd1c5c5-21c4-4d2b-bd8c-ab02e3f7e86f/08d30a68dc1e389f985186046036144a/dotnet-sdk-3.0.100-preview3-010431-linux-arm64.tar.gz
 '
 export link_node_arm64='https://nodejs.org/dist/v10.15.3/node-v10.15.3-linux-arm64.tar.xz'
