@@ -14,18 +14,23 @@ https://download.visualstudio.microsoft.com/download/pr/2b201001-7074-476a-aa83-
 https://download.visualstudio.microsoft.com/download/pr/4cd1c5c5-21c4-4d2b-bd8c-ab02e3f7e86f/08d30a68dc1e389f985186046036144a/dotnet-sdk-3.0.100-preview3-010431-linux-arm64.tar.gz
 '
 export link_node_arm64='https://nodejs.org/dist/v10.15.3/node-v10.15.3-linux-arm64.tar.xz'
+export link_pwsh_arm64='https://github.com/PowerShell/PowerShell/releases/download/v6.2.0/powershell-6.2.0-linux-arm64.tar.gz'
+export link_pwsh_arm64='https://github.com/PowerShell/PowerShell/releases/download/v6.2.0/powershell-6.2.0-linux-arm64.tar.gz'
 
 # X64
 export links_x64='
 https://download.visualstudio.microsoft.com/download/pr/69937b49-a877-4ced-81e6-286620b390ab/8ab938cf6f5e83b2221630354160ef21/dotnet-sdk-2.2.104-linux-x64.tar.gz
 '
 export link_node_x64='https://nodejs.org/dist/v10.15.3/node-v10.15.3-linux-x64.tar.xz'
+export link_pwsh_x64='https://github.com/PowerShell/PowerShell/releases/download/v6.2.0/powershell-6.2.0-linux-x64.tar.gz'
 
 # ARM
 export links_arm32='
 https://download.visualstudio.microsoft.com/download/pr/d9f37b73-df8d-4dfa-a905-b7648d3401d0/6312573ac13d7a8ddc16e4058f7d7dc5/dotnet-sdk-2.2.104-linux-arm.tar.gz
 '
 export link_node_arm32='https://nodejs.org/dist/v10.15.3/node-v10.15.3-linux-armv7l.tar.xz'
+export link_pwsh_arm32='https://github.com/PowerShell/PowerShell/releases/download/v6.2.0/powershell-6.2.0-linux-arm32.tar.gz'
+
 
 # OSX
 export links_osx='
@@ -33,6 +38,7 @@ https://download.visualstudio.microsoft.com/download/pr/7b61ec42-34d4-443a-9472-
 '
 
 export link_node_osx='https://nodejs.org/dist/v10.15.3/node-v10.15.3-darwin-x64.tar.gz'
+export link_pwsh_osx='https://github.com/PowerShell/PowerShell/releases/download/v6.2.0/powershell-6.2.0-osx-x64.tar.gz'
 
 function header() { LightGreen='\033[1;32m';Yellow='\033[1;33m';RED='\033[0;31m'; NC='\033[0m'; printf "${LightGreen}$1${NC} ${Yellow}$2${NC}\n"; }
 
@@ -43,6 +49,7 @@ header "The current OS architecture" $arch
 
 eval links='$'links_$arch
 eval link_node='$'link_node_$arch
+eval link_pwsh='$'link_pwsh_$arch
 
 function extract () {
   url=$1
@@ -116,6 +123,16 @@ function install_dotnet() {
   done
 }
 
+# powershell with a execution (+x) fix
+function _install_pwsh() {
+  sudo rm -rf /opt/powershell >/dev/null 2>&1
+  extract $link_pwsh "/opt/powershell" 'skip-pwsh-symlinks'
+  # There is a bug with official powershell distribution. It is a fix:
+  sudo chmod 775 /opt/powershell/pwsh
+  add_symlinks pwsh /opt/powershell
+}
+
+
 _dotnet=
 _node=
 _pwsh=
@@ -136,6 +153,7 @@ while [ $# -ne 0 ]; do
 done
 if [[ ! -z "$_node" ]]; then install_node; fi
 if [[ ! -z "$_dotnet" ]]; then install_dotnet; fi
+if [[ ! -z "$_pwsh" ]]; then install_pwsh; fi
 if [[ ! -z "$_nothing" ]]; then 
   echo 'usage:
 wget -q -nv --no-check-certificate -O - https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-and-nodejs.sh | bash -s dotnet node pwsh
