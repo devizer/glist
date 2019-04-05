@@ -10,7 +10,7 @@ System requirements: GLIBC_2.17+, GLIBCXX_3.4.20+'
 
 # ARM 64
 export links_arm64='
-https://download.visualstudio.microsoft.com/download/pr/2b201001-7074-476a-aa83-b5194c660a59/68233f3c3f16c97767a77216ec1f6e70/dotnet-sdk-2.2.104-linux-arm64.tar.gz
+https://download.visualstudio.microsoft.com/download/pr/7d8f3f4c-9a90-42c5-956f-45f673384d3f/14d686d853a964025f5c54db237ff6ef/dotnet-sdk-2.2.105-linux-x64.tar.gz
 https://download.visualstudio.microsoft.com/download/pr/4cd1c5c5-21c4-4d2b-bd8c-ab02e3f7e86f/08d30a68dc1e389f985186046036144a/dotnet-sdk-3.0.100-preview3-010431-linux-arm64.tar.gz
 '
 export link_node_arm64='https://nodejs.org/dist/v10.15.3/node-v10.15.3-linux-arm64.tar.xz'
@@ -19,14 +19,14 @@ export link_pwsh_arm64='https://github.com/PowerShell/PowerShell/releases/downlo
 
 # X64
 export links_x64='
-https://download.visualstudio.microsoft.com/download/pr/69937b49-a877-4ced-81e6-286620b390ab/8ab938cf6f5e83b2221630354160ef21/dotnet-sdk-2.2.104-linux-x64.tar.gz
+https://download.visualstudio.microsoft.com/download/pr/7d8f3f4c-9a90-42c5-956f-45f673384d3f/14d686d853a964025f5c54db237ff6ef/dotnet-sdk-2.2.105-linux-x64.tar.gz
 '
 export link_node_x64='https://nodejs.org/dist/v10.15.3/node-v10.15.3-linux-x64.tar.xz'
 export link_pwsh_x64='https://github.com/PowerShell/PowerShell/releases/download/v6.2.0/powershell-6.2.0-linux-x64.tar.gz'
 
 # ARM
 export links_arm32='
-https://download.visualstudio.microsoft.com/download/pr/d9f37b73-df8d-4dfa-a905-b7648d3401d0/6312573ac13d7a8ddc16e4058f7d7dc5/dotnet-sdk-2.2.104-linux-arm.tar.gz
+https://download.visualstudio.microsoft.com/download/pr/74ce4696-c78e-45c0-9cb2-f504e8d00a6f/152f760e7f1d9f3448038e3864ee5277/dotnet-sdk-2.2.105-linux-arm.tar.gz
 '
 export link_node_arm32='https://nodejs.org/dist/v10.15.3/node-v10.15.3-linux-armv7l.tar.xz'
 export link_pwsh_arm32='https://github.com/PowerShell/PowerShell/releases/download/v6.2.0/powershell-6.2.0-linux-arm32.tar.gz'
@@ -34,7 +34,8 @@ export link_pwsh_arm32='https://github.com/PowerShell/PowerShell/releases/downlo
 
 # OSX
 export links_osx='
-https://download.visualstudio.microsoft.com/download/pr/7b61ec42-34d4-443a-9472-10db3b600b00/331956fdc0884ec01aaa5aa44360fce2/dotnet-sdk-2.2.104-osx-x64.tar.gz
+https://download.visualstudio.microsoft.com/download/pr/47709d55-450a-4828-9e3a-de65aef7c2f2/f512dd0abf6989ce1800d4fd40a745d7/dotnet-sdk-2.2.105-osx-x64.tar.gz
+
 '
 
 export link_node_osx='https://nodejs.org/dist/v10.15.3/node-v10.15.3-darwin-x64.tar.gz'
