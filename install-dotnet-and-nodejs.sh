@@ -123,7 +123,7 @@ while [ $# -ne 0 ]; do
     param="$1"
     case "$param" in
         dotnet|node|pwsh)
-            eval '$'_$param=yes
+            eval _$param=yes
             _nothing=
             ;;
         *)
