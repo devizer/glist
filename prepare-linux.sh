@@ -2,12 +2,14 @@
 # wget -q -nv --no-check-certificate -O - https://raw.githubusercontent.com/devizer/glist/master/prepare-linux.sh | bash
 
 # 1. Swap Used for PRTG
+sudo mkdir -p /var/prtg/scripts
 echo '#!/usr/bin/env bash
 v=$(free -m | sed -n 3,3p | awk '"'"'{print $3}'"'"')
-echo "0:$v:OK"
+t=$(free -m | sed -n 3,3p | awk '"'"'{print $2}'"'"')
+echo "0:$v:OK. $v Mb of $t Mb of swap are used"
 ' | sudo tee /var/prtg/scripts/SwapUsed.sh >/dev/null
 sudo chmod 755 /var/prtg/scripts/SwapUsed.sh
-echo "Swap Used: $(/var/prtg/scripts/SwapUsed.sh)"
+echo "Swap Used: [$(/var/prtg/scripts/SwapUsed.sh)]"
 
 # 2. drop-caches
 echo '#!/bin/bash
