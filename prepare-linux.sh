@@ -1,15 +1,25 @@
 #!/usr/bin/env bash
 # wget -q -nv --no-check-certificate -O - https://raw.githubusercontent.com/devizer/glist/master/prepare-linux.sh | bash
 
-# 1. Swap Used for PRTG
+# 1a. Swap Used for PRTG
 sudo mkdir -p /var/prtg/scripts
 echo '#!/usr/bin/env bash
 v=$(free -m | sed -n 3,3p | awk '"'"'{print $3}'"'"')
 t=$(free -m | sed -n 3,3p | awk '"'"'{print $2}'"'"')
-echo "0:$v:OK. $v Mb of $t Mb of swap are used"
+echo "0:$v:OK. Total swap is $t Mb"
 ' | sudo tee /var/prtg/scripts/SwapUsed.sh >/dev/null
 sudo chmod 755 /var/prtg/scripts/SwapUsed.sh
 echo "Swap Used: [$(/var/prtg/scripts/SwapUsed.sh)]"
+
+# 1b. RAM Free for PRTG
+sudo mkdir -p /var/prtg/scripts
+echo '#!/usr/bin/env bash
+v=$(free -m | sed -n 2,2p | awk '"'"'{print $4}'"'"')
+t=$(free -m | sed -n 2,2p | awk '"'"'{print $2}'"'"')
+echo "0:$v:OK. Total RAM is $t Mb"
+' | sudo tee /var/prtg/scripts/RamFree.sh >/dev/null
+sudo chmod 755 /var/prtg/scripts/RamFree.sh
+echo "RAM Free: [$(/var/prtg/scripts/RamFree.sh)]"
 
 # 2. drop-caches
 echo '#!/bin/bash
