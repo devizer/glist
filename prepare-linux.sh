@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# wget -q -nv --no-check-certificate -O - https://raw.githubusercontent.com/devizer/glist/master/prepare-linux.sh | bash
+
+# 1. Swap Used for PRTG
+echo '#!/usr/bin/env bash
+v=$(free -m | sed -n 3,3p | awk '"'"'{print $3}'"'"')
+echo "0:$v:OK"
+' | sudo tee /var/prtg/scripts/SwapUsed.sh >/dev/null
+sudo chmod 755 /var/prtg/scripts/SwapUsed.sh
+echo "Swap Used: $(/var/prtg/scripts/SwapUsed.sh)"
+
+# 2. drop-caches
+echo '#!/bin/bash
+sudo sync
+echo 3 | sudo tee /proc/sys/vm/drop_caches > /dev/null
+' | sudo tee /usr/bin/drop-caches >/dev/null
+sudo chmod 755 /usr/bin/drop-caches
+
+# 3. color_prompt=yes
+printf "\ncolor_prompt=yes\n" | sudo tee -a /etc/environment >/dev/null
+
+# 4. list-packages
+echo '#!/usr/bin/env bash
+packages=$(dpkg --get-selections | grep -v deinstall | awk '"'"'{print $1}'"'"')
+apt-cache --no-all-versions show $packages | 
+    awk '"'"'$1 == "Package:" { p = $2 }
+         $1 == "Size:"    { printf("%10d %s\n", $2, p) }'"'"' |
+    sort -k1 -n
+' | sudo tee /usr/bin/list-packages >/dev/null
+sudo chmod +x /usr/bin/list-packages
+
+echo '
+export PS1="\[\033[01;31m\]\u@\h\[\033[00m\] \[\033[01;34m\]\w \$\[\033[00m\] "
+' | tee -a ~/.bashrc >/dev/null
+
+
