@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # wget -q -nv --no-check-certificate -O - https://raw.githubusercontent.com/devizer/glist/master/prepare-linux.sh | bash
+# url=https://raw.githubusercontent.com/devizer/glist/master/prepare-linux.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -sSL $url) | bash
 
 # 1a. Swap Used for PRTG
 sudo mkdir -p /var/prtg/scripts
