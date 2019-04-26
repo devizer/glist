@@ -49,3 +49,26 @@ export PS1="\[\033[01;31m\]\u@\h\[\033[00m\] \[\033[01;34m\]\w \$\[\033[00m\] "
 ' | tee -a ~/.bashrc >/dev/null
 
 
+echo '#!/usr/bin/env bash
+cd /
+sudo rm -rf /var/lib/apt/lists/*
+sudo rm -rf /var/cache/apt/*
+sudo rm -rf /var/tmp/*
+sudo rm -rf /tmp/*
+
+cd /var/log
+printf "\nDELETE LOGS in /var/log: "
+for f in $(sudo find .); do
+  if [[ -f "$f" ]]; then printf "$f "; sudo rm -f "$f"; fi
+done
+echo ""
+
+sudo rm -rf $HOME/.cache/mozilla  2>/dev/null
+sudo rm -rf $HOME/.Rider2018.3/system/resharper-host/local/Transient 2>/dev/null
+sudo rm -rf $HOME/.cache/google-chrome 2>/dev/null
+sudo rm -rf $HOME/.Rider2018.3/system/caches 2>/dev/null
+sudo rm -rf $HOME/.Rider2018.3/system/log 2>/dev/null
+df -hT | grep -E /$
+' | sudo tee /usr/local/bin/del-cache
+sudo chmod +x /usr/local/bin/del-cache
+# /usr/local/bin/del-cache
