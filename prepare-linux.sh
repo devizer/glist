@@ -69,6 +69,6 @@ sudo rm -rf $HOME/.cache/google-chrome 2>/dev/null
 sudo rm -rf $HOME/.Rider2018.3/system/caches 2>/dev/null
 sudo rm -rf $HOME/.Rider2018.3/system/log 2>/dev/null
 df -hT | grep -E /$
-' | sudo tee /usr/local/bin/del-cache
+' | sudo tee /usr/local/bin/del-cache >/dev/null
 sudo chmod +x /usr/local/bin/del-cache
 # /usr/local/bin/del-cache
