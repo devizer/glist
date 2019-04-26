@@ -4,9 +4,11 @@
 
 # 1a. Swap Used for PRTG
 sudo mkdir -p /var/prtg/scripts
+
+# V2
 echo '#!/usr/bin/env bash
-v=$(free -m | sed -n 3,3p | awk '"'"'{print $3}'"'"')
-t=$(free -m | sed -n 3,3p | awk '"'"'{print $2}'"'"')
+v=$(free -m | grep -E "[S|s]wap:" | awk '"'"'{print $3}'"'"')
+t=$(free -m | grep -E "[S|s]wap:" | awk '"'"'{print $2}'"'"')
 echo "0:$v:OK. Total swap is $t Mb"
 ' | sudo tee /var/prtg/scripts/SwapUsed.sh >/dev/null
 sudo chmod 755 /var/prtg/scripts/SwapUsed.sh

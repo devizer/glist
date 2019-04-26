@@ -1,7 +1,18 @@
 #!/usr/bin/env bash
+# one-line installer:
 #
 # url=https://raw.githubusercontent.com/devizer/glist/master/latest-nginx/Repo-for-NGINX.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -sSL $url) | bash
 #
+
+echo 'Installing repo for latest nginx. It includes:
+ nginx
+ nginx-module-geoip
+ nginx-module-image-filter
+ nginx-module-njs
+ nginx-module-perl
+ nginx-module-xslt
+'
+
 # DEB: https://joshtronic.com/2018/12/17/how-to-install-the-latest-nginx-on-debian-and-ubuntu/
 # RH: https://www.cyberciti.biz/faq/how-to-install-and-use-nginx-on-centos-7-rhel-7/
 # mainline here is optional? http://nginx.org/packages/[mainline]/os/ver
@@ -20,7 +31,7 @@ deb http://nginx.org/packages/$ID/ $(lsb_release -c -s) nginx
 
 elif [ -f "/etc/redhat-release" ]; then
   . /etc/os-release
-  # Cut "7.6" to "7". And "7" transforms to "7"
+  # Cut "7.6" to "7". And "7" transforms to "7" as is
   VERSION_ID=$(echo "$VERSION_ID" | cut -f1 -d".")
   echo '
 [nginx]
