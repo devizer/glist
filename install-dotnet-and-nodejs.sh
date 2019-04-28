@@ -27,6 +27,8 @@ export link_pwsh_x64='https://github.com/PowerShell/PowerShell/releases/download
 # ARM
 export links_arm32='
 https://download.visualstudio.microsoft.com/download/pr/74ce4696-c78e-45c0-9cb2-f504e8d00a6f/152f760e7f1d9f3448038e3864ee5277/dotnet-sdk-2.2.105-linux-arm.tar.gz
+'
+export links_arm32='
 https://download.visualstudio.microsoft.com/download/pr/e5573b57-df74-4b5b-8cd8-06973b66c3ac/b9ee29318ad2d87fa05adfaf74a8271c/dotnet-sdk-2.2.203-linux-arm.tar.gz
 '
 export link_node_arm32='https://nodejs.org/dist/v10.15.3/node-v10.15.3-linux-armv7l.tar.xz'
