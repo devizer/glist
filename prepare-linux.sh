@@ -9,7 +9,7 @@ sudo mkdir -p /var/prtg/scripts
 echo '#!/usr/bin/env bash
 v=$(free -m | grep -E "[S|s]wap:" | awk '"'"'{print $3}'"'"')
 t=$(free -m | grep -E "[S|s]wap:" | awk '"'"'{print $2}'"'"')
-echo "0:$v:OK. Total swap is $t Mb"
+echo "0:$v:OK. Swap is $t Mb"
 ' | sudo tee /var/prtg/scripts/SwapUsed.sh >/dev/null
 sudo chmod 755 /var/prtg/scripts/SwapUsed.sh
 echo "Swap Used: [$(/var/prtg/scripts/SwapUsed.sh)]"
@@ -19,7 +19,7 @@ sudo mkdir -p /var/prtg/scripts
 echo '#!/usr/bin/env bash
 v=$(free -m | sed -n 2,2p | awk '"'"'{print $4}'"'"')
 t=$(free -m | sed -n 2,2p | awk '"'"'{print $2}'"'"')
-echo "0:$v:OK. Total RAM is $t Mb"
+echo "0:$v:OK. RAM is $t Mb"
 ' | sudo tee /var/prtg/scripts/RamFree.sh >/dev/null
 sudo chmod 755 /var/prtg/scripts/RamFree.sh
 echo "RAM Free: [$(/var/prtg/scripts/RamFree.sh)]"
