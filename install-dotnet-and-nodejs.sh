@@ -10,7 +10,7 @@ System requirements: GLIBC_2.17+, GLIBCXX_3.4.20+'
 
 # ARM 64
 export links_arm64='
-https://download.visualstudio.microsoft.com/download/pr/f2e3d68d-dc7e-4a4e-afce-6588572a19d8/d3b822d4387d2d2721eb853108b5251b/dotnet-sdk-2.2.105-linux-arm64.tar.gz
+https://download.visualstudio.microsoft.com/download/pr/50979c85-1634-4c40-a4d0-4d25c9dae08d/cfa1d7e5ef765cef1d2c9127c9e14599/dotnet-sdk-2.2.203-linux-arm64.tar.gz
 https://download.visualstudio.microsoft.com/download/pr/39601b46-a250-46c3-92f0-68493e07fe5c/3bc40cf7868dcdd05ce353e253fd266c/dotnet-sdk-3.0.100-preview4-011223-linux-arm64.tar.gz
 '
 export link_node_arm64='https://nodejs.org/dist/v10.15.3/node-v10.15.3-linux-arm64.tar.xz'
@@ -19,8 +19,9 @@ export link_pwsh_arm64='https://github.com/PowerShell/PowerShell/releases/downlo
 
 # X64
 export links_x64='
-https://download.visualstudio.microsoft.com/download/pr/7d8f3f4c-9a90-42c5-956f-45f673384d3f/14d686d853a964025f5c54db237ff6ef/dotnet-sdk-2.2.105-linux-x64.tar.gz
+https://download.visualstudio.microsoft.com/download/pr/647f8505-3bf0-48c5-ac0f-3839be6816d7/d0c2762ded5a1ded3c79b1e495e43b7c/dotnet-sdk-2.2.203-linux-x64.tar.gz
 '
+
 export link_node_x64='https://nodejs.org/dist/v10.15.3/node-v10.15.3-linux-x64.tar.xz'
 export link_pwsh_x64='https://github.com/PowerShell/PowerShell/releases/download/v6.2.0/powershell-6.2.0-linux-x64.tar.gz'
 
@@ -37,7 +38,7 @@ export link_pwsh_arm32='https://github.com/PowerShell/PowerShell/releases/downlo
 
 # OSX
 export links_osx='
-https://download.visualstudio.microsoft.com/download/pr/47709d55-450a-4828-9e3a-de65aef7c2f2/f512dd0abf6989ce1800d4fd40a745d7/dotnet-sdk-2.2.105-osx-x64.tar.gz
+https://download.visualstudio.microsoft.com/download/pr/d4f74ee8-c6f1-4288-bcf2-4a8515601020/10533119f42116bb4ce53eef285fc4a6/dotnet-sdk-2.2.106-osx-x64.tar.gz
 
 '
 
