@@ -29,5 +29,6 @@ fi
 # Debian/Ubuntu?
 if [[ ! -z "$(command -v apt-get)" ]]; then
   libicu=$(apt-cache search libicu | grep -E '^libicu[0-9]* ' | awk '{print $1}')
-  sudo apt-get install -y liblttng-ust0 curl libssl1.0.0 libkrb5-3 zlib1g $libicu
+  libssl=$(apt-cache search libssl | grep -E '^libssl1\.0\.[0-9]* ' | awk '{print $1}')
+  sudo apt-get install -y liblttng-ust0 curl $libssl libkrb5-3 zlib1g $libicu
 fi
