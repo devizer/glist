@@ -11,6 +11,7 @@ fi
 # CentOS/Fedora?
 if [[ ! -z "$(command -v dnf)" ]]; then
   sudo dnf install -y lttng-ust libcurl openssl-libs krb5-libs libicu zlib
+  # .NET 2x needs openssl 1.0.*
   sudo dnf info compat-openssl10 >/dev/null 2>&1
   if [ $? -eq 0 ]; then 
     printf "\nInstalling openssl 1.0 compatiblity\n"
@@ -19,6 +20,7 @@ if [[ ! -z "$(command -v dnf)" ]]; then
 # REDHAT?
 elif [[ ! -z "$(command -v yum)" ]]; then
   sudo yum install -y lttng-ust libcurl openssl-libs krb5-libs libicu zlib
+  # .NET 2x needs openssl 1.0.*
   sudo yum info -y compat-openssl10 >/dev/null 2>&1
   if [ $? -eq 0 ]; then 
     printf "\nInstalling openssl 1.0 compatiblity\n"
@@ -26,9 +28,10 @@ elif [[ ! -z "$(command -v yum)" ]]; then
   fi
 fi
 
-# Debian/Ubuntu?
+# Debian 8-9. Ubuntu 14.04-19.04
 if [[ ! -z "$(command -v apt-get)" ]]; then
   libicu=$(apt-cache search libicu | grep -E '^libicu[0-9]* ' | awk '{print $1}')
-  libssl=$(apt-cache search libssl | grep -E '^libssl1\.0\.[0-9]* ' | awk '{print $1}')
-  sudo apt-get install -y liblttng-ust0 curl $libssl libkrb5-3 zlib1g $libicu
+  # libssl=$(apt-cache search libssl | grep -E '^libssl1\.0\.[0-9]* ' | awk '{print $1}')
+  # The curl package here is a hack that installs correct version of both libssl and libcurl
+  sudo apt-get install -y liblttng-ust0 curl libkrb5-3 zlib1g $libicu
 fi
