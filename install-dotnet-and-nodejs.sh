@@ -41,15 +41,28 @@ export link_pwsh_arm32='https://github.com/PowerShell/PowerShell/releases/downlo
 # OSX
 export links_osx='
 https://download.visualstudio.microsoft.com/download/pr/d4f74ee8-c6f1-4288-bcf2-4a8515601020/10533119f42116bb4ce53eef285fc4a6/dotnet-sdk-2.2.106-osx-x64.tar.gz
-
 '
-
 export link_node_osx='https://nodejs.org/dist/v10.15.3/node-v10.15.3-darwin-x64.tar.gz'
 export link_pwsh_osx='https://github.com/PowerShell/PowerShell/releases/download/v6.2.0/powershell-6.2.0-osx-x64.tar.gz'
+
+# RHEL6
+export links_rhel6='https://download.visualstudio.microsoft.com/download/pr/9a62e1d1-5ff6-474d-bf51-02ec4afb446c/b1022b8481438457d64510b21ac2cbd2/dotnet-sdk-2.2.203-rhel.6-x64.tar.gz'
+export link_node_rhel6=$link_node_x64
+export link_pwsh_rhel6=$link_pwsh_x64
+
 
 function header() { LightGreen='\033[1;32m';Yellow='\033[1;33m';RED='\033[0;31m'; NC='\033[0m'; printf "${LightGreen}$1${NC} ${Yellow}$2${NC}\n"; }
 
 if [[ $(uname -m) == armv7* ]]; then arch=arm32; else arch=arm64; fi; if [[ $(uname -m) == x86_64 ]]; then arch=x64; fi; if [[ $(uname -s) == Darwin ]]; then arch=osx; fi;
+if [ -e /etc/os-release ]; then
+elif [ -e /etc/redhat-release ]; then
+  redhatRelease=$(</etc/redhat-release)
+  if [[ $redhatRelease == "CentOS release 6."* || $redhatRelease == "Red Hat Enterprise Linux Server release 6."* ]]; then
+    rid=rhel6;
+  fi
+fi
+
+
 header "The current OS architecture" $arch
 # if [ -f check-links.sh ]; then (. check-links.sh); fi; exit
 

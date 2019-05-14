@@ -7,6 +7,11 @@ if [[ ! -z "$(command -v zypper)" ]]; then
   sudo zypper install -y lttng-ust curl libopenssl1_0_0 krb5 libicu zlib
 fi
 
+# Alpine Linux?
+if [[ ! -z "$(command -v apk)" ]]; then
+  apk add --no-cache --update sudo bash icu-libs ca-certificates \
+    krb5-libs libgcc libstdc++ libintl libssl1.1 libstdc++ lttng-ust tzdata userspace-rcu zlib
+fi
 
 # CentOS/Fedora?
 if [[ ! -z "$(command -v dnf)" ]]; then
