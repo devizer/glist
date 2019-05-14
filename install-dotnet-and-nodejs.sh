@@ -57,7 +57,7 @@ if [[ $(uname -m) == armv7* ]]; then arch=arm32; else arch=arm64; fi; if [[ $(un
 if [ ! -e /etc/os-release ] && [ -e /etc/redhat-release ]; then
   redhatRelease=$(</etc/redhat-release)
   if [[ $redhatRelease == "CentOS release 6."* || $redhatRelease == "Red Hat Enterprise Linux Server release 6."* ]]; then
-    rid=rhel6;
+    arch=rhel6;
   fi
 fi
 
