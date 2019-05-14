@@ -54,8 +54,7 @@ export link_pwsh_rhel6=$link_pwsh_x64
 function header() { LightGreen='\033[1;32m';Yellow='\033[1;33m';RED='\033[0;31m'; NC='\033[0m'; printf "${LightGreen}$1${NC} ${Yellow}$2${NC}\n"; }
 
 if [[ $(uname -m) == armv7* ]]; then arch=arm32; else arch=arm64; fi; if [[ $(uname -m) == x86_64 ]]; then arch=x64; fi; if [[ $(uname -s) == Darwin ]]; then arch=osx; fi;
-if [ -e /etc/os-release ]; then
-elif [ -e /etc/redhat-release ]; then
+if [ ! -e /etc/os-release ] && [ -e /etc/redhat-release ]; then
   redhatRelease=$(</etc/redhat-release)
   if [[ $redhatRelease == "CentOS release 6."* || $redhatRelease == "Red Hat Enterprise Linux Server release 6."* ]]; then
     rid=rhel6;
