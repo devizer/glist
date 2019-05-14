@@ -182,6 +182,8 @@ if [[ ! -z "$_dotnet" ]]; then install_dotnet; fi
 if [[ ! -z "$_pwsh" ]]; then install_pwsh; fi
 
 sudo rm -rf /tmp/dotnet-tmp >/dev/null 2>&1 || true
+
+export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
 [[ ! -z "$(command -v node)" ]]   && header "Installed node:" "$(node --version)"                            || echo node is not found
 [[ ! -z "$(command -v npm)" ]]    && header "Installed npm:" "$(npm --version)"                              || echo npm is not found
 [[ ! -z "$(command -v yarn)" ]]   && header "Installed yarn:" "$(yarn --version)"                            || echo yarn is not found
