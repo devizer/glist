@@ -4,7 +4,7 @@ $baseUrl="https://raw.githubusercontent.com/devizer/glist/master/bin/git/Portabl
 $download_path="$($Env:LocalAppData)"; if ($download_path -eq "") { $download_path="$($Env:UserProfile)"; }
 $git_path="$download_path\PortableGit"
 Write-Host "url: [$baseUrl]"
-Write-Host "downloading portable git into path: $git_path"
+Write-Host "downloading portable git (40 Mb) into path: $git_path"
 New-Item $git_path -type directory -force -EA SilentlyContinue | out-null
 [System.Net.ServicePointManager]::ServerCertificateValidationCallback={$true};
 $d=new-object System.Net.WebClient; $d.DownloadFile("$baseUrl","$download_path\PortableGit-$suffix.7z.exe");

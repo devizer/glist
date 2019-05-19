@@ -10,18 +10,19 @@ Supported architectures: Linux x64, armv7 (32-bit), aarch64 (64-bit) and MacOS 1
 System requirements: GLIBC_2.17+, GLIBCXX_3.4.20+'
 
 # ARM 64
+# https://download.visualstudio.microsoft.com/download/pr/39601b46-a250-46c3-92f0-68493e07fe5c/3bc40cf7868dcdd05ce353e253fd266c/dotnet-sdk-3.0.100-preview4-011223-linux-arm64.tar.gz
 export links_arm64='
-https://download.visualstudio.microsoft.com/download/pr/50979c85-1634-4c40-a4d0-4d25c9dae08d/cfa1d7e5ef765cef1d2c9127c9e14599/dotnet-sdk-2.2.203-linux-arm64.tar.gz
-https://download.visualstudio.microsoft.com/download/pr/39601b46-a250-46c3-92f0-68493e07fe5c/3bc40cf7868dcdd05ce353e253fd266c/dotnet-sdk-3.0.100-preview4-011223-linux-arm64.tar.gz
+https://download.visualstudio.microsoft.com/download/pr/3d3d9050-ab4e-4303-9c2b-48fabbf10ed6/fba8b766585dbeeea3a6b608304f7526/dotnet-sdk-2.2.204-linux-arm64.tar.gz
+https://download.visualstudio.microsoft.com/download/pr/fa62ce11-f5d3-4f71-a5dd-07edf988edae/91cfccdeb4a58583f49c4a12dbd6f329/dotnet-sdk-3.0.100-preview5-011568-linux-arm64.tar.gz
 '
 export link_node_arm64='https://nodejs.org/dist/v10.15.3/node-v10.15.3-linux-arm64.tar.xz'
 export link_node_arm64='https://nodejs.org/dist/v12.2.0/node-v12.2.0-linux-arm64.tar.xz'
 export link_pwsh_arm64='https://github.com/PowerShell/PowerShell/releases/download/v6.2.0/powershell-6.2.0-linux-arm64.tar.gz'
-export link_pwsh_arm64='https://github.com/PowerShell/PowerShell/releases/download/v6.2.0/powershell-6.2.0-linux-arm64.tar.gz'
+
 
 # X64
 export links_x64='
-https://download.visualstudio.microsoft.com/download/pr/647f8505-3bf0-48c5-ac0f-3839be6816d7/d0c2762ded5a1ded3c79b1e495e43b7c/dotnet-sdk-2.2.203-linux-x64.tar.gz
+https://download.visualstudio.microsoft.com/download/pr/ece856bb-de15-4df3-9677-67cc817ffc1b/521da52132d23deae5400b8e19e23691/dotnet-sdk-2.2.204-linux-x64.tar.gz
 '
 
 export link_node_x64='https://nodejs.org/dist/v10.15.3/node-v10.15.3-linux-x64.tar.xz'
@@ -32,7 +33,7 @@ export links_arm32='
 https://download.visualstudio.microsoft.com/download/pr/74ce4696-c78e-45c0-9cb2-f504e8d00a6f/152f760e7f1d9f3448038e3864ee5277/dotnet-sdk-2.2.105-linux-arm.tar.gz
 '
 export links_arm32='
-https://download.visualstudio.microsoft.com/download/pr/e5573b57-df74-4b5b-8cd8-06973b66c3ac/b9ee29318ad2d87fa05adfaf74a8271c/dotnet-sdk-2.2.203-linux-arm.tar.gz
+https://download.visualstudio.microsoft.com/download/pr/fc0c7de2-24cb-45e4-a354-df612b5c3420/b8cc998c1c66717309d1e59ea979e1f3/dotnet-sdk-2.2.204-linux-arm.tar.gz
 '
 export link_node_arm32='https://nodejs.org/dist/v10.15.3/node-v10.15.3-linux-armv7l.tar.xz'
 export link_pwsh_arm32='https://github.com/PowerShell/PowerShell/releases/download/v6.2.0/powershell-6.2.0-linux-arm32.tar.gz'
@@ -40,13 +41,13 @@ export link_pwsh_arm32='https://github.com/PowerShell/PowerShell/releases/downlo
 
 # OSX
 export links_osx='
-https://download.visualstudio.microsoft.com/download/pr/d4f74ee8-c6f1-4288-bcf2-4a8515601020/10533119f42116bb4ce53eef285fc4a6/dotnet-sdk-2.2.106-osx-x64.tar.gz
+https://download.visualstudio.microsoft.com/download/pr/f89d26ff-c9f0-459c-97e0-0d56e0ee43ef/fc1dcdc4fe2eb39cfd04e4c6cf60d8e1/dotnet-sdk-2.2.107-osx-x64.tar.gz
 '
 export link_node_osx='https://nodejs.org/dist/v10.15.3/node-v10.15.3-darwin-x64.tar.gz'
 export link_pwsh_osx='https://github.com/PowerShell/PowerShell/releases/download/v6.2.0/powershell-6.2.0-osx-x64.tar.gz'
 
 # RHEL6
-export links_rhel6='https://download.visualstudio.microsoft.com/download/pr/9a62e1d1-5ff6-474d-bf51-02ec4afb446c/b1022b8481438457d64510b21ac2cbd2/dotnet-sdk-2.2.203-rhel.6-x64.tar.gz'
+export links_rhel6='https://download.visualstudio.microsoft.com/download/pr/e2943c98-ddba-4768-af91-9936995d5b5d/b10543dc39973d697201a7a13419a9e6/dotnet-sdk-2.2.204-rhel.6-x64.tar.gz'
 export link_node_rhel6=$link_node_x64
 export link_pwsh_rhel6=$link_pwsh_x64
 
