@@ -1,3 +1,4 @@
+#!/usr/bin/env pwsh
 function MemBenchmark
 {
     param([System.Int32] $bufferSize, [System.Int64] $msecDuration)
@@ -5,7 +6,7 @@ function MemBenchmark
     $arrSize = $bufferSize / 8
     $srcBuffer = New-Object 'long[]' $arrSize
     $dstBuffer = New-Object 'long[]' $arrSize
-    $rand = new-object System.Random; $rand.NextBytes($srcBuffer)
+    # $rand = new-object System.Random; $rand.NextBytes($srcBuffer)
     $length = [long] 0
     $sw = new-object System.Diagnostics.Stopwatch; $sw.Start()
     do

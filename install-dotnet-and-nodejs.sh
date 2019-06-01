@@ -1,13 +1,15 @@
 #!/usr/bin/env bash
 # Here is one line installer 
 # script=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-and-nodejs.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash -s dotnet node pwsh
-# wget -q -nv --no-check-certificate -O - https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-and-nodejs.sh | bash -s dotnet node pwsh
 
 set -e
 set -u
-echo '.NET SDK 2.*/3.0, node 10.5.3 and powershell 6.1/6.2 generic binaries installer. 
+echo '.NET SDK 2.*/3.0, NodeJS LTS 10.5.3 and powershell 6.2 generic binaries installer. 
 Supported architectures: Linux x64, armv7 (32-bit), aarch64 (64-bit) and MacOS 10.12+
 System requirements: GLIBC_2.17+, GLIBCXX_3.4.20+'
+
+TMPDIR="${TMPDIR:-/tmp}"
+echo Download buffer location: $TMPDIR
 
 # ARM 64
 # https://download.visualstudio.microsoft.com/download/pr/39601b46-a250-46c3-92f0-68493e07fe5c/3bc40cf7868dcdd05ce353e253fd266c/dotnet-sdk-3.0.100-preview4-011223-linux-arm64.tar.gz
@@ -54,7 +56,8 @@ export link_pwsh_rhel6=$link_pwsh_x64
 
 function header() { LightGreen='\033[1;32m';Yellow='\033[1;33m';RED='\033[0;31m'; NC='\033[0m'; printf "${LightGreen}$1${NC} ${Yellow}$2${NC}\n"; }
 
-if [[ $(uname -m) == armv7* ]]; then arch=arm32; else arch=arm64; fi; if [[ $(uname -m) == x86_64 ]]; then arch=x64; fi; if [[ $(uname -s) == Darwin ]]; then arch=osx; fi;
+m=$(uname -m)
+if [[ $m == armv7* ]]; then arch=arm32; elif [[ $m == aarch64* ]] || [[ $m == armv8* ]]; then arch=arm64; elif [[ $m == x86_64 ]]; then arch=x64; fi; if [[ $(uname -s) == Darwin ]]; then arch=osx; fi;
 if [ ! -e /etc/os-release ] && [ -e /etc/redhat-release ]; then
   redhatRelease=$(</etc/redhat-release)
   if [[ $redhatRelease == "CentOS release 6."* || $redhatRelease == "Red Hat Enterprise Linux Server release 6."* ]]; then
@@ -75,15 +78,15 @@ function extract () {
   todir=$2
   symlinks_pattern=$3
   filename=$(basename $1)
-  sudo mkdir -p /tmp/dotnet-tmp
+  sudo mkdir -p $TMPDIR/dotnet-tmp
   
   # DOWNLOADING
   counter=$((counter+1))
   header "[Step $counter] Downloading" $filename
   if [[ "$(command -v curl)" == "" ]]; then
-    sudo wget --no-check-certificate -O /tmp/dotnet-tmp/$filename $url
+    sudo wget --no-check-certificate -O $TMPDIR/dotnet-tmp/$filename $url
   else
-    sudo curl -L -o /tmp/dotnet-tmp/$filename $url
+    sudo curl -L -o $TMPDIR/dotnet-tmp/$filename $url
   fi
   sudo mkdir -p $todir
   pushd $todir >/dev/null
@@ -93,12 +96,12 @@ function extract () {
   header "[Step $counter] Extracting" $filename
   if [[ $filename =~ .tar.gz$ ]]; then tarcmd=xzf; else tarcmd=xJf; fi
   if [[ ! -z "$(command -v pv)" ]]; then
-    pv /tmp/dotnet-tmp/$filename | sudo tar $tarcmd -
+    pv $TMPDIR/dotnet-tmp/$filename | sudo tar $tarcmd -
   else
-    sudo tar $tarcmd /tmp/dotnet-tmp/$filename
+    sudo tar $tarcmd $TMPDIR/dotnet-tmp/$filename
   fi
   popd >/dev/null
-  sudo rm -f /tmp/dotnet-tmp/$filename
+  sudo rm -f $TMPDIR/dotnet-tmp/$filename
   add_symlinks $symlinks_pattern $todir
 }
 
@@ -182,7 +185,7 @@ if [[ ! -z "$_node" ]]; then install_node; fi
 if [[ ! -z "$_dotnet" ]]; then install_dotnet; fi
 if [[ ! -z "$_pwsh" ]]; then install_pwsh; fi
 
-sudo rm -rf /tmp/dotnet-tmp >/dev/null 2>&1 || true
+sudo rm -rf $TMPDIR/dotnet-tmp >/dev/null 2>&1 || true
 
 export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
 [[ ! -z "$(command -v node)" ]]   && header "Installed node:" "$(node --version)"                            || echo node is not found
