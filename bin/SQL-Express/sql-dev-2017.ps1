@@ -6,6 +6,8 @@ Write-Host "DOWNLOADING SQL $v BOOTSTRAPPER into `"$outfile`""
 New-Item "${Env:AppData}\Temp" -type directory -force -EA SilentlyContinue | out-null
 $sys=$Env:SystemDrive; if (-not $sys) { $sys="C:\" }; $sys=$sys.ToUpper().TrimEnd([char]92);
 
+# ADDCURRENTUSERASSQLADMIN="True" can be used for Express edition or set by ROLE :(
+
 '
 [OPTIONS]
 ACTION="Install"
@@ -40,8 +42,8 @@ ENABLERANU="False"
 SQLCOLLATION="Latin1_General_CI_AS"
 SQLSVCACCOUNT="NT AUTHORITY\SYSTEM"
 SQLSVCINSTANTFILEINIT="True"
-SQLSYSADMINACCOUNTS="BUILTIN\Administrators"
-ADDCURRENTUSERASSQLADMIN="True"
+SQLSYSADMINACCOUNTS="BUILTIN\Users"
+ADDCURRENTUSERASSQLADMIN="False"
 SECURITYMODE="SQL"
 SAPWD="`1qazxsw2"
 SQLTEMPDBFILECOUNT="2"
