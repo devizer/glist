@@ -52,7 +52,7 @@ If Not Defined url (
 
 set KEY=SSMS-Setup-%v%
 set outfile=%AppData%\Temp\%KEY%.exe
-echo DOWNLOADING [%KEY%.exe]
+echo Downloading [%KEY%.exe]
 echo From: [%url%]
 mkdir "%AppData%\Temp" 1>nul 2>&1
 echo [System.Net.ServicePointManager]::ServerCertificateValidationCallback={$true}; $d=new-object System.Net.WebClient; $d.DownloadFile("$Env:url","$Env:outfile") | powershell -command -
