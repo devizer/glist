@@ -3,6 +3,10 @@
 set -e
 set -u
 
+MYSQL_TEST_DB="${MYSQL_TEST_DB:-APP42}"
+MYSQL_ROOT_PASSWORD="${MYSQL_ROOT_PASSWORD:-D0tN3t}"
+
+
 function wait_for() {
   n=$1
   p=$2
@@ -10,7 +14,7 @@ function wait_for() {
   counter=0; total=30; started=""
   while [ $counter -lt $total ]; do
     counter=$((counter+1));
-    mysql --protocol=TCP -h localhost -u root -p'D0tN3t' -P $p -e "Select 1;" 2>/dev/null 1>&2 && started="yes" || true
+    mysql --protocol=TCP -h localhost -u root -p"${MYSQL_ROOT_PASSWORD}" -P $p -e "Select 1;" 2>/dev/null 1>&2 && started="yes" || true
     if [ -n "$started" ]; then printf " OK\n"; break; else (sleep 1; printf $counter"."); fi
   done
 }
@@ -25,11 +29,11 @@ for (( i=0; i<$count; i++ )); do
   echo "[$(($i+1)) / $count] container: $name, image: $image"
   time sudo docker pull "$image"
   port=$((3306+1+$i));
-  cmd="sudo docker run --name $name -e MYSQL_ROOT_HOST=% -e MYSQL_ROOT_PASSWORD=D0tN3t -e MYSQL_DATABASE=w3top -d -p $port:3306 $image"
+  cmd="sudo docker run --name $name -e MYSQL_ROOT_HOST=% -e MYSQL_ROOT_PASSWORD=\"${MYSQL_ROOT_PASSWORD}\" -e MYSQL_DATABASE=\"${MYSQL_TEST_DB}\" -d -p $port:3306 $image"
   echo ""; echo $cmd
   eval "$cmd" || true
   # sleep 8; docker logs $name
   wait_for "$name" "$port"
-  mysql -t --protocol=TCP -h localhost -u root -p'D0tN3t' -P $port -e "Select version() as \`MySQL Server at $port port\`; show databases;"
+  mysql -t --protocol=TCP -h localhost -u root -p"${MYSQL_ROOT_PASSWORD}" -P $port -e "Select version() as \`$name at $port port\`; show databases;"
   echo ""
 done
