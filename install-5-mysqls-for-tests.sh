@@ -6,7 +6,7 @@ set -u
 function wait_for() {
   n=$1
   p=$2
-  printf "\nWaiting for $n on localhost @ $p ...."
+  printf "Waiting for $n on localhost @ $p ...."
   counter=0; total=30; started=""
   while [ $counter -lt $total ]; do
     counter=$((counter+1));
@@ -30,6 +30,6 @@ for (( i=0; i<$count; i++ )); do
   eval "$cmd" || true
   # sleep 8; docker logs $name
   wait_for "$name" "$port"
-  mysql --protocol=TCP -h localhost -u root -p'D0tN3t' -P $port -e "Select version() as \`MySQL Server at $port port\`; show databases;"
+  mysql -t --protocol=TCP -h localhost -u root -p'D0tN3t' -P $port -e "Select version() as \`MySQL Server at $port port\`; show databases;"
   echo ""
 done
