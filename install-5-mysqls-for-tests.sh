@@ -6,7 +6,6 @@ set -u
 MYSQL_TEST_DB="${MYSQL_TEST_DB:-APP42}"
 MYSQL_ROOT_PASSWORD="${MYSQL_ROOT_PASSWORD:-D0tN3t}"
 
-
 function wait_for() {
   n=$1
   p=$2
@@ -34,6 +33,7 @@ for (( i=0; i<$count; i++ )); do
   eval "$cmd" || true
   # sleep 8; docker logs $name
   wait_for "$name" "$port"
+  echo "LOGS of $name"; sudo docker logs "$name"
   mysql -t --protocol=TCP -h localhost -u root -p"${MYSQL_ROOT_PASSWORD}" -P $port -e "Select version() as \`$name at $port port\`; show databases;"
   echo ""
 done
