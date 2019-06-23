@@ -23,9 +23,9 @@ for (( i=0; i<$count; i++ )); do
   image=${images[$i]}
   name=${names[$i]}
   echo "[$(($i+1)) / $count] container: $name, image: $image"
-  time docker pull "$image"
+  time sudo docker pull "$image"
   port=$((3306+1+$i));
-  cmd="docker run --name $name -e MYSQL_ROOT_HOST=% -e MYSQL_ROOT_PASSWORD=D0tN3t -e MYSQL_DATABASE=w3top -d -p $port:3306 $image"
+  cmd="sudo docker run --name $name -e MYSQL_ROOT_HOST=% -e MYSQL_ROOT_PASSWORD=D0tN3t -e MYSQL_DATABASE=w3top -d -p $port:3306 $image"
   echo ""; echo $cmd
   eval "$cmd" || true
   # sleep 8; docker logs $name
