@@ -7,6 +7,7 @@ MYSQL_TEST_DB="${MYSQL_TEST_DB:-APP42}"
 MYSQL_ROOT_PASSWORD="${MYSQL_ROOT_PASSWORD:-D0tN3t}"
 
 function wait_for() {
+  if [[ "$(command -v mysql)" == "" ]]; then return; fi
   n=$1
   p=$2
   printf "Waiting for $n on localhost @ $p ...."
@@ -33,6 +34,8 @@ for (( i=0; i<$count; i++ )); do
   eval "$cmd" || true
   wait_for "$name" "$port"
   # echo "LOGS of $name"; sudo docker logs "$name"
-  mysql -t --protocol=TCP -h localhost -u root -p"${MYSQL_ROOT_PASSWORD}" -P $port -e "Select version() as \`$name at $port port\`; show databases;"
+  if [[ "$(command -v mysql)" != "" ]]; then
+    mysql -t --protocol=TCP -h localhost -u root -p"${MYSQL_ROOT_PASSWORD}" -P $port -e "Select version() as \`$name at $port port\`; show databases;"
+  fi
   echo ""
 done
