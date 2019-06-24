@@ -35,7 +35,8 @@ for (( i=0; i<$count; i++ )); do
   wait_for "$name" "$port"
   # echo "LOGS of $name"; sudo docker logs "$name"
   if [[ "$(command -v mysql)" != "" ]]; then
-    mysql -t --protocol=TCP -h localhost -u root -p"${MYSQL_ROOT_PASSWORD}" -P $port -e "Select version() as \`$name at $port port\`; show databases;"
+    # mysql-client on ubuntu 14.04 cant connect to mysql 8.0
+    mysql -t --protocol=TCP -h localhost -u root -p"${MYSQL_ROOT_PASSWORD}" -P $port -e "Select version() as \`$name at $port port\`; show databases;" || true
   fi
   echo ""
 done
