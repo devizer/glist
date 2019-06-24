@@ -31,9 +31,8 @@ for (( i=0; i<$count; i++ )); do
   cmd="sudo docker run --name $name -e MYSQL_ROOT_HOST=% -e MYSQL_ROOT_PASSWORD=\"${MYSQL_ROOT_PASSWORD}\" -e MYSQL_DATABASE=\"${MYSQL_TEST_DB}\" -d -p $port:3306 $image"
   echo ""; echo $cmd
   eval "$cmd" || true
-  # sleep 8; docker logs $name
   wait_for "$name" "$port"
-  echo "LOGS of $name"; sudo docker logs "$name"
+  # echo "LOGS of $name"; sudo docker logs "$name"
   mysql -t --protocol=TCP -h localhost -u root -p"${MYSQL_ROOT_PASSWORD}" -P $port -e "Select version() as \`$name at $port port\`; show databases;"
   echo ""
 done
