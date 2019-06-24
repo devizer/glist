@@ -21,7 +21,7 @@ function wait_for() {
 images=("vsamov/mysql-5.1.73" "mysql/mysql-server:5.5" "mysql/mysql-server:5.6" "mysql/mysql-server:5.7" "mysql/mysql-server:8.0")
 names=("mysql-5.1" "mysql-5.5" "mysql-5.6" "mysql-5.7" "mysql-8.0")
 count=${#images[@]}
-echo "COUNT: $count"
+echo "Installing $count mysql servers: ${names[*]// /|}"
 for (( i=0; i<$count; i++ )); do
   image=${images[$i]}
   name=${names[$i]}
