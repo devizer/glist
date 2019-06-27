@@ -8,7 +8,7 @@ POSTGRESQL_PASS="${POSTGRESQL_PASS:-pass}"
 POSTGRESQL_USER="${POSTGRESQL_USER:-postgres}"
 WAIT_TIMEOUT="${WAIT_TIMEOUT:-30}"
 
-function wait_for_pgsql() {
+function wait_for() {
   if [[ "$(command -v psql)" == "" ]]; then return; fi
   p=$1
   printf "Waiting for postgres on localhost at $p port ...."
@@ -22,20 +22,20 @@ function wait_for_pgsql() {
 }
 
 vars="-e POSTGRESQL_USER=$POSTGRESQL_USER -e POSTGRESQL_PASS=$POSTGRESQL_PASS -e POSTGRESQL_DB=$$POSTGRESQL_DB -e POSTGRES_USER=$POSTGRESQL_USER -e POSTGRES_PASS=$POSTGRESQL_PASS -e POSTGRES_DB=$POSTGRESQL_DB"
-
 port=54321
-for image in postgres:12-alpine postgres:11.4-alpine postgres:10.9-alpine postgres:9.6-alpine postgres:9.5-alpine postgres:9.4-alpine postgres:9.1 postgres:8.4; do
-  name=${image//:/-}
-  echo starting $image as $name
-  sudo docker logs $name >/dev/null 2>&1 && echo $name already exists && sudo docker start $name >/dev/null 2>&1 \
-    || time eval "sudo docker run --name $name $vars -p ${port}:5432 -d $image" \
-    || true
-
-  port=$((port+1)
-done
+names=(postgres:12-alpine )
+for image in 
+eval "docker run --name postgres-12  $vars -p 54328:5432 -d postgres:12-alpine" || true
+eval "docker run --name postgres-11  $vars -p 54327:5432 -d postgres:11.4-alpine" || true
+eval "docker run --name postgres-10  $vars -p 54326:5432 -d postgres:10.9-alpine" || true
+eval "docker run --name postgres-9.6 $vars -p 54325:5432 -d postgres:9.6-alpine" || true
+eval "docker run --name postgres-9.5 $vars -p 54324:5432 -d postgres:9.5-alpine" || true
+eval "docker run --name postgres-9.4 $vars -p 54323:5432 -d postgres:9.4-alpine" || true
+eval "docker run --name postgres-9.1 $vars -p 54322:5432 -d postgres:9.1" || true
+eval "docker run --name postgres-8.4 $vars -p 54321:5432 -d postgres:8.4" || true
 
 for port in {54328..54321}; do
-  wait_for_pgsql $port
+  wait_for $port
 done
 
 for port in {54321..54328}; do
