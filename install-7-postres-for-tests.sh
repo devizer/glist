@@ -22,14 +22,14 @@ function wait_for() {
 }
 
 vars="-e POSTGRESQL_USER=$POSTGRESQL_USER -e POSTGRESQL_PASS=$POSTGRESQL_PASS -e POSTGRESQL_DB=$$POSTGRESQL_DB -e POSTGRES_USER=$POSTGRESQL_USER -e POSTGRES_PASS=$POSTGRESQL_PASS -e POSTGRES_DB=$POSTGRESQL_DB"
-eval "docker run --name postgres-12  $vars -p 54328:5432 -d postgres:12-alpine"
-eval "docker run --name postgres-11  $vars -p 54327:5432 -d postgres:11.4-alpine"
-eval "docker run --name postgres-10  $vars -p 54326:5432 -d postgres:10.9-alpine"
-eval "docker run --name postgres-9.6 $vars -p 54325:5432 -d postgres:9.6-alpine"
-eval "docker run --name postgres-9.5 $vars -p 54324:5432 -d postgres:9.5-alpine"
-eval "docker run --name postgres-9.4 $vars -p 54323:5432 -d postgres:9.4-alpine"
-eval "docker run --name postgres-9.1 $vars -p 54322:5432 -d postgres:9.1"
-eval "docker run --name postgres-8.4 $vars -p 54321:5432 -d postgres:8.4"
+eval "docker run --name postgres-12  $vars -p 54328:5432 -d postgres:12-alpine" || true
+eval "docker run --name postgres-11  $vars -p 54327:5432 -d postgres:11.4-alpine" || true
+eval "docker run --name postgres-10  $vars -p 54326:5432 -d postgres:10.9-alpine" || true
+eval "docker run --name postgres-9.6 $vars -p 54325:5432 -d postgres:9.6-alpine" || true
+eval "docker run --name postgres-9.5 $vars -p 54324:5432 -d postgres:9.5-alpine" || true
+eval "docker run --name postgres-9.4 $vars -p 54323:5432 -d postgres:9.4-alpine" || true
+eval "docker run --name postgres-9.1 $vars -p 54322:5432 -d postgres:9.1" || true
+eval "docker run --name postgres-8.4 $vars -p 54321:5432 -d postgres:8.4" || true
 
 for port in {54328..54321}; do
   wait_for $port
