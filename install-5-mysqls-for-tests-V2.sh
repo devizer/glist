@@ -15,7 +15,7 @@ local name=$1 port=$2
     counter=$((counter+1));
     # mysql --protocol=TCP -h localhost -u root -p"${MYSQL_ROOT_PASSWORD}" -P $p -e "Select 1;" 2>/dev/null 1>&2 && started="yes" || true
     docker exec -t $name mysql --protocol=TCP -h localhost -u root -p"${MYSQL_ROOT_PASSWORD}" -P 3306 -e "Select 1;" 2>/dev/null 1>&2 && started="yes" || true
-    if [ -n "$started" ]; then printf " OK"; break; else (sleep 1; printf $counter"."); fi
+    if [ -n "$started" ]; then printf " OK"; break; else (sleep 1; printf "${counter}."); fi
   done
   if [ -z "$started" ]; then printf " Fail\n"; else
     ver=$(docker exec -t $name sh -c "MYSQL_PWD=\"$MYSQL_ROOT_PASSWORD\" mysql -s -N --protocol=TCP -h localhost -u root -P 3306 -e 'Select version();' 2>&1")
@@ -31,7 +31,7 @@ local name=$1 port=$2
     counter=$((counter+1));
     # mysql --protocol=TCP -h localhost -u root -p"${MYSQL_ROOT_PASSWORD}" -P $p -e "Select 1;" 2>/dev/null 1>&2 && started="yes" || true
     docker exec -t $name mysql --protocol=TCP -h localhost -u root -p"${MYSQL_ROOT_PASSWORD}" -P 3306 -e "Select 1;" 2>/dev/null 1>&2 && started="yes" || true
-    if [ -n "$started" ]; then printf " OK\n"; break; else (sleep 1; printf $counter"."); fi
+    if [ -n "$started" ]; then printf " OK\n"; break; else (sleep 1; printf "${counter}."); fi
   done
   if [ -z "$started" ]; then printf " Fail\n"; fi;
 }
