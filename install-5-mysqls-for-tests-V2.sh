@@ -1,5 +1,5 @@
 #!/us/bin/env bash
-# url=https://raw.githubusercontent.com/devizer/glist/master/install-5-mysqls-for-tests.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -sSL $url) | bash
+# url=https://raw.githubusercontent.com/devizer/glist/master/install-5-mysqls-for-tests-V2.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -sSL $url) | bash
 set -e
 set -u
 
@@ -16,7 +16,7 @@ function wait_for() {
   while [ $counter -lt $total ]; do
     counter=$((counter+1));
     # mysql --protocol=TCP -h localhost -u root -p"${MYSQL_ROOT_PASSWORD}" -P $p -e "Select 1;" 2>/dev/null 1>&2 && started="yes" || true
-    docker exec -it $n mysql --protocol=TCP -h localhost -u root -p"${MYSQL_ROOT_PASSWORD}" -P 3306 -e "Select 1;" 2>/dev/null 1>&2 && started="yes" || true
+    docker exec -t $n mysql --protocol=TCP -h localhost -u root -p"${MYSQL_ROOT_PASSWORD}" -P 3306 -e "Select 1;" 2>/dev/null 1>&2 && started="yes" || true
     if [ -n "$started" ]; then printf " OK\n"; break; else (sleep 1; printf $counter"."); fi
   done
 }
@@ -46,7 +46,7 @@ for (( i=0; i<$count; i++ )); do
   # echo "LOGS of $name"; sudo docker logs "$name"
   if [[ "$(command -v mysql)" != "" ]]; then
     # mysql-client on ubuntu 14.04 cant connect to mysql 8.0
-    docker exec -it $name mysql -t --protocol=TCP -h localhost -u root -p"${MYSQL_ROOT_PASSWORD}" -P 3306 -e "Select version() as \`$name at $port port\`; show databases;" || true
+    docker exec -t $name mysql -t --protocol=TCP -h localhost -u root -p"${MYSQL_ROOT_PASSWORD}" -P 3306 -e "Select version() as \`$name at $port port\`; show databases;" || true
   fi
   echo ""
 done
