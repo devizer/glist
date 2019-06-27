@@ -1,4 +1,4 @@
-#!/us/bin/env bash
+#!/usr/bin/env bash
 # url=https://raw.githubusercontent.com/devizer/glist/master/install-5-mysqls-for-tests.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -sSL $url) | bash
 set -e
 set -u
