@@ -9,13 +9,13 @@ POSTGRESQL_USER="${POSTGRESQL_USER:-postgres}"
 WAIT_TIMEOUT="${WAIT_TIMEOUT:-30}"
 
 function wait_for_pgsql() {
+  local port=$1 total=$WAIT_TIMEOUT counter=0 started=""
   if [[ "$(command -v psql)" == "" ]]; then return; fi
-  p=$1
-  printf "Waiting for postgres on localhost at $p port ...."
+  printf "Waiting for postgres on localhost at $port port ...."
   counter=0; total=$WAIT_TIMEOUT; started=""
   while [ $counter -lt $total ]; do
     counter=$((counter+1));
-    PGCONNECT_TIMEOUT=1 PGPASSWORD="$POSTGRESQL_PASS" psql -t -h localhost -p "$p" -U "$POSTGRESQL_USER" -q -c "select 1;" >/dev/null 2>&1 && started="yes" || true
+    PGCONNECT_TIMEOUT=1 PGPASSWORD="$POSTGRESQL_PASS" psql -t -h localhost -p "$port" -U "$POSTGRESQL_USER" -q -c "select 1;" >/dev/null 2>&1 && started="yes" || true
     if [ -n "$started" ]; then printf " OK\n"; break; else (sleep 1; printf $counter"."); fi
   done
   if [ -z "$started" ]; then printf " Fail\n"; fi;
