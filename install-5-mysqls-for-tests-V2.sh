@@ -59,6 +59,8 @@ for (( i=0; i<$count; i++ )); do
   wait_for_mysql "$name" "$port"
 done
 
+exit 0;
+
 echo "Checking $count mysql servers: ${names[*]// /|}"
 for (( i=0; i<$count; i++ )); do
   image=${images[$i]} name=${names[$i]} port=$((3306+1+$i));
