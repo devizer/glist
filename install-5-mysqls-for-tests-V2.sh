@@ -19,7 +19,7 @@ local name=$1 port=$2
   done
   if [ -z "$started" ]; then printf " Fail\n"; else
     ver=$(docker exec -t $name sh -c "MYSQL_PWD=\"$MYSQL_ROOT_PASSWORD\" mysql -s -N --protocol=TCP -h localhost -u root -P 3306 -e 'Select version();' 2>&1")
-    echo ", Ver is $ver"
+    printf ", Ver is $ver\n"
   fi
 }
 
