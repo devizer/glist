@@ -25,13 +25,14 @@ vars="-e POSTGRESQL_USER=$POSTGRESQL_USER -e POSTGRESQL_PASS=$POSTGRESQL_PASS -e
 
 port=54321
 for image in postgres:12-alpine postgres:11.4-alpine postgres:10.9-alpine postgres:9.6-alpine postgres:9.5-alpine postgres:9.4-alpine postgres:9.1 postgres:8.4; do
-  name=${image//:/-}
+  name="${image//:/-}"
   echo starting $image as $name
-  sudo docker logs $name >/dev/null 2>&1 && echo $name already exists && sudo docker start $name >/dev/null 2>&1 \
-    || time eval "sudo docker run --name $name $vars -p ${port}:5432 -d $image" \
-    || true
-
-  port=$((port+1)
+  exists=false
+  sudo docker logs "$name" >/dev/null 2>&1 && echo $name already exists && exists=true && sudo docker start $name >/dev/null 2>&1
+  if [[ $exists == false ]]; then
+    time eval "sudo docker run --name $name $vars -p ${port}:5432 -d $image"
+  fi
+  port=$((port+1))
 done
 
 for port in {54328..54321}; do
