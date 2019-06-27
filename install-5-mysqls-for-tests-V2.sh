@@ -62,6 +62,7 @@ done
 echo "Checking $count mysql servers: ${names[*]// /|}"
 for (( i=0; i<$count; i++ )); do
   image=${images[$i]} name=${names[$i]} port=$((3306+1+$i));
-  ver=$(docker exec -t $name sh -c "MYSQL_PWD=\"$MYSQL_ROOT_PASSWORD\" mysql -s -N --protocol=TCP -h localhost -u root -P 3306 -e 'Select version();' 2>&1")
+  ver=$(docker exec -t $name sh -c "MYSQL_PWD=\"$MYSQL_ROOT_PASSWORD\" mysql -s -N --protocol=TCP -h localhost -u root -P 3306 -e 'Select version();' 2>&1");
+  echo "";
   echo "MySQL server version on port [$port] is [$ver]";
 done
