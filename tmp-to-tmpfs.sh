@@ -18,6 +18,11 @@ mount -t tmpfs tmpfs /var/tmp
 
 
 echo '
+deb http://deb.debian.org/debian jessie main
+deb http://security.debian.org jessie/updates main
+' > /etc/apt/sources.list
+
+echo '
 deb http://archive.debian.org/debian/ wheezy main
 deb http://archive.debian.org/debian-security/ wheezy/updates main
 ' > /etc/apt/sources.list

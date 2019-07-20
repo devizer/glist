@@ -14,12 +14,14 @@ echo Download buffer location: $TMPDIR
 # ARM 64
 # https://download.visualstudio.microsoft.com/download/pr/39601b46-a250-46c3-92f0-68493e07fe5c/3bc40cf7868dcdd05ce353e253fd266c/dotnet-sdk-3.0.100-preview4-011223-linux-arm64.tar.gz
 export links_arm64='
-https://download.visualstudio.microsoft.com/download/pr/3d3d9050-ab4e-4303-9c2b-48fabbf10ed6/fba8b766585dbeeea3a6b608304f7526/dotnet-sdk-2.2.204-linux-arm64.tar.gz
-https://download.visualstudio.microsoft.com/download/pr/fa62ce11-f5d3-4f71-a5dd-07edf988edae/91cfccdeb4a58583f49c4a12dbd6f329/dotnet-sdk-3.0.100-preview5-011568-linux-arm64.tar.gz
+https://download.visualstudio.microsoft.com/download/pr/0af74ee1-47bb-43bd-b55f-1657f079c309/6649fd1bc91b14aee4a6b4ed44a2f45d/dotnet-sdk-2.2.301-linux-arm64.tar.gz
+https://download.visualstudio.microsoft.com/download/pr/8997987c-1fcc-4b83-ab49-08117ac40f86/13f3cc0b0dfcf37398d11caff3926bb9/dotnet-sdk-3.0.100-preview6-012264-linux-arm64.tar.gz
 '
 export link_node_arm64='https://nodejs.org/dist/v10.15.3/node-v10.15.3-linux-arm64.tar.xz'
 export link_node_arm64='https://nodejs.org/dist/v12.2.0/node-v12.2.0-linux-arm64.tar.xz'
+export link_node_arm64='https://nodejs.org/dist/v10.16.0/node-v10.16.0-linux-arm64.tar.xz'
 export link_pwsh_arm64='https://github.com/PowerShell/PowerShell/releases/download/v6.2.0/powershell-6.2.0-linux-arm64.tar.gz'
+export link_pwsh_arm64='https://github.com/PowerShell/PowerShell/releases/download/v6.2.2/powershell-6.2.2-linux-arm64.tar.gz'
 
 
 # X64
