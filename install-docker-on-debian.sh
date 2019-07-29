@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # url=https://raw.githubusercontent.com/devizer/glist/master/install-docker-on-debian.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -sSL $url) | bash
 
-function header() { LightGreen='\033[1;32m';Yellow='\033[1;33m';RED='\033[0;31m'; NC='\033[0m'; printf "${LightGreen}$1${NC} ${Yellow}$2${NC}\n"; }
+function header42() { LightGreen='\033[1;32m';Yellow='\033[1;33m';RED='\033[0;31m'; NC='\033[0m'; printf "${LightGreen}$1${NC} ${Yellow}$2${NC}\n"; }
 
 if true || [ "$(command -v docker)" == "" ]; then 
-  header "Installing docker from" "download.docker.com repo"
+  header42 "Installing docker from" "download.docker.com repo"
   source /etc/os-release
   sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get clean
 
@@ -23,7 +23,7 @@ if true || [ "$(command -v docker)" == "" ]; then
 fi
 
 if [ "$(command -v docker-compose)" == "" ]; then 
-  header "Installing" "docker-compose"
+  header42 "Installing" "docker-compose"
   sudo curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
   sudo chmod +x /usr/local/bin/docker-compose
 fi
