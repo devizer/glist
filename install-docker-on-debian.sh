@@ -6,9 +6,9 @@ function header42() { LightGreen='\033[1;32m';Yellow='\033[1;33m';RED='\033[0;31
 if true || [ "$(command -v docker)" == "" ]; then 
   header42 "Installing docker from" "download.docker.com repo"
   source /etc/os-release
-  sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get clean
+  sudo apt-get -q update && sudo apt-get upgrade -q -y && sudo apt-get clean
 
-  sudo apt-get install apt-transport-https ca-certificates curl gnupg2 software-properties-common -y && sudo apt-get clean
+  sudo apt-get install -q apt-transport-https ca-certificates curl gnupg2 software-properties-common -y && sudo apt-get clean
   curl -fsSL https://download.docker.com/linux/$ID/gpg | sudo apt-key add -
 
   sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
@@ -17,9 +17,9 @@ if true || [ "$(command -v docker)" == "" ]; then
      "deb [arch=$(dpkg --print-architecture)] https://download.docker.com/linux/$ID \
      $(lsb_release -cs) \
      stable"
-  sudo apt-get update
+  sudo apt-get update -q 
   apt-cache policy docker-ce
-  sudo apt-get install -y docker-ce && sudo apt-get clean && sudo systemctl status docker | head -n 88
+  sudo apt-get install -y -q docker-ce && sudo apt-get clean && sudo systemctl status docker | head -n 88
 fi
 
 if [ "$(command -v docker-compose)" == "" ]; then 

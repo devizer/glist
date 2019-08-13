@@ -12,5 +12,5 @@ function mount_without_Direct_IO() {
   sudo mount -t btrfs "$file" "$path" -o defaults,noatime,nodiratime,compress-force=zlib
 }
 
-losetup /dev/loop0 "$file" --direct-io=on
+losetup /dev/loop0 "$file" --direct-io=on || losetup /dev/loop0 "$file"
 sudo mount -t btrfs /dev/loop0 "$path" -o defaults,noatime,nodiratime,compress-force=zlib
