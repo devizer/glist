@@ -46,7 +46,8 @@ for (( i=0; i<$count; i++ )); do
   echo ""; echo "[$(($i+1)) / $count] starting container [$name] using image [$image]"
   # time sudo bash -c "TIMEFORMAT='Image download time: %1lR' docker pull $image"
   port=$((3306+1+$i));
-  cmd="sudo docker pull $image; sudo docker run --name $name -e MYSQL_ROOT_HOST=% -e MYSQL_ROOT_PASSWORD=\"${MYSQL_ROOT_PASSWORD}\" -e MYSQL_DATABASE=\"${MYSQL_TEST_DB}\" -d -p $port:3306 $image || sudo docker start $name"
+  if [[ -n "${HIDE_PULL_PROGRESS:-}" ]]; then hide_pull=">/dev/null"
+  cmd="sudo docker pull $image ${hide_pull:-}; sudo docker run --name $name -e MYSQL_ROOT_HOST=% -e MYSQL_ROOT_PASSWORD=\"${MYSQL_ROOT_PASSWORD}\" -e MYSQL_DATABASE=\"${MYSQL_TEST_DB}\" -d -p $port:3306 $image || sudo docker start $name"
   echo $cmd
 
   exists=false; sudo docker logs "$name" >/dev/null 2>&1 && echo $name already exists && exists=true && sudo docker start $name >/dev/null 2>&1
