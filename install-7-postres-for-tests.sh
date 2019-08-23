@@ -30,7 +30,8 @@ for image in postgres:12-alpine postgres:11.4-alpine postgres:10.9-alpine postgr
   exists=false
   sudo docker logs "$name" >/dev/null 2>&1 && echo $name already exists && exists=true && sudo docker start $name >/dev/null 2>&1
   if [[ $exists == false ]]; then
-    time eval "sudo docker run --name $name $vars -p ${port}:5432 -d $image"
+    if [[ -n "${HIDE_PULL_PROGRESS:-}" ]]; then hide_pull=">/dev/null"; fi
+    time eval "sudo docker pull $image ${hide_pull:-}; sudo docker run --name $name $vars -p ${port}:5432 -d $image"
   fi
   port=$((port+1))
 done
