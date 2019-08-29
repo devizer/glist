@@ -8,8 +8,8 @@ if [ ! -f ${file}.ok ]; then
   && echo ok > ${file}.ok
 fi
 mkdir -p /mnt/dvd "/live linux"
-mount -o loop ${file} /mnt/dvd
-mount -o loop /mnt/dvd/casper/filesystem.squashfs "/live linux"
+mount -o loop,ro ${file} /mnt/dvd
+mount -o loop,ro /mnt/dvd/casper/filesystem.squashfs "/live linux"
 
 
 
