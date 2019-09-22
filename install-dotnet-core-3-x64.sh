@@ -17,6 +17,7 @@ dotnet --info
 cat << UPGRADE_EOF > upgrade-2-to-3
 #!/usr/bin/env bash
 find -name '*.csproj' | while read csproj; do
+  echo Upgrading \${csproj} to net core 3.0
   if [ ! -f "\${csproj}.bak" ]; then cp -f "\${csproj}" "\${csproj}.bak"; fi
   sed -i -e 's/netcoreapp2.2/netcoreapp3.0/g' "\${csproj}"
   sed -i -e 's/netstandard2.0/netstandard2.1/g' "\${csproj}"
