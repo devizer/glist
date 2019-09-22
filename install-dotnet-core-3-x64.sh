@@ -10,6 +10,7 @@ file=$install_dir/$(basename "$url")
 curl -o $file $url
 tar xzf $file -C $install_dir
 rm -f $file
+sudo ln -s -f "$install_dir/dotnet" "/usr/local/bin/dotnet"
 export PATH="$install_dir:$PATH"
 dotnet --info
 
