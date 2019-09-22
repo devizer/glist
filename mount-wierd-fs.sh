@@ -16,3 +16,16 @@ losetup /dev/loop6 "$file" --direct-io=on || losetup /dev/loop6 "$file"
 sudo mount -t btrfs /dev/loop6 "$path" -o defaults,noatime,nodiratime,compress-force=zlib
 
 # sudo mount -t btrfs "/dev/sda2" /mnt/target -o defaults,noatime,nodiratime,compress-force=zlib
+
+for i in {1..2}; do
+echo 'n
+p
+
+
++5000M
+w
+' | sudo fdisk /dev/sdb
+done
+
+
+
