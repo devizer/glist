@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
-# script=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-core-3-x64.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash -s dotnet node pwsh
+# script=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-core-3-x64.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash -s $HOME/.local/dotnet3
 
 url=https://download.visualstudio.microsoft.com/download/pr/b81a2bd3-a8a4-4c7e-bd69-030f412ff7b4/3fc5f2c0481313daf2e18c348362ff3f/dotnet-sdk-3.0.100-rc1-014190-linux-x64.tar.gz
-install_dir=$HOME/bin/dotnet3
+install_dir="$1"
+install_dir=${install_dir:-$HOME/bin/dotnet3}
+echo dotnet core install dir: $install_dir
 mkdir -p "$install_dir"
 file=$install_dir/$(basename "$url")
 curl -o $file $url
