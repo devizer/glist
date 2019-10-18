@@ -55,7 +55,7 @@ https://download.visualstudio.microsoft.com/download/pr/f89d26ff-c9f0-459c-97e0-
 https://download.visualstudio.microsoft.com/download/pr/b9251194-4118-41cb-ae05-6763fb002e5d/1d398b4e97069fa4968628080b617587/dotnet-sdk-3.0.100-osx-x64.tar.gz
 '
 export link_node_osx='https://nodejs.org/dist/v10.15.3/node-v10.15.3-darwin-x64.tar.gz'
-export link_node_osx='https://nodejs.org/dist/v12.12.0/node-v12.12.0-darwin-x64.tar.gz'
+# export link_node_osx='https://nodejs.org/dist/v12.12.0/node-v12.12.0-darwin-x64.tar.gz'
 export link_pwsh_osx='https://github.com/PowerShell/PowerShell/releases/download/v6.2.0/powershell-6.2.0-osx-x64.tar.gz'
 
 # RHEL6
