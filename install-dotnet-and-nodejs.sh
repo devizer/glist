@@ -51,7 +51,7 @@ export link_pwsh_arm32='https://github.com/PowerShell/PowerShell/releases/downlo
 
 # OSX
 export links_osx='
-https://download.visualstudio.microsoft.com/download/pr/f89d26ff-c9f0-459c-97e0-0d56e0ee43ef/fc1dcdc4fe2eb39cfd04e4c6cf60d8e1/dotnet-sdk-2.2.107-osx-x64.tar.gz
+https://download.visualstudio.microsoft.com/download/pr/405eba1f-9a78-4ac0-99f3-3fad5107022c/d793c7a75613fb985bb6f7aff522437e/dotnet-sdk-2.2.204-osx-x64.tar.gz
 https://download.visualstudio.microsoft.com/download/pr/b9251194-4118-41cb-ae05-6763fb002e5d/1d398b4e97069fa4968628080b617587/dotnet-sdk-3.0.100-osx-x64.tar.gz
 '
 export link_node_osx='https://nodejs.org/dist/v10.15.3/node-v10.15.3-darwin-x64.tar.gz'
