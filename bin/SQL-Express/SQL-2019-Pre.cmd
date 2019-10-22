@@ -3,7 +3,7 @@
 set v=2019-CTP-3.0
 set KEY=SQL-%v%
 echo DOWNLOADING SQL %v% BOOTSTRAPPER
-set url=http://download.microsoft.com/download/9/D/8/9D82EBFB-1530-4A7F-B923-41BB3A5952B2/SQL2019CTP3.0-SSEI-Eval.exe
+set url=https://download.microsoft.com/download/f/7/1/f710f0db-9d30-4ec5-b0ad-f65529493f44/SQL2019RC1-SSEI-Eval.exe
 set outfile=%AppData%\Temp\%KEY%.exe
 mkdir "%AppData%\Temp" 1>nul 2>&1
 echo [System.Net.ServicePointManager]::ServerCertificateValidationCallback={$true}; $d=new-object System.Net.WebClient; $d.DownloadFile("$Env:url","$Env:outfile") | powershell -command -
