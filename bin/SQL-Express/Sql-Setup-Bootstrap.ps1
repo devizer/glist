@@ -62,13 +62,13 @@ $Sql_Servers_Definition = @(
     }
 
     function Install-SqlServer { param($description)
-        if ($Env:Script) {
+        if ($description.Script) {
             Say "Installing $($description.Title)"
-            Invoke-Expression $Env:Script *> "$Env:ARTIFACT\Sql Server Setup.log"
+            Invoke-Expression $description.Script *> "$Env:SQL_SETUP_LOG_FOLDER\Setup $($description.Title).log"
         } 
         
         # hide pre-installed LocalDB for tests with SQL Express/Developer
-        if ($Env:Local_DB -eq $null) {
+        if ($description.LocalDB -eq $null) {
             Say "Pre-installed SqlLocalDB.exe: $(Find-SqlLocalDB-Exe)"
             # it is imposible to delete LocalDB 2016, but it is ok to delete 2014th LocalDB
             # @(2016, 2014, 2016, 2016) | % { Uninstall-SqlLocalDB "$_" }
