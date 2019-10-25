@@ -1,14 +1,5 @@
 # Env Variables: SQL_SETUP_LOG_FOLDER
 $Sql_Servers_Definition = @(
-  @{  Title = "SQL SERVER LocalDB 2017"; LocalDB = $true;
-      Keys = @("LocalDB", "2017", "Latest", "x64");
-      Script = 'powershell -f .\Install-SQL-LocalDB.ps1; cp "$($Env:USERPROFILE)\AppData\Local\Temp\LocalDB-Installer\SqlLocaLDB-v14-x64.log" "$Env:SQL_SETUP_LOG_FOLDER;"'
-      Comment = "Actual Version is 2014 on the AppVeyor VS 2015 image. For x86 Windows it installs LocalDB 2014"
-   },
-  @{  Title = "SQL SERVER LocalDB 2016 SP1 CU8"; LocalDB = $true;
-      Keys = ("LocalDB", "2016", "x64");
-      Comment = "Actual Version is 2014 on the AppVeyor VS 2015 image"
-   },
   @{  Title = "SQL SERVER 2019 RC (Developer)";
       Keys = @("Developer", "2019", "SqlServer", "Pre", "x64");
       Script = ".\SQL-2019-Pre.cmd"
@@ -43,16 +34,25 @@ $Sql_Servers_Definition = @(
    },
   @{  Title = "SQL SERVER 2005 SP4 x86 (Express)"; 
       Keys = @("Express", "2005", "SqlServer", "x86");
-      Script = ".\SQL-Express-2005-SP4-x86.cmd"
+      Script = '.\SQL-Express-2005-SP4-x86.cmd; @(${Env:ProgramFiles(x86)}, $Env:ProgramFiles) | % { $log_dir="$($_)\Microsoft SQL Server\90\Setup Bootstrap\LOG"; if (Test-Path $log_dir) { Write-Host "Store $log_dir as [Sql 2005 SP4 Setup Log.7z]"; & 7z a -t7z -mx=3 -ms=on "$Env:ARTIFACT\Sql 2005 SP4 Setup Log.7z" "$log_dir" *> "$Env:TEMP\_" } }'
       Comment = "Only for 2 AppVoyer images: Visual Studio 2017 & 2019 (does not work on AppVoyer 2013 & 2015)"
+   },
+  @{  Title = "SQL SERVER LocalDB 2017"; LocalDB = $true;
+      Keys = @("LocalDB", "2017", "Latest", "x64");
+      Script = 'powershell -f .\Install-SQL-LocalDB.ps1; cp "$($Env:USERPROFILE)\AppData\Local\Temp\LocalDB-Installer\SqlLocaLDB-v14-x64.log" "$Env:SQL_SETUP_LOG_FOLDER;"'
+      Comment = "Actual Version is 2014 on the AppVeyor VS 2015 image. For x86 Windows it installs LocalDB 2014"
+   },
+  @{  Title = "SQL SERVER LocalDB 2016 SP1 CU8"; LocalDB = $true;
+      Keys = ("LocalDB", "2016", "x64");
+      Comment = "Actual Version is 2014 on the AppVeyor VS 2015 image"
    }
 )
 
 
     function Find-SqlServers { param( [array] $keys )
-       Write-Host "Args: $keys"
+       # Write-Host "Args: $keys"
        $Sql_Servers_Definition | % { $sql = $_
-            $isIt=$true; foreach($k in $keys) { if (-not ($sql.Keys -match $k)) { $isIt=$false; } }
+            $isIt=$true; foreach($k in $keys) { if (-not ($sql.Keys -contains $k)) { $isIt=$false; } }
             if ($isIt) { $sql }
        }
     }
@@ -153,5 +153,33 @@ $Sql_Servers_Definition = @(
         get-wmiobject win32_service | where {$_.Name.ToLower().IndexOf("sql") -ge 0 } | sort-object -Property "DisplayName" | ft State, Name, DisplayName, StartMode
     }
 
-$Sql_Servers_Definition | % { $_ | ft }
-Find-SqlServers SqlServer, 20199 | % { $_.Title }
+if ($Env:SQL_SETUP_BOOTSTRAP_TEST) {
+    $Sql_Servers_Definition | % { $_ | ft }
+    $testCases = @(
+      @{ Args = @("SqlServer", "2019");               Expected="SQL SERVER 2019 RC (Developer)"},
+      @{ Args = @("SqlServer", "2017", "Developer");  Expected="SQL SERVER 2017 (Developer)" },
+      @{ Args = @("SqlServer", "2017", "Express");    Expected="SQL SERVER 2017 (Express)" },
+      @{ Args = @("SqlServer", "2016", "Express");    Expected="SQL SERVER 2016 (Express)" },
+      @{ Args = @("SqlServer", "2014", "Express");    Expected="SQL SERVER 2014 SP2 x86 (Express)" },
+      @{ Args = @("SqlServer", "2012", "Express");    Expected="SQL SERVER 2012 SP3 (Express)" },
+      @{ Args = @("SqlServer", "2008R2", "Express");  Expected="SQL SERVER 2008 R2 SP2 x86 (Express)" },
+      @{ Args = @("SqlServer", "2008", "Express");    Expected="SQL SERVER 2008 SP3 (Express)" },
+      @{ Args = @("SqlServer", "2005", "Express");    Expected="SQL SERVER 2005 SP4 x86 (Express)" },
+      @{ Args = @("SqlServer");                       Expected="SQL SERVER 2019 RC (Developer)" },
+      @{ Args = @("LocalDB", "2017");                 Expected="SQL SERVER LocalDB 2017" },
+      @{ Args = @("LocalDB", "2016");                 Expected="SQL SERVER LocalDB 2016 SP1 CU8" }
+      @{ Args = @("LocalDB");                         Expected="SQL SERVER LocalDB 2017" },
+      @{ Args = @("No Such SQL Server");              Expected=""; }
+    )
+
+    $errors = 0;
+    $testCases | % { 
+        $actual=(Find-SqlServers $_.Args | Select -First 1).Title
+        Write-Host "Test. For [$($_.Args)] Actual: [$actual], expected: [$($_.Expected)]"
+        if ("$actual" -ne "$($_.Expected)") { Write-Host "Test Failed" -ForegroundColor Red; $errors++}
+    }
+    Write-Host "Total Errors: $errors";
+    if ($errors) { Throw "Total Errors: $errors" }
+}
+
+# Find-SqlServers SqlServer, 2019, Developer | % { $_.Title }
