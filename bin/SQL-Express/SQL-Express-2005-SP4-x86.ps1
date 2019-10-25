@@ -1,9 +1,15 @@
+function Get-Elapsed
+{
+    if ($Global:startAt -eq $null) { $Global:startAt = [System.Diagnostics.Stopwatch]::StartNew(); }
+    [System.String]::Concat("[", (new-object System.DateTime(0)).AddMilliseconds($Global:startAt.ElapsedMilliseconds).ToString("HH:mm:ss"), "]");
+}; $_=Get-Elapsed;
+
 $files=$("Essentials.7z.exe")
 $baseUrl="https://raw.githubusercontent.com/devizer/glist/master/Essentials/"
 $Temp="$($Env:LocalAppData)"; if ($Temp -eq "") { $Temp="$($Env:UserProfile)"; }
 $Temp="$Temp\Temp"
 $Essentials="$Temp\Essentials"
-Write-Host "Essentials folder: [$Essentials]" -foregroundcolor "magenta"
+Write-Host "$(Get-Elapsed) Essentials folder: [$Essentials]" -foregroundcolor "magenta"
 New-Item $Essentials -type directory -force -EA SilentlyContinue | out-null
 [System.Net.ServicePointManager]::ServerCertificateValidationCallback={$true};
 foreach($file in $files) {
@@ -14,7 +20,7 @@ pushd $Essentials
 ri Essentials.7z.exe
 popd
 $_7_Zip="$Essentials\x64\7z.exe";  if ( -Not ("$($Env:PROCESSOR_ARCHITECTURE)" -eq "AMD64")) { $_7_Zip="$Essentials\x86\7z.exe"; }
-Write-Host "Architecture: $($Env:PROCESSOR_ARCHITECTURE). 7-Zip: [$_7_Zip]" -foregroundcolor "magenta"; 
+Write-Host "$(Get-Elapsed) Architecture: $($Env:PROCESSOR_ARCHITECTURE). 7-Zip: [$_7_Zip]" -foregroundcolor "magenta"; 
 
 
 # Done: Essentials
@@ -26,7 +32,7 @@ pushd $Temp
 ri SQL-Express-2005-SP4-x86.7z*
 popd
 
-Write-Host "Installing .NET 3.5 and 4.5. Perfimissions are required"
+Write-Host "$(Get-Elapsed) Installing .NET 3.5 and 4.5. Perfimissions are required"
 Add-WindowsFeature Net-Framework-Core -EA SilentlyContinue
 Add-WindowsFeature NET-Framework-45-Core -EA SilentlyContinue
 Install-WindowsFeature Net-Framework-Core -EA SilentlyContinue
@@ -41,7 +47,8 @@ popd
 
 $target="${Env:SystemDrive}\SQL"
 pushd "$temp\SQL-Express-2005-SP4-x86"
-cmd /c .\setup.exe /qb ADDLOCAL=SQL_Engine INSTANCENAME=SQL_2005_SP4_X86 DISABLENETWORKPROTOCOLS=0 SECURITYMODE=SQL SAPWD=``1qazxsw2 INSTALLSQLDIR="$target" 
+Write-Host "$(Get-Elapsed) Launch setup.exe at $(Get-Location)"
+cmd /c .\setup.exe /qn ADDLOCAL=SQL_Engine INSTANCENAME=SQL_2005_SP4_X86 DISABLENETWORKPROTOCOLS=0 SECURITYMODE=SQL SAPWD=``1qazxsw2 INSTALLSQLDIR="$target" 
 popd
 
 Remove-Item -Recurse -Force "$temp\SQL-Express-2005-SP4-x86"

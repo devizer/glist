@@ -1,6 +1,6 @@
 @echo off
 
-set v=2019-CTP-3.0
+set v=2019-RC1
 set KEY=SQL-%v%
 echo DOWNLOADING SQL %v% BOOTSTRAPPER
 set url=https://download.microsoft.com/download/f/7/1/f710f0db-9d30-4ec5-b0ad-f65529493f44/SQL2019RC1-SSEI-Eval.exe
@@ -27,7 +27,7 @@ rem   and SQL Client Connectivity SDK.
   /IAcceptSQLServerLicenseTerms /IACCEPTROPENLICENSETERMS ^
   /UpdateEnabled=True ^
   /FEATURES=SQLENGINE,REPLICATION,FullText ^
-  /INSTANCENAME="SQL_2019_CTP30" ^
+  /INSTANCENAME="SQL_2019_RC" ^
   /INSTANCEDIR="%SystemDrive%\SQL" ^
   /INSTALLSHAREDDIR="%SystemDrive%\SQL\x64" ^
   /INSTALLSHAREDWOWDIR="%SystemDrive%\SQL\x86" ^
