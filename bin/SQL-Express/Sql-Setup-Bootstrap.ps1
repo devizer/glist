@@ -62,10 +62,13 @@ $Sql_Servers_Definition = @(
     }
 
     function Install-SqlServer { param($description)
+        Download-Installers
         Say "Arg for (Install-SqlServer ...):"; $description | fl *
         if ($description.Script) {
             Say "Installing $($description.Title)"
+            pushd $Global:SQL_SETUP_WORK
             Invoke-Expression $description.Script *> "$Env:SQL_SETUP_LOG_FOLDER\Setup $($description.Title).log"
+            popd
         } 
         
         # hide pre-installed LocalDB for tests with SQL Express/Developer
