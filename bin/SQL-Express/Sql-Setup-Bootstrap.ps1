@@ -51,7 +51,7 @@ $Sql_Servers_Definition = @(
     function Download-Installers {
         if (!$Global:SQL_SETUP_WORK) {
             $Work="$($Env:LocalAppData)"; if ($Work -eq "") { $Work="$($Env:UserProfile)"; }; $Work="$Work\Temp\Sql-Installers"
-            if (-net Test-Path $Work) { New-Item -ItemType Directory -Path $Work -EA SilentlyContinue | out-null }
+            if (-not Test-Path $Work) { New-Item -ItemType Directory -Path $Work -EA SilentlyContinue | out-null }
             Say "Downloading SQL Installers to: $Work"
             (new-object System.Net.WebClient).DownloadFile('https://raw.githubusercontent.com/devizer/glist/master/bin/SQL-Express/windows-core/sql-express-all.7z.exe', "$Work\sql-express-all.7z.exe")
             pushd $Work
