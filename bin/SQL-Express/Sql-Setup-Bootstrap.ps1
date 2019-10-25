@@ -55,7 +55,7 @@ $Sql_Servers_Definition = @(
             Say "Downloading SQL Installers to: $Work"
             (new-object System.Net.WebClient).DownloadFile('https://raw.githubusercontent.com/devizer/glist/master/bin/SQL-Express/windows-core/sql-express-all.7z.exe', "$Work\sql-express-all.7z.exe")
             pushd $Work
-            & .\sql-express-all.7z.exe -y
+            & .\sql-express-all.7z.exe -y | out-null
             popd
             $Global:SQL_SETUP_WORK = $work
         }
