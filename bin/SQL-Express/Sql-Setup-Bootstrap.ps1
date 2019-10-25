@@ -34,7 +34,7 @@ $Sql_Servers_Definition = @(
    },
   @{  Title = "SQL SERVER 2005 SP4 x86 (Express)"; 
       Keys = @("Express", "2005", "SqlServer", "x86");
-      Script = '.\SQL-Express-2005-SP4-x86.cmd; @(${Env:ProgramFiles(x86)}, $Env:ProgramFiles) | % { $log_dir="$($_)\Microsoft SQL Server\90\Setup Bootstrap\LOG"; if (Test-Path $log_dir) { Write-Host "Store $log_dir as [Sql 2005 SP4 Setup Log.7z]"; & 7z a -t7z -mx=3 -ms=on "$Env:ARTIFACT\Sql 2005 SP4 Setup Log.7z" "$log_dir" *> "$Env:TEMP\_" } }'
+      Script = '.\SQL-Express-2005-SP4-x86.cmd; @(${Env:ProgramFiles(x86)}, $Env:ProgramFiles) | % { $log_dir="$($_)\Microsoft SQL Server\90\Setup Bootstrap\LOG"; if (Test-Path $log_dir) { Write-Host "Store $log_dir as [Sql 2005 SP4 Setup Log.7z]"; & 7z a -t7z -mx=3 "$Env:SQL_SETUP_LOG_FOLDER\Sql 2005 SP4 Setup Log.7z" "$log_dir" *> "$Env:TEMP\_" } }'
       Comment = "Only for 2 AppVoyer images: Visual Studio 2017 & 2019 (does not work on AppVoyer 2013 & 2015)"
    },
   @{  Title = "SQL SERVER LocalDB 2017"; LocalDB = $true;
@@ -48,6 +48,33 @@ $Sql_Servers_Definition = @(
    }
 )
 
+    function Download-Installers {
+        if (!$Global:SQL_SETUP_WORK) {
+            $Work="$($Env:LocalAppData)"; if ($Work -eq "") { $Work="$($Env:UserProfile)"; }; $Work="$Work\Temp\Sql-Installers"
+            New-Item -ItemType Directory -Path $Work -EA SilentlyContinue | out-null
+            Say "Downloading SQL Installers to: $Work"
+            (new-object System.Net.WebClient).DownloadFile('https://raw.githubusercontent.com/devizer/glist/master/bin/SQL-Express/windows-core/sql-express-all.7z.exe', "$Work\sql-express-all.7z.exe")
+            pushd $Work
+            & .\sql-express-all.7z.exe -y
+            popd
+            $Global:SQL_SETUP_WORK = $work
+        }
+    }
+
+    function Install-SqlServer { param($description)
+        if ($Env:Script) {
+            Say "Installing $($description.Title)"
+            Invoke-Expression $Env:Script *> "$Env:ARTIFACT\Sql Server Setup.log"
+        } 
+        
+        # hide pre-installed LocalDB for tests with SQL Express/Developer
+        if ($Env:Local_DB -eq $null) {
+            Say "Pre-installed SqlLocalDB.exe: $(Find-SqlLocalDB-Exe)"
+            # it is imposible to delete LocalDB 2016, but it is ok to delete 2014th LocalDB
+            # @(2016, 2014, 2016, 2016) | % { Uninstall-SqlLocalDB "$_" }
+            Hide-LocalDB-Servers
+        }
+    }
 
     function Find-SqlServers { param( [array] $keys )
        # Write-Host "Args: $keys"
@@ -183,3 +210,4 @@ if ($Env:SQL_SETUP_BOOTSTRAP_TEST) {
 }
 
 # Find-SqlServers SqlServer, 2019, Developer | % { $_.Title }
+Download-Installers
