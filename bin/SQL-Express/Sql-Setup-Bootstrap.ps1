@@ -62,6 +62,7 @@ $Sql_Servers_Definition = @(
     }
 
     function Install-SqlServer { param($description)
+        Say "Arg for (Install-SqlServer ...):"; $description | fl *
         if ($description.Script) {
             Say "Installing $($description.Title)"
             Invoke-Expression $description.Script *> "$Env:SQL_SETUP_LOG_FOLDER\Setup $($description.Title).log"
@@ -77,7 +78,7 @@ $Sql_Servers_Definition = @(
     }
 
     function Find-SqlServers { param( [array] $keys )
-       # Write-Host "Args: $keys"
+       Say "Args for (Find-SqlServers ...): $keys"
        $Sql_Servers_Definition | % { $sql = $_
             $isIt=$true; foreach($k in $keys) { if (-not ($sql.Keys -contains $k)) { $isIt=$false; } }
             if ($isIt) { $sql }
