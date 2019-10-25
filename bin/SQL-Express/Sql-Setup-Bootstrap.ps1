@@ -82,7 +82,7 @@ $Sql_Servers_Definition = @(
 
     function Find-SqlServers-ByTags { param( [array] $keys )
        # Say "Args for (Find-SqlServers ...): $keys"
-       if (!"$keys") { Say "WARNING! Empty tag list means NoSQL. Lol: [$keys]"; return; }
+       if (!"$keys") { Say "WARNING! Empty tag list means NoSQL. Lol. [$keys]"; return; }
        $found=0;
        $Sql_Servers_Definition | % { $sql = $_
             $isIt=$true; foreach($k in $keys) { if (-not ($sql.Keys -contains $k)) { $isIt=$false; } }
