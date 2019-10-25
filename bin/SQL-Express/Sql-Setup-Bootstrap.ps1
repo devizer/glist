@@ -65,7 +65,7 @@ $Sql_Servers_Definition = @(
         Download-Installers
         # Say "Arg for (Install-SqlServer ...):"; $description | fl *
         if ($description.Script) {
-            Say "Installing $($description.Title), logs: $($Env:SQL_SETUP_LOG_FOLDER)\Setup $($description.Title).log"
+            Say "Installing the $($description.Title)"
             pushd $Global:SQL_SETUP_WORK
             Invoke-Expression $description.Script *> "$($Env:SQL_SETUP_LOG_FOLDER)\Setup $($description.Title).log"
             popd
@@ -91,7 +91,7 @@ $Sql_Servers_Definition = @(
     }
 
     function Find-SqlServers { param( [string] $list)
-        Say "Installing: $list"
+        Say "Installing SQL Server(s) by tags: $list"
         "$list".Split(@([char]44, [char]59)) | % { $sqlKey=$_.Trim()
             $tags=@("$sqlKey".Split([char]32) | % {$_.Trim()} | where { $_.Length -gt 0 } )
             if ($tags.Count -gt 0) {
