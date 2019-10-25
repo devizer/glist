@@ -149,7 +149,8 @@ $Sql_Servers_Definition = @(
     # uninstallation does not work properly, but upgrade works better
     function Hide-LocalDB-Servers {
         Say "Hide SQL Server LocalDB"; 
-        Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Microsoft SQL Server Local DB\Installed Versions" -Recurse -Force
+        $path="HKLM:\SOFTWARE\Microsoft\Microsoft SQL Server Local DB\Installed Versions"
+        if (Test-Path $path) { Remove-Item -Path $path -Recurse -Force }
     }
 
     # return empty string if SqlLocalDB.exe is not found. always returns latest installed SqlLocalDB.exe
