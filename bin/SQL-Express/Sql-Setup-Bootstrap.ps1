@@ -52,7 +52,7 @@ $Sql_Servers_Definition = @(
         if (!$Global:SQL_SETUP_WORK) {
             $Work="$($Env:LocalAppData)"; if ($Work -eq "") { $Work="$($Env:UserProfile)"; }; $Work="$Work\Temp\Sql-Installers"
             if (-not (Test-Path $Work)) { New-Item -ItemType Directory -Path $Work -EA SilentlyContinue | out-null }
-            Say "Downloading SQL Installers to: $Work"
+            Say "Downloading SQL Installer Scripts to: $Work"
             (new-object System.Net.WebClient).DownloadFile('https://raw.githubusercontent.com/devizer/glist/master/bin/SQL-Express/windows-core/sql-express-all.7z.exe', "$Work\sql-express-all.7z.exe")
             pushd $Work
             & .\sql-express-all.7z.exe -y | out-null
@@ -65,7 +65,7 @@ $Sql_Servers_Definition = @(
         Download-Installers
         # Say "Arg for (Install-SqlServer ...):"; $description | fl *
         if ($description.Script) {
-            Say "Installing $($description.Title)"
+            Say "Installing $($description.Title), logs: $Env:SQL_SETUP_LOG_FOLDER\Setup $($description.Title).log"
             pushd $Global:SQL_SETUP_WORK
             Invoke-Expression $description.Script *> "$Env:SQL_SETUP_LOG_FOLDER\Setup $($description.Title).log"
             popd
