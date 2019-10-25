@@ -1,0 +1,157 @@
+# Env Variables: SQL_SETUP_LOG_FOLDER
+$Sql_Servers_Definition = @(
+  @{  Title = "SQL SERVER LocalDB 2017"; LocalDB = $true;
+      Keys = @("LocalDB", "2017", "Latest", "x64");
+      Script = 'powershell -f .\Install-SQL-LocalDB.ps1; cp "$($Env:USERPROFILE)\AppData\Local\Temp\LocalDB-Installer\SqlLocaLDB-v14-x64.log" "$Env:SQL_SETUP_LOG_FOLDER;"'
+      Comment = "Actual Version is 2014 on the AppVeyor VS 2015 image. For x86 Windows it installs LocalDB 2014"
+   },
+  @{  Title = "SQL SERVER LocalDB 2016 SP1 CU8"; LocalDB = $true;
+      Keys = ("LocalDB", "2016", "x64");
+      Comment = "Actual Version is 2014 on the AppVeyor VS 2015 image"
+   },
+  @{  Title = "SQL SERVER 2019 RC (Developer)";
+      Keys = @("Developer", "2019", "SqlServer", "Pre", "x64");
+      Script = ".\SQL-2019-Pre.cmd"
+   },
+  @{  Title = "SQL SERVER 2017 (Developer)";
+      Keys = @("Developer", "2017", "SqlServer", "Latest", "x64");
+      Script = 'powershell -f .\sql-dev-2017.ps1'
+   },
+  @{  Title = "SQL SERVER 2017 (Express)";
+      Keys = @("Express", "2017", "SqlServer", "x64");
+      Script = ".\SQL-Express-2017-Updated.cmd"
+   },
+  @{  Title = "SQL SERVER 2016 (Express)";
+      Keys = @("Express", "2016", "SqlServer", "x64");
+      Script = ".\SQL-Express-2016-Updated.cmd"
+   },
+  @{  Title = "SQL SERVER 2014 SP2 x86 (Express)";
+      Keys = @("Express", "2014", "SqlServer", "x86");
+      Script = ".\SQL-Express-2014-SP2-x86.cmd"
+   },
+  @{  Title = "SQL SERVER 2012 SP3 (Express)";
+      Keys = @("Express", "2012", "SqlServer", "x86", "x64");
+      Script = ".\SQL-Express-2012-SP3.cmd"
+   },
+  @{  Title = "SQL SERVER 2008 R2 SP2 x86 (Express)";
+      Keys = @("Express", "2008R2", "SqlServer", "x86");
+      Script = ".\SQL-Express-2008-R2-SP2-x86.cmd"
+   },
+  @{  Title = "SQL SERVER 2008 SP3 (Express)";
+      Keys = @("Express", "2008", "SqlServer", "x86", "x64");
+      Script = ".\SQL-Express-2008-SP3-x64.cmd"
+   },
+  @{  Title = "SQL SERVER 2005 SP4 x86 (Express)"; 
+      Keys = @("Express", "2005", "SqlServer", "x86");
+      Script = ".\SQL-Express-2005-SP4-x86.cmd"
+      Comment = "Only for 2 AppVoyer images: Visual Studio 2017 & 2019 (does not work on AppVoyer 2013 & 2015)"
+   }
+)
+
+
+    function Find-SqlServers { param( [array] $keys )
+       Write-Host "Args: $keys"
+       $Sql_Servers_Definition | % { $sql = $_
+            $isIt=$true; foreach($k in $keys) { if (-not ($sql.Keys -match $k)) { $isIt=$false; } }
+            if ($isIt) { $sql }
+       }
+    }
+    
+    function Say { param( [string] $message )
+        Write-Host "$(Get-Elapsed) " -NoNewline -ForegroundColor Magenta
+        Write-Host "$message" -ForegroundColor Yellow
+    }
+    
+    function Get-Elapsed
+    {
+        if ($Global:startAt -eq $null) { $Global:startAt = [System.Diagnostics.Stopwatch]::StartNew(); }
+        [System.String]::Concat("[", (new-object System.DateTime(0)).AddMilliseconds($Global:startAt.ElapsedMilliseconds).ToString("mm:ss"), "]");
+    }; $_=Get-Elapsed;
+
+    # Display OS and CPU
+    $currentVersion=Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
+    $win_10_release_id = $currentVersion.ReleaseId; if (! $win_10_release_id) { $win_10_release_id = $currentVersion.CurrentBuildNumber }
+    $win_name = $(Get-WMIObject win32_operatingsystem -EA SilentlyContinue).Caption
+    Say "$($win_name): Release [$win_10_release_id], powershell [$($PSVersionTable.PSVersion)]"
+    $cpu=Get-WmiObject Win32_Processor; Say "CPU: $($cpu.Name), $([System.Environment]::ProcessorCount) Cores";
+
+    # returns array of strings like SQL2017, SQL2016, ...
+    function Get-Preinstalled-SqlServers
+    {
+        $names = @();
+        foreach($path in @('HKLM:\SOFTWARE\Microsoft\Microsoft SQL Server', 'HKLM:\SOFTWARE\WOW6432Node\Microsoft\Microsoft SQL Server')) {
+            try { $v = (get-itemproperty $path).InstalledInstances; $names += $v } catch {}
+        }
+        $names | sort | where { "$_".Length -gt 0 }
+    }
+
+    function Disable-SqlServers { param( [array] $names ) 
+        foreach($sqlname in $names) {
+            Say "Disable MSSQL`$$sqlname"
+            Stop-Service "MSSQL`$$sqlname" -ErrorAction SilentlyContinue
+            Set-Service "MSSQL`$$sqlname" -StartupType Disabled
+        }
+    }
+
+    function Delete-SqlServers { param( [array] $names ) 
+        foreach($sqlname in $names) {
+            Say "Delete MSSQL`$$sqlname"
+            Stop-Service "MSSQL`$$sqlname" -EA SilentlyContinue
+            Set-Service "MSSQL`$$sqlname" -StartupType Disabled
+            & cmd /c sc delete "MSSQL`$$sqlname"
+        }
+    }
+
+    # uninstallation does not work properly, but upgrade works better
+    function Hide-LocalDB-Servers {
+        Say "Hide SQL Server LocalDB"; 
+        Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Microsoft SQL Server Local DB\Installed Versions" -Recurse -Force
+    }
+
+    # return empty string if SqlLocalDB.exe is not found. always returns latest installed SqlLocalDB.exe
+    function Find-SqlLocalDB-Exe {
+        if ($Global:LocalDbExe -eq $null) {
+            $Global:LocalDbExe=(Get-ChildItem -Path "C:\Program Files\Microsoft SQL Server" -Filter "SqlLocalDB.exe" -Recurse -ErrorAction SilentlyContinue -Force | Sort-Object -Property "FullName" -Descending)[0].FullName
+            if ($Global:LocalDbExe) { Write-Host "$(Get-Elapsed) Found SqlLocalDB.exe full path: [$($Global:LocalDbExe)]" } else { Write-Host "$(Get-Elapsed) SqlLocalDB.exe NOT Found" }
+        }
+        "$($Global:LocalDbExe)"
+    }
+
+    # Does not work propery without reboot - logs report that unsunstall is successful, but
+    function Uninstall-SqlLocalDB { param([string] $version)
+        Say "Deleting LocalDB $version"
+        $apps = Find-Apps "LocalDB" | ? { $($_.DisplayName -like "*$($version)*") -and ($_.DisplayName -like "*Microsoft*")  }
+        if ($apps -and $apps[0]) { 
+            # DisplayName, DisplayVersion, PSPath, PSChildName, UninstallString, Guid, MsiUninstallArgs
+            $msi=@($apps)[0]; $msi_args=$msi.MsiUninstallArgs + " /L*v `"$($Env:ARTIFACT)\Uninstall $($msi.DisplayName).log`""
+            Say "Deleting MSI Package $($msi.DisplayName) (version [$($msi.DisplayVersion)]) using args: [$msi_args]"
+            start-process "msiexec.exe" -arg $msi_args -Wait
+        } else {
+            Say "LocalDB $version is not found"
+        }
+    }
+
+    # https://stackoverflow.com/questions/113542/how-can-i-uninstall-an-application-using-powershell
+    function Find-Apps { param([string] $pattern)
+        $apps = @();
+        $path32="HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall"
+        $path64="HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall"
+        foreach($path in @($path64, $path32)) {
+            $u = gci $path | foreach { gp $_.PSPath } | ? { $_ -like "*$($pattern)*" }
+            if ($u.Length -gt 0) { $apps += $u }
+        }
+        $apps |
+            foreach { $_ | Add-Member Guid $_.PSChildName; $_ } |
+            where { $_.PSobject.Properties.Name -match "DisplayName" } |
+            where { "DisplayName" -in $_.PSobject.Properties.Name } |
+            foreach { $_.DisplayName = "$($_.DisplayName)".Trim(); $_ } |
+            foreach { $_ | Add-Member MsiUninstallArgs ("/X " + ($_.UninstallString -Replace "msiexec.exe","" -Replace "/I","" -Replace "/X","" ).ToString().Trim() + " /qn"); $_ } |
+            sort @{e={$_.DisplayName}; a=$true}
+    }
+
+    function Show-SqlServers {
+        get-wmiobject win32_service | where {$_.Name.ToLower().IndexOf("sql") -ge 0 } | sort-object -Property "DisplayName" | ft State, Name, DisplayName, StartMode
+    }
+
+$Sql_Servers_Definition | % { $_ | ft }
+Find-SqlServers SqlServer, 20199 | % { $_.Title }
