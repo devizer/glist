@@ -63,7 +63,7 @@ $Sql_Servers_Definition = @(
 
     function Install-SqlServer { param($description)
         Download-Installers
-        Say "Arg for (Install-SqlServer ...):"; $description | fl *
+        # Say "Arg for (Install-SqlServer ...):"; $description | fl *
         if ($description.Script) {
             Say "Installing $($description.Title)"
             pushd $Global:SQL_SETUP_WORK
@@ -72,7 +72,7 @@ $Sql_Servers_Definition = @(
         } 
         
         # hide pre-installed LocalDB for tests with SQL Express/Developer
-        if ($description.LocalDB -eq $null) {
+        if ($false -and $description.LocalDB -eq $null) {
             Say "Pre-installed SqlLocalDB.exe: $(Find-SqlLocalDB-Exe)"
             # it is imposible to delete LocalDB 2016, but it is ok to delete 2014th LocalDB
             # @(2016, 2014, 2016, 2016) | % { Uninstall-SqlLocalDB "$_" }
@@ -80,13 +80,26 @@ $Sql_Servers_Definition = @(
         }
     }
 
-    function Find-SqlServers { param( [array] $keys )
-       Say "Args for (Find-SqlServers ...): $keys"
+    function Find-SqlServers-ByTags { param( [array] $keys )
+       # Say "Args for (Find-SqlServers ...): $keys"
+       $found=0;
        $Sql_Servers_Definition | % { $sql = $_
             $isIt=$true; foreach($k in $keys) { if (-not ($sql.Keys -contains $k)) { $isIt=$false; } }
-            if ($isIt) { $sql }
+            if ($isIt) { $sql; $found++ }
        }
+       if (!$found) {Say "WARNING! Unknown SQL Server for tags: [$keys]"}
     }
+
+    function Find-SqlServers { param( [string] $list)
+        Say "Installing: $list"
+        "$list".Split(@([char]44, [char]59)) | % { $sqlKey=$_.Trim()
+            $tags=@("$sqlKey".Split([char]32) | % {$_.Trim()} | where { $_.Length -gt 0 } )
+            if ($tags.Count -gt 0) {
+                Find-SqlServers-ByTags $tags | Select -First 1
+            }
+        }
+    }
+
     
     function Say { param( [string] $message )
         Write-Host "$(Get-Elapsed) " -NoNewline -ForegroundColor Magenta
