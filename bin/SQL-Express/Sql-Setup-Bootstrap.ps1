@@ -82,6 +82,7 @@ $Sql_Servers_Definition = @(
 
     function Find-SqlServers-ByTags { param( [array] $keys )
        # Say "Args for (Find-SqlServers ...): $keys"
+       if (!"$keys") { Say "WARNING! Empty tag list means NoSQL. Lol: [$keys]"; return; }
        $found=0;
        $Sql_Servers_Definition | % { $sql = $_
             $isIt=$true; foreach($k in $keys) { if (-not ($sql.Keys -contains $k)) { $isIt=$false; } }
@@ -219,7 +220,7 @@ if ($Env:SQL_SETUP_BOOTSTRAP_TEST) {
 
     $errors = 0;
     $testCases | % { 
-        $actual=(Find-SqlServers $_.Args | Select -First 1).Title
+        $actual=(Find-SqlServers-ByTags $_.Args | Select -First 1).Title
         Write-Host "Test. For [$($_.Args)] Actual: [$actual], expected: [$($_.Expected)]"
         if ("$actual" -ne "$($_.Expected)") { Write-Host "Test Failed" -ForegroundColor Red; $errors++}
     }
