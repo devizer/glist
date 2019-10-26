@@ -91,7 +91,7 @@ $Sql_Servers_Definition = @(
        if (!$found) {Say "WARNING! Unknown SQL Server for tags: [$keys]"}
     }
 
-    function Find-SqlServers { param( [string] $list)
+    function Parse-SqlServers { param( [string] $list)
         Say "Installing SQL Server(s) by tags: $list"
         "$list".Split(@([char]44, [char]59)) | % { $sqlKey=$_.Trim()
             $tags=@("$sqlKey".Split([char]32) | % {$_.Trim()} | where { $_.Length -gt 0 } )
@@ -228,8 +228,8 @@ if ($Env:SQL_SETUP_BOOTSTRAP_TEST) {
     if ($errors) { Throw "Total Errors: $errors" }
 }
 
-# Find-SqlServers SqlServer, 2019, Developer | % { $_.Title }
+# Find-SqlServers-ByTags SqlServer, 2019, Developer | % { $_.Title }
 Download-Installers
 
 # Example
-# Find-SqlServers "SqlServer 2017 Developer, SqlServer 2016, SqlServer 2014, SqlServer 2012, SqlServer 2008R2, SqlServer 2008, SqlServer 2005" | % { Install-SqlServer $_ }
+# Parse-SqlServers "SqlServer 2017 Developer, SqlServer 2016, SqlServer 2014, SqlServer 2012, SqlServer 2008R2, SqlServer 2008, SqlServer 2005" | % { Install-SqlServer $_ }
