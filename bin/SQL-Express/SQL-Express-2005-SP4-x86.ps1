@@ -4,7 +4,7 @@ function Get-Elapsed
     [System.String]::Concat("[", (new-object System.DateTime(0)).AddMilliseconds($Global:startAt.ElapsedMilliseconds).ToString("HH:mm:ss"), "]");
 }; $_=Get-Elapsed;
 
-if (!$Env:NEW_SQL_INSTANCE_NAME) {
+if (! "$($Env:NEW_SQL_INSTANCE_NAME)") {
     $Env:NEW_SQL_INSTANCE_NAME="SQL_2005_SP4_X86"
 }
 Write-Host "$(Get-Elapsed) Installing new instance [$($Env:NEW_SQL_INSTANCE_NAME)] for [SQL Server 2005 SP4 (Express)]"
