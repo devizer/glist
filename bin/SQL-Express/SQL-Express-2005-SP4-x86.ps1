@@ -4,6 +4,12 @@ function Get-Elapsed
     [System.String]::Concat("[", (new-object System.DateTime(0)).AddMilliseconds($Global:startAt.ElapsedMilliseconds).ToString("HH:mm:ss"), "]");
 }; $_=Get-Elapsed;
 
+if (!$Env:NEW_SQL_INSTANCE_NAME) {
+    $Env:NEW_SQL_INSTANCE_NAME=""
+}
+Write-Host "$(Get-Elapsed) Installing new instance [$($Env:NEW_SQL_INSTANCE_NAME)] for [SQL Server 2005 SP4 (Express)]"
+
+
 $files=$("Essentials.7z.exe")
 $baseUrl="https://raw.githubusercontent.com/devizer/glist/master/Essentials/"
 $Temp="$($Env:LocalAppData)"; if ($Temp -eq "") { $Temp="$($Env:UserProfile)"; }
@@ -48,7 +54,7 @@ popd
 $target="${Env:SystemDrive}\SQL"
 pushd "$temp\SQL-Express-2005-SP4-x86"
 Write-Host "$(Get-Elapsed) Launch setup.exe at $(Get-Location)"
-cmd /c .\setup.exe /qn ADDLOCAL=SQL_Engine INSTANCENAME=SQL_2005_SP4_X86 DISABLENETWORKPROTOCOLS=0 SECURITYMODE=SQL SAPWD=``1qazxsw2 INSTALLSQLDIR="$target" 
+cmd /c .\setup.exe /qn ADDLOCAL=SQL_Engine INSTANCENAME=$($Env:NEW_SQL_INSTANCE_NAME) DISABLENETWORKPROTOCOLS=0 SECURITYMODE=SQL SAPWD=``1qazxsw2 INSTALLSQLDIR="$target" 
 popd
 
 Remove-Item -Recurse -Force "$temp\SQL-Express-2005-SP4-x86"
