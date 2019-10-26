@@ -35,7 +35,7 @@ $Sql_Servers_Definition = @(
   @{  Title = "SQL SERVER 2005 SP4 x86 (Express)"; 
       Keys = @("Express", "2005", "SqlServer", "x86");
       Script = '.\SQL-Express-2005-SP4-x86.cmd; @(${Env:ProgramFiles(x86)}, $Env:ProgramFiles) | % { $log_dir="$($_)\Microsoft SQL Server\90\Setup Bootstrap\LOG"; if (Test-Path $log_dir) { Write-Host "Store $log_dir as [Sql 2005 SP4 Setup Log.7z]"; & 7z a -t7z -mx=3 "$($Env:SQL_SETUP_LOG_FOLDER)\Sql 2005 SP4 Setup Log.7z" "$log_dir" *> "$Env:TEMP\_" } }'
-      Comment = "Only for 2 AppVoyer images: Visual Studio 2017 & 2019 (the setup does not work on AppVoyer VS 2013 & 2015)"
+      Comment = "Only for 2 AppVoyer images: Visual Studio 2017 & 2019 (does not work on AppVoyer 2013 & 2015)"
    },
   @{  Title = "SQL SERVER LocalDB 2017"; LocalDB = $true;
       Keys = @("LocalDB", "2017", "Latest", "x64");
@@ -47,24 +47,6 @@ $Sql_Servers_Definition = @(
       Comment = "Actual Version is 2014 on the AppVeyor VS 2015 image"
    }
 )
-
-    function Say { param( [string] $message )
-        Write-Host "$(Get-Elapsed) " -NoNewline -ForegroundColor Magenta
-        Write-Host "$message" -ForegroundColor Yellow
-    }
-    
-    function Get-Elapsed
-    {
-        if ($Global:startAt -eq $null) { $Global:startAt = [System.Diagnostics.Stopwatch]::StartNew(); }
-        [System.String]::Concat("[", (new-object System.DateTime(0)).AddMilliseconds($Global:startAt.ElapsedMilliseconds).ToString("mm:ss"), "]");
-    }; Get-Elapsed | out-null;
-
-    # Display OS and CPU
-    $currentVersion=Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
-    $win_10_release_id = $currentVersion.ReleaseId; if (! $win_10_release_id) { $win_10_release_id = $currentVersion.CurrentBuildNumber }
-    $win_name = $(Get-WMIObject win32_operatingsystem -EA SilentlyContinue).Caption
-    Say "$($win_name): Release [$win_10_release_id], powershell [$($PSVersionTable.PSVersion)]"
-    $cpu=Get-WmiObject Win32_Processor; Say "CPU: $($cpu.Name), $([System.Environment]::ProcessorCount) Cores";
 
     function Download-Installers {
         if (!$Global:SQL_SETUP_WORK) {
@@ -83,9 +65,7 @@ $Sql_Servers_Definition = @(
         Download-Installers
         # Say "Arg for (Install-SqlServer ...):"; $description | fl *
         if ($description.Script) {
-            $instanceNameInfo=" as '$($description.InstanceName)' instance"; if (! "$($description.InstanceName)") {$instanceNameInfo=""}
-            Say "Installing the '$($description.Title)'$instanceNameInfo"
-            $Env:NEW_SQL_INSTANCE_NAME=$description.InstanceName
+            Say "Installing the $($description.Title)"
             pushd $Global:SQL_SETUP_WORK
             Invoke-Expression $description.Script *> "$($Env:SQL_SETUP_LOG_FOLDER)\Setup $($description.Title).log"
             popd
@@ -113,18 +93,33 @@ $Sql_Servers_Definition = @(
 
     function Parse-SqlServers { param( [string] $list)
         Say "Installing SQL Server(s) by tags: $list"
-        "$list".Split(@([char]44, [char]59)) | % { $sqlDef=$_.Trim()
-            $arr = $sqlDef.Split(@([char]58));
-            $sqlKey = $arr[0];
-            if ($arr.Length -gt 1) { $instanceName=$arr[1].Trim(); } else {  $instanceName=$null; }
+        "$list".Split(@([char]44, [char]59)) | % { $sqlKey=$_.Trim()
             $tags=@("$sqlKey".Split([char]32) | % {$_.Trim()} | where { $_.Length -gt 0 } )
             if ($tags.Count -gt 0) {
-                Find-SqlServers-ByTags $tags | Select -First 1 | foreach { $_["InstanceName"] = $instanceName; $_ }
+                Find-SqlServers-ByTags $tags | Select -First 1
             }
         }
     }
 
     
+    function Say { param( [string] $message )
+        Write-Host "$(Get-Elapsed) " -NoNewline -ForegroundColor Magenta
+        Write-Host "$message" -ForegroundColor Yellow
+    }
+    
+    function Get-Elapsed
+    {
+        if ($Global:startAt -eq $null) { $Global:startAt = [System.Diagnostics.Stopwatch]::StartNew(); }
+        [System.String]::Concat("[", (new-object System.DateTime(0)).AddMilliseconds($Global:startAt.ElapsedMilliseconds).ToString("mm:ss"), "]");
+    }; $_=Get-Elapsed;
+
+    # Display OS and CPU
+    $currentVersion=Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
+    $win_10_release_id = $currentVersion.ReleaseId; if (! $win_10_release_id) { $win_10_release_id = $currentVersion.CurrentBuildNumber }
+    $win_name = $(Get-WMIObject win32_operatingsystem -EA SilentlyContinue).Caption
+    Say "$($win_name): Release [$win_10_release_id], powershell [$($PSVersionTable.PSVersion)]"
+    $cpu=Get-WmiObject Win32_Processor; Say "CPU: $($cpu.Name), $([System.Environment]::ProcessorCount) Cores";
+
     # returns array of strings like SQL2017, SQL2016, ...
     function Get-Preinstalled-SqlServers
     {
@@ -231,14 +226,10 @@ if ($Env:SQL_SETUP_BOOTSTRAP_TEST) {
     }
     Write-Host "Total Errors: $errors";
     if ($errors) { Throw "Total Errors: $errors" }
-
-    # Full Featured Example
-    # Warning: Without reboot the SQL 2005 SP4 Express cant be installed if SQL 2019 is installed first
-    Parse-SqlServers "SqlServer 2019 Developer: DEVELOPER_2019, SqlServer 2017 Developer: DEVELOPER_2017, SqlServer 2017 Express: EXPRESS_2017, SqlServer 2016: EXPRESS_2016, SqlServer 2014: EXPRESS_2014, SqlServer 2012: EXPRESS_2012, SqlServer 2008R2: EXPRESS_2008_R2, SqlServer 2008: Express_2008, SqlServer 2005: EXPRESS_2005, LocalDB 2017, LocalDB 2016"
 }
 
 # Find-SqlServers-ByTags SqlServer, 2019, Developer | % { $_.Title }
 Download-Installers
 
 # Example
-# Parse-SqlServers "SqlServer 2019 Developer: DEVELOPER_2019, SqlServer 2017 Developer: DEVELOPER_2017, SqlServer 2017 Express: EXPRESS_2017, SqlServer 2016: EXPRESS_2016, SqlServer 2014: EXPRESS_2014, SqlServer 2012: EXPRESS_2012, SqlServer 2008R2: EXPRESS_2008_R2, SqlServer 2008: Express_2008, SqlServer 2005: EXPRESS_2005" | % { Install-SqlServer $_ }
+# Parse-SqlServers "SqlServer 2017 Developer, SqlServer 2016, SqlServer 2014, SqlServer 2012, SqlServer 2008R2, SqlServer 2008, SqlServer 2005" | % { Install-SqlServer $_ }
