@@ -54,3 +54,9 @@ popd
 Remove-Item -Recurse -Force "$temp\SQL-Express-2005-SP4-x86"
 $exe="$target\MSSQL.1\MSSQL\Binn\sqlservr.exe"
 & netsh firewall add allowedprogram `"$exe`" `"SQL Express 2005 SP4 x86`" ENABLE
+
+Write-Host "$(Get-Elapsed) Set Permission for SQL_2005_SP4_X86 service"
+& sc.exe config "MSSQL`$SQL_2005_SP4_X86" obj="NT AUTHORITY\SYSTEM"
+Write-Host "$(Get-Elapsed) Restart SQL_2005_SP4_X86 service"
+& net stop "MSSQL`$SQL_2005_SP4_X86"
+& net start "MSSQL`$SQL_2005_SP4_X86"
