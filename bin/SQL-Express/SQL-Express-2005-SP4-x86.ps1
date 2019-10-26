@@ -5,7 +5,7 @@ function Get-Elapsed
 }; $_=Get-Elapsed;
 
 if (!$Env:NEW_SQL_INSTANCE_NAME) {
-    $Env:NEW_SQL_INSTANCE_NAME=""
+    $Env:NEW_SQL_INSTANCE_NAME="SQL_2005_SP4_X86"
 }
 Write-Host "$(Get-Elapsed) Installing new instance [$($Env:NEW_SQL_INSTANCE_NAME)] for [SQL Server 2005 SP4 (Express)]"
 
@@ -62,8 +62,8 @@ $exe="$target\MSSQL.1\MSSQL\Binn\sqlservr.exe"
 & netsh firewall add allowedprogram `"$exe`" `"SQL Express 2005 SP4 x86`" ENABLE
 
 Write-Host "$(Get-Elapsed) Set Permission for SQL_2005_SP4_X86 service"
-& sc.exe config "MSSQL`$SQL_2005_SP4_X86" obj="NT AUTHORITY\SYSTEM"
+& sc.exe config "MSSQL`$$($Env:NEW_SQL_INSTANCE_NAME)" obj="NT AUTHORITY\SYSTEM"
 Write-Host "$(Get-Elapsed) Restart SQL_2005_SP4_X86 service"
-& net stop "MSSQL`$SQL_2005_SP4_X86"
-& net start "MSSQL`$SQL_2005_SP4_X86"
+& net stop "MSSQL`$$($Env:NEW_SQL_INSTANCE_NAME)"
+& net start "MSSQL`$$($Env:NEW_SQL_INSTANCE_NAME)"
 Write-Host "$(Get-Elapsed) Done"
