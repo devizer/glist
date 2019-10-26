@@ -6,7 +6,7 @@ set KEY=SQL-%v%
 if Not Defined NEW_SQL_INSTANCE_NAME (
   set NEW_SQL_INSTANCE_NAME=SQL_2019_RC
 )
-echo Installing new instance [%NEW_SQL_INSTANCE_NAME%] for [%KEY%]
+echo Installing new instance [%NEW_SQL_INSTANCE_NAME%] of [%KEY%]
 
 echo DOWNLOADING SQL %v% BOOTSTRAPPER
 set url=https://download.microsoft.com/download/f/7/1/f710f0db-9d30-4ec5-b0ad-f65529493f44/SQL2019RC1-SSEI-Eval.exe

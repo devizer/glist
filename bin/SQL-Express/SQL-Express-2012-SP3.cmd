@@ -5,7 +5,7 @@ set KEY=SQL-Express-2012-SP3-x64
 if Not Defined NEW_SQL_INSTANCE_NAME (
   set NEW_SQL_INSTANCE_NAME=SQL_2012_SP3
 )
-echo Installing new instance [%NEW_SQL_INSTANCE_NAME%] for [%KEY%]
+echo Installing new instance [%NEW_SQL_INSTANCE_NAME%] of [%KEY%]
 
 echo DOWNLOADING %KEY%.exe
 set url=https://download.microsoft.com/download/F/6/7/F673709C-D371-4A64-8BF9-C1DD73F60990/ENU/x64/SQLEXPR_x64_ENU.exe

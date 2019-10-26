@@ -34,7 +34,7 @@ $Sql_Servers_Definition = @(
    },
   @{  Title = "SQL SERVER 2005 SP4 x86 (Express)"; 
       Keys = @("Express", "2005", "SqlServer", "x86");
-      Script = '$Env:NEW_SQL_INSTANCE_NAME="EXPRESS2005SP4"; .\SQL-Express-2005-SP4-x86.cmd; @(${Env:ProgramFiles(x86)}, $Env:ProgramFiles) | % { $log_dir="$($_)\Microsoft SQL Server\90\Setup Bootstrap\LOG"; if (Test-Path $log_dir) { Write-Host "Store $log_dir as [Sql 2005 SP4 Setup Log.7z]"; & 7z a -t7z -mx=3 "$($Env:SQL_SETUP_LOG_FOLDER)\Sql 2005 SP4 Setup Log.7z" "$log_dir" *> "$Env:TEMP\_" } }'
+      Script = '.\SQL-Express-2005-SP4-x86.cmd; @(${Env:ProgramFiles(x86)}, $Env:ProgramFiles) | % { $log_dir="$($_)\Microsoft SQL Server\90\Setup Bootstrap\LOG"; if (Test-Path $log_dir) { Write-Host "Store $log_dir as [Sql 2005 SP4 Setup Log.7z]"; & 7z a -t7z -mx=3 "$($Env:SQL_SETUP_LOG_FOLDER)\Sql 2005 SP4 Setup Log.7z" "$log_dir" *> "$Env:TEMP\_" } }'
       Comment = "Only for 2 AppVoyer images: Visual Studio 2017 & 2019 (does not work on AppVoyer 2013 & 2015)"
    },
   @{  Title = "SQL SERVER LocalDB 2017"; LocalDB = $true;

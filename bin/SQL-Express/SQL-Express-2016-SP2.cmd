@@ -5,7 +5,7 @@ set KEY=SQL-Express-2016-SP2-x64
 if Not Defined NEW_SQL_INSTANCE_NAME (
   set NEW_SQL_INSTANCE_NAME=SQL_2016_SP2
 )
-echo Installing new instance [%NEW_SQL_INSTANCE_NAME%] for [%KEY%]
+echo Installing new instance [%NEW_SQL_INSTANCE_NAME%] of [%KEY%]
 
 echo DOWNLOADING %KEY%.exe
 set url=https://download.microsoft.com/download/9/2/B/92BAD988-00C5-4F68-811E-B7FFBE009B00/SQLServer2016SP2-KB4052908-x64-ENU.exe

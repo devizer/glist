@@ -5,7 +5,7 @@ set KEY=SQL-Express-2014-SP2-x86
 if Not Defined NEW_SQL_INSTANCE_NAME (
   set NEW_SQL_INSTANCE_NAME=SQL_2014_SP2_X86
 )
-echo Installing new instance [%NEW_SQL_INSTANCE_NAME%] for [%KEY%]
+echo Installing new instance [%NEW_SQL_INSTANCE_NAME%] of [%KEY%]
 
 
 echo DOWNLOADING %KEY%.exe

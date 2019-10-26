@@ -7,7 +7,7 @@ function Get-Elapsed
 if (! "$($Env:NEW_SQL_INSTANCE_NAME)") {
     $Env:NEW_SQL_INSTANCE_NAME="SQL_2005_SP4_X86"
 }
-Write-Host "$(Get-Elapsed) Installing new instance [$($Env:NEW_SQL_INSTANCE_NAME)] for [SQL Server 2005 SP4 (Express)]"
+Write-Host "$(Get-Elapsed) Installing new instance [$($Env:NEW_SQL_INSTANCE_NAME)] of [SQL Server 2005 SP4 (Express)]"
 
 
 $files=$("Essentials.7z.exe")
