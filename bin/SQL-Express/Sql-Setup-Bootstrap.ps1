@@ -196,7 +196,7 @@ $Sql_Servers_Definition = @(
     }
 
     function Show-SqlServers {
-        get-wmiobject win32_service | where {$_.Name.ToLower().IndexOf("sql") -ge 0 } | sort-object -Property "DisplayName" | ft State, Name, DisplayName, StartMode
+        get-wmiobject win32_service | where {$_.Name.ToLower().IndexOf("sql") -ge 0 } | sort-object -Property "DisplayName" | ft State, Name, DisplayName, StartMode, StartName
     }
 
 if ($Env:SQL_SETUP_BOOTSTRAP_TEST) {

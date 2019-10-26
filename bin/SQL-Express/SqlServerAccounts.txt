@@ -1,0 +1,17 @@
+You should use Local non-system or Service account. If this SQL Server service require to access the network resources you can use a ordinary Domain account.
+
+Domain User Account
+If the service must interact with network services, access domain resources like file shares or if it uses linked server connections to other computers running SQL Server, you might use a minimally-privileged domain account. Many server-to-server activities can be performed only with a domain user account. This account should be pre-created by domain administration in your environment.
+Local User Account
+If the computer is not part of a domain, a local user account without Windows administrator permissions is recommended.
+Following are NOT advised as it grant more privileges than required for running SQL Server Services
+
+Local System is a very high-privileged built-in account. It has extensive privileges on the local system and acts as the computer on the network. The actual name of the account is "NT AUTHORITY\SYSTEM".
+The Local Service account is a built-in account that has the same level of access to resources and objects as members of the Users group. This limited access helps safeguard the system if individual services or processes are compromised. Services that run as the Local Service account access network resources as a null session without credentials. Be aware that the Local Service account is not supported for the SQL Server or SQL Server Agent services. The actual name of the account is "NT AUTHORITY\LOCAL SERVICE".
+The Network Service account is a built-in account that has more access to resources and objects than members of the Users group. Services that run as the Network Service account access network resources by using the credentials of the computer account. The actual name of the account is "NT AUTHORITY\NETWORK SERVICE"
+
+Please consider the below recomendataions:
+- Always run SQL Server services by using the lowest possible user rights.
+- Use a specific low-privilege user account or domain account instead of a shared account for SQL Server services.
+- Use separate accounts for different SQL Server services.
+- Do not grant additional permissions to the SQL Server service account or the service groups
