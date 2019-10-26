@@ -2,6 +2,12 @@
 
 set v=2019-RC1
 set KEY=SQL-%v%
+
+if Not Defined NEW_SQL_INSTANCE_NAME (
+  set NEW_SQL_INSTANCE_NAME=SQL_2019_RC
+)
+echo Installing new instance [%NEW_SQL_INSTANCE_NAME%] for [%KEY%]
+
 echo DOWNLOADING SQL %v% BOOTSTRAPPER
 set url=https://download.microsoft.com/download/f/7/1/f710f0db-9d30-4ec5-b0ad-f65529493f44/SQL2019RC1-SSEI-Eval.exe
 set outfile=%AppData%\Temp\%KEY%.exe
@@ -27,7 +33,7 @@ rem   and SQL Client Connectivity SDK.
   /IAcceptSQLServerLicenseTerms /IACCEPTROPENLICENSETERMS ^
   /UpdateEnabled=True ^
   /FEATURES=SQLENGINE,REPLICATION,FullText ^
-  /INSTANCENAME="SQL_2019_RC" ^
+  /INSTANCENAME="%NEW_SQL_INSTANCE_NAME%" ^
   /INSTANCEDIR="%SystemDrive%\SQL" ^
   /INSTALLSHAREDDIR="%SystemDrive%\SQL\x64" ^
   /INSTALLSHAREDWOWDIR="%SystemDrive%\SQL\x86" ^

@@ -1,6 +1,12 @@
 @echo off
 
 set KEY=SQL-Express-2008-SP3-x64
+
+if Not Defined NEW_SQL_INSTANCE_NAME (
+  set NEW_SQL_INSTANCE_NAME=SQL_2008_SP3
+)
+echo Installing new instance [%NEW_SQL_INSTANCE_NAME%] for [%KEY%]
+
 echo DOWNLOADING %KEY%.exe
 set url=https://download.microsoft.com/download/0/F/D/0FD88169-F86F-46E1-8B3B-56C44F6E9505/SQLEXPR_x64_ENU.exe
 set outfile=%AppData%\Temp\%KEY%.exe
@@ -16,7 +22,7 @@ rem # https://docs.microsoft.com/en-us/previous-versions/sql/sql-server-2008/ms1
 "%AppData%\Temp\%KEY%\Setup.exe" /QS /INDICATEPROGRESS /Action=Install ^
   /ADDCURRENTUSERASSQLADMIN ^
   /FEATURES=SQLENGINE ^
-  /INSTANCENAME=SQL_2008_SP3 ^
+  /INSTANCENAME=%NEW_SQL_INSTANCE_NAME% ^
   /SECURITYMODE=SQL /SAPWD=`1qazxsw2 ^
   /SQLSVCACCOUNT="NT AUTHORITY\SYSTEM" ^
   /INSTANCEDIR="%SystemDrive%\SQL" ^

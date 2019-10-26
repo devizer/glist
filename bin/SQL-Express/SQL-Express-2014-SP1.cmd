@@ -1,6 +1,12 @@
 @echo off
 
 set KEY=SQL-Express-2014-SP1-x64
+
+if Not Defined NEW_SQL_INSTANCE_NAME (
+  set NEW_SQL_INSTANCE_NAME=SQL_2014_SP1
+)
+echo Installing new instance [%NEW_SQL_INSTANCE_NAME%] for [%KEY%]
+
 echo DOWNLOADING %KEY%.exe
 set url=https://download.microsoft.com/download/1/5/6/156992E6-F7C7-4E55-833D-249BD2348138/ENU/x64/SQLEXPR_x64_ENU.exe
 set outfile=%AppData%\Temp\%KEY%.exe
@@ -15,7 +21,7 @@ del /F /Q "%outfile%"
   /IAcceptSQLServerLicenseTerms ^
   /UpdateEnabled=True ^
   /FEATURES=SQLENGINE,REPLICATION,SQL,RS,Tools,LocalDB ^
-  /INSTANCENAME="SQL_2014_SP1" ^
+  /INSTANCENAME="%NEW_SQL_INSTANCE_NAME%" ^
   /INSTANCEDIR="%SystemDrive%\SQL" ^
   /SECURITYMODE="SQL" ^
   /SAPWD="`1qazxsw2" ^

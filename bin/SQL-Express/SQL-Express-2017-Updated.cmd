@@ -2,6 +2,12 @@
 
 set v=2017
 set KEY=SQL-Express-%v%-SP-x64
+
+if Not Defined NEW_SQL_INSTANCE_NAME (
+  set NEW_SQL_INSTANCE_NAME=SQL_2017
+)
+echo Installing new instance [%NEW_SQL_INSTANCE_NAME%] for [%KEY%]
+
 echo DOWNLOADING SQL Express %v% BOOTSTRAPPER
 set url=https://raw.githubusercontent.com/devizer/glist/master/bin/sql-2017-Express/SQLServer2017-SSEI-Expr.exe
 set outfile=%AppData%\Temp\%KEY%.exe
@@ -18,7 +24,7 @@ dir "%AppData%\Temp\%KEY%\SQLEXPR_x64_ENU.exe"
   /IAcceptSQLServerLicenseTerms /IACCEPTROPENLICENSETERMS ^
   /UpdateEnabled=True ^
   /FEATURES=SQLENGINE,REPLICATION,SQL,RS,Tools,LocalDB ^
-  /INSTANCENAME="SQL_2017" ^
+  /INSTANCENAME="%NEW_SQL_INSTANCE_NAME%" ^
   /INSTANCEDIR="%SystemDrive%\SQL" ^
   /INSTALLSHAREDDIR="%SystemDrive%\SQL\x64" ^
   /INSTALLSHAREDWOWDIR="%SystemDrive%\SQL\x86" ^
