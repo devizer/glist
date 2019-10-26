@@ -230,3 +230,6 @@ if ($Env:SQL_SETUP_BOOTSTRAP_TEST) {
 
 # Find-SqlServers SqlServer, 2019, Developer | % { $_.Title }
 Download-Installers
+
+# Example
+# Find-SqlServers "SqlServer 2017 Developer, SqlServer 2016, SqlServer 2014, SqlServer 2012, SqlServer 2008R2, SqlServer 2008, SqlServer 2005" | % { Install-SqlServer $_ }
