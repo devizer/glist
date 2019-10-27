@@ -204,6 +204,19 @@ $Sql_Servers_Definition = @(
         get-wmiobject win32_service | where {$_.Name.ToLower().IndexOf("sql") -ge 0 } | sort-object -Property "DisplayName" | ft State, Name, DisplayName, StartMode, StartName
     }
 
+    function Upgrade-PSReadLine { param([bool] $force)
+       if ($force -or ($Env:APPVEYOR_BUILD_WORKER_IMAGE -eq "Visual Studio 2019")) {
+           try {
+               Say "Upgrading PSReadLine on '$($Env:APPVEYOR_BUILD_WORKER_IMAGE)' image"
+               Install-Module PSReadLine -AllowPrerelease -Force
+               Say "PSReadLine Upgraded"
+           } catch {
+               Say "PSReadLine Upgrade Failed. $($_.Exception.GetType().Name) $($_.Exception.Message)"
+           }
+       }
+    }
+
+
 if ($Env:SQL_SETUP_BOOTSTRAP_TEST) {
     $Sql_Servers_Definition | % { $_ | ft }
     $testCases = @(
