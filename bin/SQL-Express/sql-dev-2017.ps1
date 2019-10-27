@@ -8,6 +8,18 @@ $sys=$Env:SystemDrive; if (-not $sys) { $sys="C:\" }; $sys=$sys.ToUpper().TrimEn
 
 # ADDCURRENTUSERASSQLADMIN="True" can be used for Express edition or set by ROLE :(
 
+function Get-Elapsed
+{
+    if ($Global:startAt -eq $null) { $Global:startAt = [System.Diagnostics.Stopwatch]::StartNew(); }
+    [System.String]::Concat("[", (new-object System.DateTime(0)).AddMilliseconds($Global:startAt.ElapsedMilliseconds).ToString("HH:mm:ss"), "]");
+}; $_=Get-Elapsed;
+
+if (! "$($Env:NEW_SQL_INSTANCE_NAME)") {
+    $Env:NEW_SQL_INSTANCE_NAME="DEVELOPER_2017"
+}
+Write-Host "$(Get-Elapsed) Installing new instance [$($Env:NEW_SQL_INSTANCE_NAME)] of [SQL Server 2005 SP4 (Express)]"
+
+
 '
 [OPTIONS]
 ACTION="Install"
@@ -23,9 +35,9 @@ FEATURES=SQLENGINE,REPLICATION,FULLTEXT
 HELP="False"
 INDICATEPROGRESS="False"
 X86="False"
-INSTANCENAME="SQL_DEV_2017"
-INSTANCEID="SQL_DEV_2017"
-SQLTELSVCACCT="NT Service\SQLTELEMETRY$SQL_DEV_2017"
+INSTANCENAME="' + "$($Env:NEW_SQL_INSTANCE_NAME)" + '"
+INSTANCEID="' + "$($Env:NEW_SQL_INSTANCE_NAME)" + '"
+SQLTELSVCACCT="NT Service\SQLTELEMETRY$' + "$($Env:NEW_SQL_INSTANCE_NAME)" + '"
 SQLTELSVCSTARTUPTYPE="Disabled"
 INSTANCEDIR="' + $sys + '\SQL"
 INSTALLSHAREDDIR="' + $sys + '\SQL\x64"
