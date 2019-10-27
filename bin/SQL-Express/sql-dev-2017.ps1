@@ -17,7 +17,7 @@ function Get-Elapsed
 if (! "$($Env:NEW_SQL_INSTANCE_NAME)") {
     $Env:NEW_SQL_INSTANCE_NAME="DEVELOPER_2017"
 }
-Write-Host "$(Get-Elapsed) Installing new instance [$($Env:NEW_SQL_INSTANCE_NAME)] of [SQL Server 2005 SP4 (Express)]"
+Write-Host "$(Get-Elapsed) Installing new instance [$($Env:NEW_SQL_INSTANCE_NAME)] of [SQL Server 2017 (Developer)]"
 
 
 '
