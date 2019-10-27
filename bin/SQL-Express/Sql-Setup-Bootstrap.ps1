@@ -211,7 +211,7 @@ $Sql_Servers_Definition = @(
                Install-Module PSReadLine -AllowPrerelease -Force
                Say "PSReadLine Upgraded"
            } catch {
-               Say "PSReadLine Upgrade Failed. $($_.Exception.GetType().Name) $($_.Exception.Message)"
+               Say "PSReadLine Upgrade Failed. $($_.Exception.GetType().Name): $($_.Exception.Message)"
            }
        }
     }
