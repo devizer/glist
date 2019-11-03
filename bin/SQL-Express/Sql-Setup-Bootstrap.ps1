@@ -44,7 +44,7 @@ $Sql_Servers_Definition = @(
    },
   @{  Title = "SQL SERVER LocalDB 2016 SP1 CU8"; LocalDB = $true;
       Keys = ("LocalDB", "2016", "x64");
-      Comment = "Actual Version is 2014 on the AppVeyor VS 2015 image"
+      Comment = "Actual Version is 2014 on the AppVeyor VS 2015 image and 2016 on AppVeyor VS 2017/2019 images"
    }
 )
 
