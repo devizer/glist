@@ -1,11 +1,11 @@
 # Env Variables: SQL_SETUP_LOG_FOLDER
 $Sql_Servers_Definition = @(
-  @{  Title = "SQL SERVER 2019 RC (Developer)";
-      Keys = @("Developer", "2019", "SqlServer", "Pre", "x64");
-      Script = ".\SQL-2019-Pre.cmd"
+  @{  Title = "SQL SERVER 2019 (Developer)";
+      Keys = @("Developer", "2019", "SqlServer", "Latest", "x64");
+      Script = ".\SQL-2019-RTM.cmd"
    },
   @{  Title = "SQL SERVER 2017 (Developer)";
-      Keys = @("Developer", "2017", "SqlServer", "Latest", "x64");
+      Keys = @("Developer", "2017", "SqlServer", "x64");
       Script = 'powershell -f .\sql-dev-2017.ps1'
    },
   @{  Title = "SQL SERVER 2017 (Express)";
@@ -220,7 +220,7 @@ $Sql_Servers_Definition = @(
 if ($Env:SQL_SETUP_BOOTSTRAP_TEST) {
     $Sql_Servers_Definition | % { $_ | ft }
     $testCases = @(
-      @{ Args = @("SqlServer", "2019");               Expected="SQL SERVER 2019 RC (Developer)"},
+      @{ Args = @("SqlServer", "2019");               Expected="SQL SERVER 2019 (Developer)" },
       @{ Args = @("SqlServer", "2017", "Developer");  Expected="SQL SERVER 2017 (Developer)" },
       @{ Args = @("SqlServer", "2017", "Express");    Expected="SQL SERVER 2017 (Express)" },
       @{ Args = @("SqlServer", "2016", "Express");    Expected="SQL SERVER 2016 (Express)" },
@@ -229,7 +229,7 @@ if ($Env:SQL_SETUP_BOOTSTRAP_TEST) {
       @{ Args = @("SqlServer", "2008R2", "Express");  Expected="SQL SERVER 2008 R2 SP2 x86 (Express)" },
       @{ Args = @("SqlServer", "2008", "Express");    Expected="SQL SERVER 2008 SP3 (Express)" },
       @{ Args = @("SqlServer", "2005", "Express");    Expected="SQL SERVER 2005 SP4 x86 (Express)" },
-      @{ Args = @("SqlServer");                       Expected="SQL SERVER 2019 RC (Developer)" },
+      @{ Args = @("SqlServer");                       Expected="SQL SERVER 2019 (Developer)" },
       @{ Args = @("LocalDB", "2017");                 Expected="SQL SERVER LocalDB 2017" },
       @{ Args = @("LocalDB", "2016");                 Expected="SQL SERVER LocalDB 2016 SP1 CU8" }
       @{ Args = @("LocalDB");                         Expected="SQL SERVER LocalDB 2017" },
