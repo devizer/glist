@@ -108,8 +108,10 @@ function ShowLocalDbVersion
 {
     # Powershell 2.0 compatible
     try {
-      $con = new-object System.Data.SqlClient.SqlConnection("Server=(localdb)\MSSQLLocalDb;Integrated Security=SSPI; Connection Timeout=9")
-      $sql = "Select Cast(ServerProperty('Edition') as nvarchar) + ' ' + Cast(ServerProperty('ProductVersion') as nvarchar) + ' ' + Cast(ServerProperty('ProductLevel') as nvarchar) + ' ' + Cast(ISNULL(ServerProperty('ProductUpdateLevel'), '') as nvarchar)"
+      $con = new-object System.Data.SqlClient.SqlConnection("Server=(localdb)\MSSQLLocalDb;Integrated Security=SSPI; Connection Timeout=12")
+      $basicProps=@("Edition", "ProductVersion", "ProductLevel", "ProductUpdateLevel") | % { "Cast(ISNULL(ServerProperty('$_'), '') as nvarchar)" }
+      $basicProps=[string]::Join(" + ' ' + ", $basicProps)
+      $sql = "Select $basicProps + char(13) + char(10) + @@version";
       $cmd = new-object System.Data.SqlClient.SqlCommand($sql, $con)
       $con.Open()
       $rdr = $cmd.ExecuteReader()
