@@ -18,7 +18,7 @@ echo [System.Net.ServicePointManager]::ServerCertificateValidationCallback={$tru
 echo DOWNLOADING SQL %v%
 echo Y | "%outfile%" /ENU /Q /Action=Download /MEDIATYPE=CAB /MEDIAPATH="%AppData%\Temp\%KEY%"
 set file=SQLEXPR_x64_ENU.exe
-"%AppData%\Temp\%KEY%\SQLServer2019-x64-ENU.exe" /qs /x:"%AppData%\Temp\%KEY%\extracted"
+"%AppData%\Temp\%KEY%\SQLServer2019-DEV-x64-ENU.exe" /qs /x:"%AppData%\Temp\%KEY%\extracted"
 del /q "%AppData%\Temp\%KEY%\SQLServer2019-x64-ENU.exe" >nul 2>&1
 
 rem The supported features on Windows Server Core are: 
