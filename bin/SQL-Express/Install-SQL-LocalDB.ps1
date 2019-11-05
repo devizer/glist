@@ -1,3 +1,5 @@
+param($needVersion = "14") # ignored for x86 windows: always installs 12th
+
 # One Line Installer
 # @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "[System.Net.ServicePointManager]::ServerCertificateValidationCallback={$true}; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/devizer/glist/master/bin/sql-LocalDB/Install-SQL-LocalDB.ps1'))"
 function Download-Essentials {
@@ -122,7 +124,7 @@ function ShowLocalDbVersion
 $Essentials = Download-Essentials;
 
 $download_To="$($Essentials.Temp)\LocalDB-Installer"
-if ($essentials.IsX64) { $suffix="v14-x64"; } Else { $suffix="v12-x86"; }
+if ($essentials.IsX64) { $suffix="v$needVersion-x64"; } Else { $suffix="v12-x86"; }
 $pars=@("`"$download_To`"", "https://raw.githubusercontent.com/devizer/glist/master/bin/sql-LocalDB/Sql-LocalDB-$suffix.msi")
 pushd "$($Essentials.Temp)"
 & "$($Essentials.ParallelDownloader)" $pars
