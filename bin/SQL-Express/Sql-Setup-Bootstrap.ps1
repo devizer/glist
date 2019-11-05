@@ -38,7 +38,7 @@ $Sql_Servers_Definition = @(
       Comment = "Only for 2 AppVoyer images: Visual Studio 2017 & 2019 (the setup does not work on AppVoyer VS 2013 & 2015)"
    },
   @{  Title = "SQL SERVER LocalDB 2019"; LocalDB = $true;
-      Keys = @("LocalDB", "2019", "Latest", "x64");
+      Keys = @("LocalDB", "2019", "Latest", "x64");  #todo: test everywhere
       Script = 'powershell -f .\Install-SQL-LocalDB.ps1 15; cp "$($Env:USERPROFILE)\AppData\Local\Temp\LocalDB-Installer\SqlLocaLDB-v14-x64.log" "$($Env:SQL_SETUP_LOG_FOLDER)";'
       Comment = "Actual Version is 2014 on the AppVeyor VS 2015 image. For x86 Windows it installs LocalDB 2014"
    },
