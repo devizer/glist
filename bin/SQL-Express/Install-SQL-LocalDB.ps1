@@ -1,4 +1,6 @@
-param($needVersion = "14") # ignored for x86 windows: always installs 12th
+param($needVersion = "14") 
+# example: powershell -f Install-SQL-LocalDB.ps1 -NeedVersion 15
+#          version is ignored for x86 windows: always installs 12th
 
 # One Line Installer
 # @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "[System.Net.ServicePointManager]::ServerCertificateValidationCallback={$true}; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/devizer/glist/master/bin/sql-LocalDB/Install-SQL-LocalDB.ps1'))"
