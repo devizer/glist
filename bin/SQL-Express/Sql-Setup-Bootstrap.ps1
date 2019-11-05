@@ -1,4 +1,4 @@
-# Env Variables: SQL_SETUP_LOG_FOLDER
+# Env Variables: SQL_SETUP_LOG_FOLDER (no default value)
 $Sql_Servers_Definition = @(
   @{  Title = "SQL SERVER 2019 (Developer)";
       Keys = @("Developer", "2019", "SqlServer", "Latest", "x64");
@@ -37,8 +37,13 @@ $Sql_Servers_Definition = @(
       Script = '.\SQL-Express-2005-SP4-x86.cmd; @(${Env:ProgramFiles(x86)}, $Env:ProgramFiles) | % { $log_dir="$($_)\Microsoft SQL Server\90\Setup Bootstrap\LOG"; if (Test-Path $log_dir) { Write-Host "Store $log_dir as [Sql 2005 SP4 Setup Log.7z]"; & 7z a -t7z -mx=3 "$($Env:SQL_SETUP_LOG_FOLDER)\Sql 2005 SP4 Setup Log.7z" "$log_dir" *> "$Env:TEMP\_" } }'
       Comment = "Only for 2 AppVoyer images: Visual Studio 2017 & 2019 (the setup does not work on AppVoyer VS 2013 & 2015)"
    },
+  @{  Title = "SQL SERVER LocalDB 2019"; LocalDB = $true;
+      Keys = @("LocalDB", "2019", "Latest", "x64");
+      Script = 'powershell -f .\Install-SQL-LocalDB.ps1 15; cp "$($Env:USERPROFILE)\AppData\Local\Temp\LocalDB-Installer\SqlLocaLDB-v14-x64.log" "$($Env:SQL_SETUP_LOG_FOLDER)";'
+      Comment = "Actual Version is 2014 on the AppVeyor VS 2015 image. For x86 Windows it installs LocalDB 2014"
+   },
   @{  Title = "SQL SERVER LocalDB 2017"; LocalDB = $true;
-      Keys = @("LocalDB", "2017", "Latest", "x64");
+      Keys = @("LocalDB", "2017", "x64");
       Script = 'powershell -f .\Install-SQL-LocalDB.ps1; cp "$($Env:USERPROFILE)\AppData\Local\Temp\LocalDB-Installer\SqlLocaLDB-v14-x64.log" "$($Env:SQL_SETUP_LOG_FOLDER)";'
       Comment = "Actual Version is 2014 on the AppVeyor VS 2015 image. For x86 Windows it installs LocalDB 2014"
    },
@@ -230,9 +235,10 @@ if ($Env:SQL_SETUP_BOOTSTRAP_TEST) {
       @{ Args = @("SqlServer", "2008", "Express");    Expected="SQL SERVER 2008 SP3 (Express)" },
       @{ Args = @("SqlServer", "2005", "Express");    Expected="SQL SERVER 2005 SP4 x86 (Express)" },
       @{ Args = @("SqlServer");                       Expected="SQL SERVER 2019 (Developer)" },
+      @{ Args = @("LocalDB", "2019");                 Expected="SQL SERVER LocalDB 2019" },
       @{ Args = @("LocalDB", "2017");                 Expected="SQL SERVER LocalDB 2017" },
       @{ Args = @("LocalDB", "2016");                 Expected="SQL SERVER LocalDB 2016 SP1 CU8" }
-      @{ Args = @("LocalDB");                         Expected="SQL SERVER LocalDB 2017" },
+      @{ Args = @("LocalDB");                         Expected="SQL SERVER LocalDB 2019" },
       @{ Args = @("No Such SQL Server");              Expected=""; }
     )
 
@@ -247,7 +253,7 @@ if ($Env:SQL_SETUP_BOOTSTRAP_TEST) {
 
     # Full Featured Example
     # Warning: Without reboot the SQL 2005 SP4 Express cant be installed if SQL 2019 is installed first
-    Parse-SqlServers "SqlServer 2019 Developer: DEVELOPER_2019, SqlServer 2017 Developer: DEVELOPER_2017, SqlServer 2017 Express: EXPRESS_2017, SqlServer 2016: EXPRESS_2016, SqlServer 2014: EXPRESS_2014, SqlServer 2012: EXPRESS_2012, SqlServer 2008R2: EXPRESS_2008_R2, SqlServer 2008: Express_2008, SqlServer 2005: EXPRESS_2005, LocalDB 2017, LocalDB 2016"
+    Parse-SqlServers "SqlServer 2019 Developer: DEVELOPER_2019, SqlServer 2017 Developer: DEVELOPER_2017, SqlServer 2017 Express: EXPRESS_2017, SqlServer 2016: EXPRESS_2016, SqlServer 2014: EXPRESS_2014, SqlServer 2012: EXPRESS_2012, SqlServer 2008R2: EXPRESS_2008_R2, SqlServer 2008: Express_2008, SqlServer 2005: EXPRESS_2005, LocalDB 2019, LocalDB 2017, LocalDB 2016"
 }
 
 # Find-SqlServers-ByTags SqlServer, 2019, Developer | % { $_.Title }
