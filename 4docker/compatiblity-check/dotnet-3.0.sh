@@ -58,7 +58,7 @@ yarn install || yarn install || yarn install || true
 Say "NPX my-react1: yarn build"
 yarn build
 Say "NPX my-react1: yarn test"
-yarn test
+yarn test | cat
 popd
 
 Say "Build Universe.W3Top/ClientApp"
