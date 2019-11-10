@@ -19,6 +19,20 @@ export DOTNET_CLI_TELEMETRY_OPTOUT=1;
 Say "Install dotnet dependencies"
 url=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-dependencies.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
 
+
+function alt_pwsh() {
+    Say "Install POWERSHELL-PREVIEW Alternative"
+    url=https://github.com/PowerShell/PowerShell/releases/download/v7.0.0-preview.5/powershell-7.0.0-preview.5-linux-x64.tar.gz
+    curl -o powershell-7.0.0-preview.5-linux-x64.tar.gz -L $url
+    mkdir -p /opt/pwsh
+    tar xzf powershell-7.0.0-preview.5-linux-x64.tar.gz -C /opt/pwsh
+    export PATH="/opt/pwsh:$PATH"
+}
+
+Say "Install POWERSHELL-PREVIEW"
+bash <(curl -s https://raw.githubusercontent.com/PowerShell/PowerShell/master/tools/install-powershell.sh) --preview || alt_pwsh
+
+
 Say "Install dotnet"
 curl -L -o dotnet-install.sh https://dot.net/v1/dotnet-install.sh
 source dotnet-install.sh -c 3.0 -i /usr/share/dotnet
