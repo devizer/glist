@@ -7,8 +7,3 @@ docker run --privileged -d --name tests ubuntu:trusty sh -c "while true; do slee
 docker exec -t tests bash -c 'source /etc/os-release; echo Im $PRETTY_NAME'
 docker cp dotnet-3.0.sh tests:/dotnet-3.0.sh
 docker exec -t tests bash -c 'bash -eu /dotnet-3.0.sh'
-
-
-
-
-
