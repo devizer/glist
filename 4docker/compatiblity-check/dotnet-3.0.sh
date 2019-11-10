@@ -23,6 +23,12 @@ Say "Install dotnet"
 curl -L -o dotnet-install.sh https://dot.net/v1/dotnet-install.sh
 source dotnet-install.sh -c 3.0 -i /usr/share/dotnet
 
+Say "Install PowerShell"
+export PATH="$PATH:/root/.dotnet/tools"
+export DOTNET_ROOT=/usr/share/dotnet
+dotnet tool install PowerShell -g
+pwsh 'Write-Host "Im powershell"'
+
 Say "Compile console app1"
 mkdir console1
 pushd console1
@@ -33,11 +39,6 @@ dotnet publish -c Release -o ./bin -r linux-x64 --self-contained
 Say "Run console app1"
 bin/console1
 popd
-
-Say "Install PowerShell"
-export PATH="$PATH:/root/.dotnet/tools"
-export DOTNET_ROOT=/usr/share/dotnet
-dotnet tool install PowerShell -g
 
 
 Say "Install Node"
