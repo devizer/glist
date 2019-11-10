@@ -51,6 +51,14 @@ export NVM_DIR="$HOME/.nvm"
 nvm install node          # 12.12
 npm install yarn npm npx npm-check-updates --global
 
+Say "Build Universe.W3Top/ClientApp"
+git clone https://github.com/devizer/KernelManagementLab
+pushd KernelManagementLab/Universe.W3Top/ClientApp
+yarn install
+yarn build
+popd
+
+
 Say "NPX my-react1"
 npx create-react-app my-react-app1
 pushd my-react-app1
@@ -58,15 +66,8 @@ Say "NPX my-react1: yarn install with retry"
 yarn install || yarn install || yarn install || true
 Say "NPX my-react1: yarn build"
 yarn build
-Say "NPX my-react1: yarn test"
-yarn test | cat
-popd
-
-Say "Build Universe.W3Top/ClientApp"
-git clone https://github.com/devizer/KernelManagementLab
-pushd KernelManagementLab/Universe.W3Top/ClientApp
-yarn install 
-yarn build
+# Say "NPX my-react1: yarn test"
+# yarn test | cat
 popd
 
 Say "Done"
