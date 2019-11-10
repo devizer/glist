@@ -9,7 +9,7 @@ function header() {
   printf "${LightGray}${elapsed:-}${NC} ${LightGreen}$1${NC} ${Yellow}$2${NC}\n"; 
 }
 counter=0;
-function Say() { counter=$((counter+1)); header "STEP $counter" "$1"; }
+function Say() { echo ""; counter=$((counter+1)); header "STEP $counter" "$1"; }
 
 Say "1st Install"
 apt update; apt-get install curl htop mc lsof git nano -y
