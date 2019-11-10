@@ -27,21 +27,25 @@ function alt_pwsh() {
     mkdir -p /opt/pwsh
     tar xzf powershell-7.0.0-preview.5-linux-x64.tar.gz -C /opt/pwsh
     export PATH="/opt/pwsh:$PATH"
+    pwsh -c '$PSVersionTable'
 }
 
 Say "Install POWERSHELL-PREVIEW"
 bash <(curl -s https://raw.githubusercontent.com/PowerShell/PowerShell/master/tools/install-powershell.sh) --preview || alt_pwsh
-
+pwsh -c '$PSVersionTable'
 
 Say "Install dotnet"
 curl -L -o dotnet-install.sh https://dot.net/v1/dotnet-install.sh
 source dotnet-install.sh -c 3.0 -i /usr/share/dotnet
 
-Say "Install PowerShell"
+
 export PATH="$PATH:/root/.dotnet/tools"
 export DOTNET_ROOT=/usr/share/dotnet
-dotnet tool install PowerShell -g
-pwsh 'Write-Host "Im powershell"'
+if false; then 
+    Say "Install ugly PowerShell"
+    dotnet tool install PowerShell -g
+    pwsh 'Write-Host "Im powershell"'
+fi
 
 Say "Compile console app1"
 mkdir console1
