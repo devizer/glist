@@ -23,6 +23,7 @@ export link_node_arm64='https://nodejs.org/dist/v10.16.0/node-v10.16.0-linux-arm
 export link_node_arm64='https://nodejs.org/dist/v12.12.0/node-v12.12.0-linux-arm64.tar.xz'
 export link_pwsh_arm64='https://github.com/PowerShell/PowerShell/releases/download/v6.2.0/powershell-6.2.0-linux-arm64.tar.gz'
 export link_pwsh_arm64='https://github.com/PowerShell/PowerShell/releases/download/v6.2.2/powershell-6.2.2-linux-arm64.tar.gz'
+export link_pwsh_arm64='https://github.com/PowerShell/PowerShell/releases/download/v6.2.3/powershell-6.2.3-linux-arm64.tar.gz'
 
 
 # X64
@@ -35,6 +36,7 @@ https://download.visualstudio.microsoft.com/download/pr/886b4a4c-30af-454b-8bec-
 export link_node_x64='https://nodejs.org/dist/v10.15.3/node-v10.15.3-linux-x64.tar.xz'
 export link_node_x64='https://nodejs.org/dist/v12.12.0/node-v12.12.0-linux-x64.tar.xz'
 export link_pwsh_x64='https://github.com/PowerShell/PowerShell/releases/download/v6.2.0/powershell-6.2.0-linux-x64.tar.gz'
+export link_pwsh_x64='https://github.com/PowerShell/PowerShell/releases/download/v6.2.3/powershell-6.2.3-linux-x64.tar.gz'
 
 # ARM
 export links_arm32='
@@ -48,6 +50,7 @@ export link_node_arm32='https://nodejs.org/dist/v10.15.3/node-v10.15.3-linux-arm
 export link_node_arm32='https://nodejs.org/dist/v12.12.0/node-v12.12.0-linux-armv7l.tar.xz'
 
 export link_pwsh_arm32='https://github.com/PowerShell/PowerShell/releases/download/v6.2.0/powershell-6.2.0-linux-arm32.tar.gz'
+export link_pwsh_arm32='https://github.com/PowerShell/PowerShell/releases/download/v6.2.3/powershell-6.2.3-linux-arm32.tar.gz'
 
 
 # OSX
@@ -58,6 +61,7 @@ https://download.visualstudio.microsoft.com/download/pr/b9251194-4118-41cb-ae05-
 export link_node_osx='https://nodejs.org/dist/v10.15.3/node-v10.15.3-darwin-x64.tar.gz'
 export link_node_osx='https://nodejs.org/dist/v12.12.0/node-v12.12.0-darwin-x64.tar.gz'
 export link_pwsh_osx='https://github.com/PowerShell/PowerShell/releases/download/v6.2.0/powershell-6.2.0-osx-x64.tar.gz'
+export link_pwsh_osx='https://github.com/PowerShell/PowerShell/releases/download/v6.2.3/powershell-6.2.3-osx-x64.tar.gz'
 
 # RHEL6
 export links_rhel6='
