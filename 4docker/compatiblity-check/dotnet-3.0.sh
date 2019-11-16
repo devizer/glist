@@ -1,7 +1,7 @@
 set -e
 set -u
 
-export DOTNET_SYSTEM_NET_HTTP_USESOCKETSHTTPHANDLER=0
+
 
 function header() {
   if [[ $(uname -s) != Darwin ]]; then
@@ -12,6 +12,9 @@ function header() {
 }
 counter=0;
 function Say() { echo ""; counter=$((counter+1)); header "STEP $counter" "$1"; }
+
+Say "export DOTNET_SYSTEM_NET_HTTP_USESOCKETSHTTPHANDLER=0"
+export DOTNET_SYSTEM_NET_HTTP_USESOCKETSHTTPHANDLER=0
 
 Say "1st Install"
 apt update; apt-get install curl htop mc lsof git nano -y
