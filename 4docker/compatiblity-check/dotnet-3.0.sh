@@ -35,9 +35,14 @@ function alt_pwsh() {
     pwsh -c '$PSVersionTable'
 }
 
-Say "Install POWERSHELL-PREVIEW"
-bash <(curl -s https://raw.githubusercontent.com/PowerShell/PowerShell/master/tools/install-powershell.sh) --preview || alt_pwsh
-pwsh -c '$PSVersionTable'
+if [[ "$(uname -m)" == "x86_64"* ]]; then
+    Say "Install POWERSHELL-PREVIEW"
+    bash <(curl -s https://raw.githubusercontent.com/PowerShell/PowerShell/master/tools/install-powershell.sh) --preview || alt_pwsh 
+    pwsh -c '$PSVersionTable'
+else
+    Say "Skipping POWERSHELL-PREVIEW"
+fi
+
 
 Say "Install dotnet"
 curl -L -o dotnet-install.sh https://dot.net/v1/dotnet-install.sh
