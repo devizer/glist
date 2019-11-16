@@ -1,6 +1,8 @@
 set -e
 set -u
 
+export DOTNET_SYSTEM_NET_HTTP_USESOCKETSHTTPHANDLER=0
+
 function header() {
   if [[ $(uname -s) != Darwin ]]; then
     startAt=${startAt:-$(date +%s)}; elapsed=$(date +%s); elapsed=$((elapsed-startAt)); elapsed=$(TZ=UTC date -d "@${elapsed}" "+%_H:%M:%S");
