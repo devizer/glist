@@ -61,16 +61,19 @@ if false; then
     pwsh 'Write-Host "Im powershell"'
 fi
 
-Say "Compile console app1"
-mkdir console1
-pushd console1
+mkdir /app
+pushd /app
+Say "dotnet new console @[$(pwd)]"
 time dotnet new console --no-restore
+Say "dotnet restore @[$(pwd)]"
 time dotnet restore
+Say "dotnet run @[$(pwd)]"
 time dotnet run
-Say "Publish console app1"
-dotnet publish -c Release -o ./bin -r linux-x64 --self-contained
-Say "Run console app1"
-bin/console1
+rid=$(dotnet --info | grep RID | awk '{print $2}')
+Say "Publish console as RID=$rid @[$(pwd)]"
+dotnet publish -c Release -o ./bin -r $rid --self-contained
+Say "Run bin/app @[$(pwd)]"
+bin/app
 popd
 
 

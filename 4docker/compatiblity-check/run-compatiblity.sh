@@ -1,16 +1,25 @@
-url=https://raw.githubusercontent.com/devizer/glist/master/4docker/compatiblity-check/dotnet-3.0.sh
-curl -L -o dotnet-3.0.sh $url
+url=https://raw.githubusercontent.com/devizer/glist/master/4docker/compatiblity-check/dotnet-and-tests.sh
+curl -L -o dotnet-and-tests.sh $url
 
-docker rm -f tests
+MULTIARCH_IMAGE="multiarch/debian-debootstrap:armhf-buster"
+DOTNET_VER="3.0"
+
+docker rm -f tests 2>/dev/null
 # trusty
 # docker run --privileged -d --name tests ubuntu:trusty sh -c "while true; do sleep 4242; done"
 
 # ARM
 docker run --rm --privileged multiarch/qemu-user-static:register --reset
-MULTIARCH_IMAGE="multiarch/debian-debootstrap:armhf-buster"
 docker run -d --name tests -t "${MULTIARCH_IMAGE}" bash -c 'sleep 424242'
+
+3.0: multiarch/debian-debootstrap:armhf-buster
+2.2: multiarch/debian-debootstrap:aarch64-buster
 
 
 docker exec -t tests bash -c 'source /etc/os-release; echo Im $PRETTY_NAME; apt update; apt-get install -y -qq git sudo jq tar bzip2 gzip curl lsb-release procps gnupg apt-transport-https dirmngr ca-certificates mc htop nano'
-docker cp dotnet-3.0.sh tests:/dotnet-3.0.sh
-docker exec -t tests bash -c 'bash -eu /dotnet-3.0.sh'
+docker cp dotnet-and-tests.sh tests:/dotnet-and-tests.sh
+docker exec -t tests bash -c "export DOTNET_VER=$DOTNET_VER; bash -eu /dotnet-and-tests.sh" || echo "FFFFFFFAAAAAAAAIIIIIIIIL"
+
+docker cp tests:/app/bin/app /tmp/app
+file /tmp/app
+
