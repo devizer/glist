@@ -68,7 +68,7 @@ time dotnet new console --no-restore
 Say "dotnet restore @[$(pwd)]"
 time dotnet restore
 Say "dotnet run @[$(pwd)]"
-time dotnet run
+time dotnet run || true
 rid=$(dotnet --info | grep RID | awk '{print $2}')
 Say "Publish console as RID=$rid @[$(pwd)]"
 dotnet publish -c Release -o ./bin -r $rid --self-contained
