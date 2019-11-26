@@ -18,7 +18,7 @@ export DOTNET_SYSTEM_NET_HTTP_USESOCKETSHTTPHANDLER=0
 
 Say "1st Install"
 apt update; apt-get install curl htop mc lsof git nano -y
-# export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1; 
+export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1; 
 export DOTNET_CLI_TELEMETRY_OPTOUT=1;
 
 Say "Install dotnet dependencies"
@@ -45,8 +45,12 @@ fi
 
 
 Say "Install dotnet"
-curl -L -o dotnet-install.sh https://dot.net/v1/dotnet-install.sh
+curl -ksSL -o dotnet-install.sh https://dot.net/v1/dotnet-install.sh
 source dotnet-install.sh -c 3.0 -i /usr/share/dotnet
+
+# ARM?
+# curl -ksSL -o dotnet-sdk-3.0.100-linux-arm.tar.gz https://download.visualstudio.microsoft.com/download/pr/8ddb8193-f88c-4c4b-82a3-39fcced27e91/b8e0b9bf4cf77dff09ff86cc1a73960b/dotnet-sdk-3.0.100-linux-arm.tar.gz
+# tar xzf dotnet-sdk-3.0.100-linux-arm.tar.gz
 
 
 export PATH="$PATH:/root/.dotnet/tools"
@@ -60,7 +64,8 @@ fi
 Say "Compile console app1"
 mkdir console1
 pushd console1
-time dotnet new console
+time dotnet new console --no-restore
+time dotnet restore
 time dotnet run
 Say "Publish console app1"
 dotnet publish -c Release -o ./bin -r linux-x64 --self-contained
