@@ -44,9 +44,9 @@ else
 fi
 
 
-Say "Install dotnet"
+Say "Install dotnet $DOTNET_VER"
 curl -ksSL -o dotnet-install.sh https://dot.net/v1/dotnet-install.sh
-source dotnet-install.sh -c 3.0 -i /usr/share/dotnet
+source dotnet-install.sh -c $DOTNET_VER -i /usr/share/dotnet
 
 # ARM?
 # curl -ksSL -o dotnet-sdk-3.0.100-linux-arm.tar.gz https://download.visualstudio.microsoft.com/download/pr/8ddb8193-f88c-4c4b-82a3-39fcced27e91/b8e0b9bf4cf77dff09ff86cc1a73960b/dotnet-sdk-3.0.100-linux-arm.tar.gz
