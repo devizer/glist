@@ -20,7 +20,7 @@ function install_powershell() {
         dotnet "'$INSTALL_DIR'/pwsh.dll" "$@"
         exit $?
     else
-        echo "Missing framework depended Powershell: '$INSTALL_DIR'/pwsh.dll >&2
+        echo "Missing framework depended Powershell: '$INSTALL_DIR'/pwsh.dll" >&2
         exit 1
     fi
     ' | sudo tee /usr/local/bin/pwsh > /dev/null
