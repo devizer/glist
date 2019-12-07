@@ -2,7 +2,7 @@
 # INSTALL_DIR=/opt/powershell; VER="--stable|--prerelase"; url=https://raw.githubusercontent.com/devizer/glist/master/Install-PowerShell.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash -s $VER
 INSTALL_DIR=${INSTALL_DIR:-/opt/powershell}
 url=https://github.com/PowerShell/PowerShell/releases/download/v6.2.3/powershell-6.2.3-linux-x64-fxdependent.tar.gz
-if [[ "$1" == "--pre"* || "${VER:-}" == "--pre"* ]]; then
+if [[ "$1" == "--pre"* || "${VER:-}" == "pre"* ]]; then
   url=https://github.com/PowerShell/PowerShell/releases/download/v7.0.0-preview.6/powershell-7.0.0-preview.6-linux-x64-fxdependent.tar.gz
 fi
 
