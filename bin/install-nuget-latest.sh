@@ -1,7 +1,7 @@
 #!/bin/bash
 f=/usr/lib/NUGET-Latest.exe
 url=https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
-cmd=/usr/bin/nuget4
+cmd=/usr/local/bin/nuget
 echo -e "\nInstalling nuget (Latest) as [$cmd]"
 (command -v wget >> /dev/null) && sudo wget --no-check-certificate -O $f $url
 if [ ! -f $f ]; then
@@ -9,6 +9,7 @@ if [ ! -f $f ]; then
 fi
 
 echo '#!/bin/sh
+set -e
 mono '$f' "$@"
 ' | sudo tee $cmd
 chmod +x $cmd
