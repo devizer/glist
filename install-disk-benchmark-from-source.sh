@@ -6,6 +6,8 @@ function install_disk_benchmark_from_source() {
    if [[ "$(command -v dotnet)" == "" ]]; then
       export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
       export DOTNET_SYSTEM_NET_HTTP_USESOCKETSHTTPHANDLER=0
+      export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
+      export DOTNET_CLI_TELEMETRY_OPTOUT=1
       url=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-dependencies.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
       DOTNET_Url=https://dot.net/v1/dotnet-install.sh; 
       mkdir -p ~/tmp/dotnet ~/.dotnet/tools
