@@ -22,7 +22,7 @@ function install_disk_benchmark_from_source() {
      git clone https://github.com/devizer/KernelManagementLab
      cd KernelManagementLab/BenchmarkLab
      git pull
-     dotnet build -c Release -o bin/temp -f netcoreapp2.2
+     dotnet build -c Release -o bin/temp -f netcoreapp2.2 -v q
      dotnet=$(command -v dotnet)
      cd bin/temp
      exe="$(pwd)/Universe.Benchmark.dll"
