@@ -33,10 +33,8 @@ function install_disk_benchmark_from_source() {
      exe="$(pwd)/Universe.Benchmark.dll"
      if [[ -f "$exe" ]]; then
         if [[ "${OS}" == Windows ]]; then
-            echo "Creating /c/Windows/disk-benchmark.cmd for '$dotnet $exe'"
-            echo '@echo off
-            dotnet "'$exe'" %*
-            ' > tee C:\\Windows\\disk-benchmark.cmd
+            echo "Creating C:\\Windows\\disk-benchmark.cmd for '$dotnet $exe'"
+            echo '@dotnet "'$exe'" %*' > C:\\Windows\\disk-benchmark.cmd
             ls -la C:\\Windows\\disk-benchmark.cmd
             cat C:\\Windows\\disk-benchmark.cmd
         else
@@ -52,6 +50,7 @@ function install_disk_benchmark_from_source() {
      fi
    popd >/dev/null
    disk-benchmark --help
+   disk-benchmark.cmd --help
 }
 
 install_disk_benchmark_from_source
