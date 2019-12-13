@@ -18,10 +18,12 @@ function install_disk_benchmark_from_source() {
       echo "Installing .NET Core 2.2 SDK"
       bash /tmp/_dotnet-install.sh -c 2.2 -i ~/tmp/dotnet
    fi
+
+   [[ "$(uname -s)" == "MSYS"* || "$(uname -s)" == "MINGW"* ]] && OS=Windows
    
    mkdir -p ~/build/disk-benchmark-source
    pushd ~/build/disk-benchmark-source >/dev/null
-     git clone https://github.com/devizer/KernelManagementLab
+     git clone https://github.com/devizer/KernelManagementLab "$(pwd)/KernelManagementLab"
      cd KernelManagementLab/BenchmarkLab
      git pull
      dotnet build -c Release -o bin/temp -f netcoreapp2.2 -v q
@@ -30,13 +32,19 @@ function install_disk_benchmark_from_source() {
      exe="$(pwd)/Universe.Benchmark.dll"
      if [[ -f "$exe" ]]; then
         echo "Creating symlink for '$dotnet $exe'"
-        echo '#!/usr/bin/env bash
-           set -e
-           export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
-           export DOTNET_ROOT="'$(dirname $dotnet)'"
-           '$dotnet' '$exe' "$@"
-        ' | sudo tee /usr/local/bin/disk-benchmark
-        sudo chmod +x /usr/local/bin/disk-benchmark
+        if [[ "${OS}" == Windows ]]; then
+            echo '@echo off
+            '$dotnet' '$exe' %*
+            ' > tee /c/Windows/disk-benchmark.cmd
+        else
+            echo '#!/usr/bin/env bash
+               set -e
+               export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
+               export DOTNET_ROOT="'$(dirname $dotnet)'"
+               '$dotnet' '$exe' "$@"
+            ' | sudo tee /usr/local/bin/disk-benchmark
+            sudo chmod +x /usr/local/bin/disk-benchmark
+        fi
      fi
    popd >/dev/null
    disk-benchmark --help
