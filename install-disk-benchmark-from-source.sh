@@ -20,6 +20,7 @@ function install_disk_benchmark_from_source() {
    fi
 
    [[ "$(uname -s)" == "MSYS"* || "$(uname -s)" == "MINGW"* ]] && OS=Windows
+   echo "OS: $OS"
    
    mkdir -p ~/build/disk-benchmark-source
    pushd ~/build/disk-benchmark-source >/dev/null
@@ -31,12 +32,13 @@ function install_disk_benchmark_from_source() {
      cd bin/temp
      exe="$(pwd)/Universe.Benchmark.dll"
      if [[ -f "$exe" ]]; then
-        echo "Creating symlink for '$dotnet $exe'"
         if [[ "${OS}" == Windows ]]; then
+            echo "Creating /c/Windows/disk-benchmark.cmd for '$dotnet $exe'"
             echo '@echo off
-            '$dotnet' '$exe' %*
+            "'$dotnet'" "'$exe'" %*
             ' > tee /c/Windows/disk-benchmark.cmd
         else
+            echo "Creating /usr/local/bin/disk-benchmark for '$dotnet $exe'"
             echo '#!/usr/bin/env bash
                set -e
                export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
