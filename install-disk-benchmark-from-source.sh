@@ -28,13 +28,16 @@ function install_disk_benchmark_from_source() {
      dotnet=$(command -v dotnet)
      cd bin/temp
      exe="$(pwd)/Universe.Benchmark.dll"
-     echo '#!/usr/bin/env bash
-        set -e
-        export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
-        export DOTNET_ROOT="'$(dirname $dotnet)'"
-        '$dotnet' '$exe' "$@"
-     ' | sudo tee /usr/local/bin/disk-benchmark
-     sudo chmod +x /usr/local/bin/disk-benchmark
+     if [[ -f "$exe" ]]; then
+        echo "Creating symlink for '$dotnet $exe'"
+        echo '#!/usr/bin/env bash
+           set -e
+           export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
+           export DOTNET_ROOT="'$(dirname $dotnet)'"
+           '$dotnet' '$exe' "$@"
+        ' | sudo tee /usr/local/bin/disk-benchmark
+        sudo chmod +x /usr/local/bin/disk-benchmark
+     fi
    popd >/dev/null
    disk-benchmark --help
 }
