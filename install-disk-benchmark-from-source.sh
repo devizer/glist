@@ -36,9 +36,9 @@ function install_disk_benchmark_from_source() {
             echo "Creating /c/Windows/disk-benchmark.cmd for '$dotnet $exe'"
             echo '@echo off
             dotnet "'$exe'" %*
-            ' > tee /c/Windows/disk-benchmark.cmd
-            ls -la /c/Windows/disk-benchmark.cmd
-            cat /c/Windows/disk-benchmark.cmd
+            ' > tee C:\\Windows\\disk-benchmark.cmd
+            ls -la C:\\Windows\\disk-benchmark.cmd
+            cat C:\\Windows\\disk-benchmark.cmd
         else
             echo "Creating /usr/local/bin/disk-benchmark for '$dotnet $exe'"
             echo '#!/usr/bin/env bash
