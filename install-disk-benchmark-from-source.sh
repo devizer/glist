@@ -34,10 +34,12 @@ function install_disk_benchmark_from_source() {
      if [[ -f "$exe" ]]; then
         if [[ "${OS}" == Windows ]]; then
             pwd2=$(cmd.exe /c "echo %CD%")
-            echo "Creating C:\\Windows\\disk-benchmark.cmd for '$dotnet $exe'"
-            echo '@dotnet '$pwd2'/Universe.Benchmark.dll %*' > C:\\Windows\\disk-benchmark.cmd
+            exe2="$pwd2\\Universe.Benchmark.dll"
+            echo "Creating C:\\Windows\\disk-benchmark.cmd for 'dotnet $exe2'"
+            echo '@dotnet "'$exe2'" %*' > C:\\Windows\\disk-benchmark.cmd
             ls -la C:\\Windows\\disk-benchmark.cmd
             cat C:\\Windows\\disk-benchmark.cmd
+            disk-benchmark.cmd --help
         else
             echo "Creating /usr/local/bin/disk-benchmark for '$dotnet $exe'"
             echo '#!/usr/bin/env bash
@@ -47,11 +49,10 @@ function install_disk_benchmark_from_source() {
                '$dotnet' '$exe' "$@"
             ' | sudo tee /usr/local/bin/disk-benchmark
             sudo chmod +x /usr/local/bin/disk-benchmark
+            disk-benchmark --help
         fi
      fi
    popd >/dev/null
-   disk-benchmark --help
-   disk-benchmark.cmd --help
 }
 
 install_disk_benchmark_from_source
