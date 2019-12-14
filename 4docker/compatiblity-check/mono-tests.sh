@@ -3,11 +3,17 @@ set -u
 
 script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
 
-apt update
-apt install sudo bash procps mc htop -y
 
 apt-cache policy mono-complete
+for p in mono-complete msbuild nuget; do
+  Say "Install: $p"
+  apt-get install -y $p
+done
 
+Say "Installing nunit3-comsole and xunit.runner"
+export XFW_VER=net47 NET_TEST_RUNNERS_INSTALL_DIR=/opt/net-test-runners; script=https://raw.githubusercontent.com/devizer/test-and-build/master/lab/NET-TEST-RUNNERS-build.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | sudo -E bash
+
+exit 0;
 
 
 Say "Install Node"
