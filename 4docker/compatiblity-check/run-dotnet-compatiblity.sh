@@ -16,7 +16,7 @@ echo 'WORKS?
 '
 
 docker exec -t tests bash -c 'echo "uname -m: $(uname -m)"'
-docker exec -t tests bash -c 'source /etc/os-release; echo Im $PRETTY_NAME; apt update; apt-get install -y -qq git sudo jq tar bzip2 gzip curl lsb-release procps gnupg apt-transport-https dirmngr ca-certificates mc htop nano'
+docker exec -t tests bash -c 'source /etc/os-release; echo Im $PRETTY_NAME; apt-get update -q; apt-get install -y -qq git sudo jq tar bzip2 gzip curl lsb-release procps gnupg2 apt-transport-https dirmngr ca-certificates mc htop nano'
 docker cp /tmp/dotnet-and-tests.sh tests:/dotnet-and-tests.sh
 docker exec -t tests bash -c "export DOTNET_VER=$DOTNET_VER; bash -eu /dotnet-and-tests.sh" || echo "FFFFFFFAAAAAAAAIIIIIIIIL"
 
