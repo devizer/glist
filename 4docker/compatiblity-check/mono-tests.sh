@@ -3,6 +3,13 @@ set -u
 
 script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
 
+Say "Creating /swap"
+sudo dd if=/dev/zero of=/swap bs=1M count=1024 # For 1GB swap file || true
+sudo mkswap /swap || true
+sudo swapon /swap || true
+free -m
+
+
 
 apt-cache policy mono-complete
 for p in mono-complete msbuild nuget; do
