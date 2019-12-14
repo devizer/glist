@@ -9,8 +9,6 @@ sudo mkswap /swap || true
 sudo swapon /swap || true
 free -m
 
-
-
 apt-cache policy mono-complete
 for p in mono-complete msbuild nuget; do
   Say "Install: $p"
@@ -21,8 +19,6 @@ Say "Installing nunit3-comsole and xunit.runner"
 export XFW_VER=net47 NET_TEST_RUNNERS_INSTALL_DIR=/opt/net-test-runners; script=https://raw.githubusercontent.com/devizer/test-and-build/master/lab/NET-TEST-RUNNERS-build.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | sudo -E bash
 
 exit 0;
-
-
 Say "Install Node"
 script=https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.0/install.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
 export NVM_DIR="$HOME/.nvm"
@@ -53,6 +49,3 @@ yarn build
 popd
 
 Say "Done"
-
-# dotnetsay 
-
