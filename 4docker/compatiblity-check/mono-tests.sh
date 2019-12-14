@@ -7,7 +7,7 @@ script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-b
 apt-cache policy mono-complete
 for p in mono-complete msbuild nuget; do
   Say "Install: $p"
-  apt-get install -y $p
+  apt-get install -y $p || Say "ERROR INSTALLING $p
 done
 
 Say "Installing nunit3-comsole and xunit.runner"
