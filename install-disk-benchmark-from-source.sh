@@ -17,7 +17,15 @@ function install_disk_benchmark_from_source() {
       
       echo "Installing .NET Core 2.2 SDK"
       bash /tmp/_dotnet-install.sh -c 2.2 -i ~/tmp/dotnet
+      echo ""
+      echo "ENVIRONMENT"
+      printenv | sort || true
    fi
+
+   echo ""
+   echo "dotnet:"
+   dotnet --info || true
+
 
    [[ "$(uname -s)" == "MSYS"* || "$(uname -s)" == "MINGW"* ]] && OS=Windows
    echo "OS: $OS"
