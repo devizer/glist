@@ -43,7 +43,10 @@ function install_disk_benchmark_from_source() {
         if [[ "${OS}" == Windows ]]; then
             pwd2=$(cmd.exe /c "echo %CD%")
             pwd2=$(cmd.exe /c "echo %CD%")
-            exe2="$pwd2\\Universe.Benchmark.dll"
+            echo "pwd2: [$pwd2]"
+            pwd3=$(powershell -c '$([Environment]::CurrentDirectory)')
+            echo "pwd3: [$pwd3]"
+            exe2="$pwd3\\Universe.Benchmark.dll"
             echo "Creating C:\\Windows\\disk-benchmark.cmd for 'dotnet $exe2'"
             echo '@dotnet "'$exe2'" %*' > C:\\Windows\\disk-benchmark.cmd
             # ls -la C:\\Windows\\disk-benchmark.cmd
