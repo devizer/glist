@@ -35,7 +35,7 @@ port=54321; counter=0; total=8
 for image in postgres:12-alpine postgres:11.4-alpine postgres:10.9-alpine postgres:9.6-alpine postgres:9.5-alpine postgres:9.4-alpine postgres:9.1 postgres:8.4; do
   name="${image//:/-}"
   counter=$((counter+1))
-  echo [$counter/$total] Starting $image as $name
+  echo ""; echo "[$counter / $total] Starting '$image' image as '$name' container"
   exists=false
   sudo docker logs "$name" >/dev/null 2>&1 && echo $name already exists && exists=true && sudo docker start $name >/dev/null 2>&1
   if [[ $exists == false ]]; then
