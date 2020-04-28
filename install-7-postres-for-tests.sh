@@ -31,16 +31,17 @@ vars="-e POSTGRESQL_USER=$POSTGRESQL_USER -e POSTGRESQL_PASS=$POSTGRESQL_PASS -e
 # 6: 9.4    ?
 # 7: 9.1
 # 8: 8.4
-port=54321
+port=54321; counter=0; total=8
 for image in postgres:12-alpine postgres:11.4-alpine postgres:10.9-alpine postgres:9.6-alpine postgres:9.5-alpine postgres:9.4-alpine postgres:9.1 postgres:8.4; do
   name="${image//:/-}"
-  echo starting $image as $name
+  counter=$((counter+1))
+  echo [$counter/$total] Starting $image as $name
   exists=false
   sudo docker logs "$name" >/dev/null 2>&1 && echo $name already exists && exists=true && sudo docker start $name >/dev/null 2>&1
   if [[ $exists == false ]]; then
     if [[ -n "${HIDE_PULL_PROGRESS:-}" ]]; then hide_pull=">/dev/null"; fi
     pgcmd="sudo docker pull $image ${hide_pull:-}; sudo docker run --name $name $vars -p ${port}:5432 -d $image"
-    echo ""; echo "shell command for $name"; echo "-| $pgcmd"
+    echo "shell command for $name"; echo "-| $pgcmd"
     time eval "$pgcmd"
   fi
   port=$((port+1))
