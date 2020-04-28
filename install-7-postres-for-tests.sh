@@ -52,9 +52,9 @@ done
 
 for port in {54321..54328}; do
   printf "checking port $port ...";
-  cmd1='PGPASSWORD=pass psql -t -h localhost -p '$port' -U postgres -q -c "select version();"';
+  cmd1='PGPASSWORD='$POSTGRESQL_PASS' psql -t -h localhost -p '$port' -U postgres -q -c "select version();"';
   v1="unknown"; v1=$(eval $cmd1 || true); v1="${v1## }";
-  cmd2='PGPASSWORD=pass psql -t -h localhost -p '$port' -U postgres -q -c "show server_version;"';
+  cmd2='PGPASSWORD='$POSTGRESQL_PASS' psql -t -h localhost -p '$port' -U postgres -q -c "show server_version;"';
   v2="unknown"; v2=$(eval $cmd2 || true); v2="${v2## }";
   printf "\r$port: [$v2] $v1\n";
 done
