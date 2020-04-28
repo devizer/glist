@@ -21,7 +21,7 @@ function wait_for_pgsql() {
   if [ -z "$started" ]; then printf " Fail\n"; fi;
 }
 
-vars="-e POSTGRESQL_USER=$POSTGRESQL_USER -e POSTGRESQL_PASS=$POSTGRESQL_PASS -e POSTGRESQL_DB=$$POSTGRESQL_DB -e POSTGRES_USER=$POSTGRESQL_USER -e POSTGRES_PASS=$POSTGRESQL_PASS -e POSTGRES_DB=$POSTGRESQL_DB"
+vars="-e POSTGRESQL_USER=$POSTGRESQL_USER -e POSTGRESQL_PASS=$POSTGRESQL_PASS -e POSTGRESQL_PASSWORD=$POSTGRESQL_PASS -e POSTGRESQL_DB=$$POSTGRESQL_DB -e POSTGRES_USER=$POSTGRESQL_USER -e POSTGRES_PASS=$POSTGRESQL_PASS -e POSTGRES_DB=$POSTGRESQL_DB"
 
 port=54321
 for image in postgres:12-alpine postgres:11.4-alpine postgres:10.9-alpine postgres:9.6-alpine postgres:9.5-alpine postgres:9.4-alpine postgres:9.1 postgres:8.4; do
