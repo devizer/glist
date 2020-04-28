@@ -23,6 +23,14 @@ function wait_for_pgsql() {
 
 vars="-e POSTGRESQL_USER=$POSTGRESQL_USER -e POSTGRESQL_PASS=$POSTGRESQL_PASS -e POSTGRESQL_PASSWORD=$POSTGRESQL_PASS -e POSTGRESQL_DB=$$POSTGRESQL_DB -e POSTGRES_USER=$POSTGRESQL_USER -e POSTGRES_PASS=$POSTGRESQL_PASS -e POSTGRES_DB=$POSTGRESQL_DB"
 
+# 1: 12     ?
+# 2: 11.4
+# 3: 10.9
+# 4: 9.6    ?
+# 5: 9.5    ?
+# 6: 9.4    ?
+# 7: 9.1
+# 8: 8.4
 port=54321
 for image in postgres:12-alpine postgres:11.4-alpine postgres:10.9-alpine postgres:9.6-alpine postgres:9.5-alpine postgres:9.4-alpine postgres:9.1 postgres:8.4; do
   name="${image//:/-}"
@@ -31,7 +39,9 @@ for image in postgres:12-alpine postgres:11.4-alpine postgres:10.9-alpine postgr
   sudo docker logs "$name" >/dev/null 2>&1 && echo $name already exists && exists=true && sudo docker start $name >/dev/null 2>&1
   if [[ $exists == false ]]; then
     if [[ -n "${HIDE_PULL_PROGRESS:-}" ]]; then hide_pull=">/dev/null"; fi
-    time eval "sudo docker pull $image ${hide_pull:-}; sudo docker run --name $name $vars -p ${port}:5432 -d $image"
+    pgcmd="sudo docker pull $image ${hide_pull:-}; sudo docker run --name $name $vars -p ${port}:5432 -d $image"
+    echo ""; echo "shell command for $name"; echo "-| $pgcmd"
+    time eval "$pgcmd"
   fi
   port=$((port+1))
 done
