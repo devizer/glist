@@ -2,7 +2,7 @@
 # Here is one line installer 
 # url=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-dependencies-v2.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
 
-set -e1
+set -e
 
 # Open SUSE 42/15, SLES 12/15?
 if [[ -n "$(command -v zypper || true)" ]]; then
@@ -19,20 +19,18 @@ fi
 if [[ -n "$(command -v dnf || true)" ]]; then
   sudo dnf install -y lttng-ust libcurl openssl-libs krb5-libs libicu zlib
   # .NET 2x needs openssl 1.0.*
-  sudo dnf info compat-openssl10 >/dev/null 2>&1
-  if [ $? -eq 0 ]; then 
+  sudo dnf info compat-openssl10 >/dev/null 2>&1 && (
     printf "\nInstalling openssl 1.0 compatiblity\n"
     sudo dnf install -y compat-openssl10
-  fi
+  )
 # REDHAT?
 elif [[ -n "$(command -v yum || true)" ]]; then
   sudo yum install -y lttng-ust libcurl openssl-libs krb5-libs libicu zlib
   # .NET 2x needs openssl 1.0.*
-  sudo yum info -y compat-openssl10 >/dev/null 2>&1
-  if [ $? -eq 0 ]; then 
+  sudo yum info -y compat-openssl10 >/dev/null 2>&1 && (
     printf "\nInstalling openssl 1.0 compatiblity\n"
     sudo yum install -y compat-openssl10
-  fi
+  )
 fi
 
 # Debian 8-9. Ubuntu 14.04-19.04
