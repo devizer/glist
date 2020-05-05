@@ -8,8 +8,11 @@ set -e
 if [[ -n "$(command -v zypper || true)" ]]; then
   # examples of libicu: opensuse/leap:15 - libicu60_2, opensuse:tumbleweed - libicu66
   libicu=$(zypper se libicu | awk -F'|' '{n=$2; gsub(/ /,"", n); if (n ~ /^libicu[_0-9]*$/) { print n} }')
-  # for .net net 3x we need libopenssl1_1 instead of libopenssl1_0_0
-  sudo zypper install -y liblttng-ust0 curl libopenssl1_0_0 krb5 "$libicu" zlib
+  # For .net net 3x we need libopenssl1_1 instead of libopenssl1_0_0
+  # For the old OpenSUSE 42 we need lttng-ust. For current - liblttng-ust0
+  lttng_legacy=$(zypper se lttng-ust | awk -F'|' '{n=$2; gsub(/ /,"", n); if (n ~ /^lttng-ust$/) { print n} }')
+  lttng_current=$(zypper se liblttng-ust0 | awk -F'|' '{n=$2; gsub(/ /,"", n); if (n ~ /^liblttng-ust0$/) { print n} }')
+  sudo zypper install -y $lttng_legacy $lttng_current curl libopenssl1_0_0 krb5 "$libicu" zlib
 fi
 
 # Alpine Linux?
