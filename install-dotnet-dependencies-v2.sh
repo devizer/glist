@@ -12,7 +12,8 @@ if [[ -n "$(command -v zypper || true)" ]]; then
   # For the old OpenSUSE 42 we need lttng-ust. For current - liblttng-ust0
   lttng_legacy=$(zypper se lttng-ust | awk -F'|' '{n=$2; gsub(/ /,"", n); if (n ~ /^lttng-ust$/) { print n} }')
   lttng_current=$(zypper se liblttng-ust0 | awk -F'|' '{n=$2; gsub(/ /,"", n); if (n ~ /^liblttng-ust0$/) { print n} }')
-  sudo zypper install -y $lttng_legacy $lttng_current curl libopenssl1_0_0 krb5 "$libicu" zlib
+  libssl1_1=$(zypper se libopenssl1_1 | awk -F'|' '{n=$2; gsub(/ /,"", n); if (n ~ /^libopenssl1_1$/) { print n} }')
+  sudo zypper install -y $lttng_legacy $lttng_current curl libopenssl1_0_0 $libssl1_1 krb5 "$libicu" zlib
 fi
 
 # Alpine Linux?
