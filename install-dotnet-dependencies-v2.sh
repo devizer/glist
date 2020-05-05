@@ -25,7 +25,7 @@ fi
 
 # CentOS/Fedora?
 if [[ -n "$(command -v dnf || true)" ]]; then
-  sudo dnf install -y --nogpg lttng-ust libcurl openssl-libs krb5-libs libicu zlib
+  sudo dnf install -y --nogpg --allowerasing lttng-ust libcurl openssl-libs krb5-libs libicu zlib
   # .NET 2x needs openssl 1.0.*
   sudo dnf info compat-openssl10 >/dev/null 2>&1 && (
     printf "\nInstalling openssl 1.0 compatiblity\n"
@@ -34,6 +34,7 @@ if [[ -n "$(command -v dnf || true)" ]]; then
 # REDHAT?
 elif [[ -n "$(command -v yum || true)" ]]; then
   # probably --nogpg is also needed
+  # for amazon linux v1 and v2 lttng-ust is missing
   sudo yum install -y lttng-ust libcurl openssl-libs krb5-libs libicu zlib
   # .NET 2x needs openssl 1.0.*
   sudo yum info -y compat-openssl10 >/dev/null 2>&1 && (
