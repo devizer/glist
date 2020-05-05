@@ -25,7 +25,6 @@ fi
 
 # CentOS/Fedora?
 if [[ -n "$(command -v dnf || true)" ]]; then
-  sudo dnf update --nogpgcheck -y || true
   sudo dnf install -y --nogpg --nogpgcheck --allowerasing lttng-ust libcurl openssl-libs krb5-libs libicu zlib
   # .NET 2x needs openssl 1.0.*
   sudo dnf info compat-openssl10 >/dev/null 2>&1 && (
