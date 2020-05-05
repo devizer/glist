@@ -14,8 +14,10 @@ fi
 
 # Alpine Linux?
 if [[ -n "$(command -v apk || true)" ]]; then
+  # either libssl1.0 or libssl1.1 depending on Alpine version
+  libssl=$(apk search libssl | awk -F'-' '{n=$1; gsub(/ /,"", n); if (n ~ /^libssl[\.0-9]*$/) { print n} }')
   apk add --no-cache --update sudo bash icu-libs ca-certificates \
-    krb5-libs libgcc libstdc++ libintl libssl1.1 libstdc++ lttng-ust tzdata userspace-rcu zlib
+    krb5-libs libgcc libstdc++ libintl $libssl libstdc++ lttng-ust tzdata userspace-rcu zlib
 fi
 
 # CentOS/Fedora?
@@ -36,7 +38,7 @@ elif [[ -n "$(command -v yum || true)" ]]; then
   )
 fi
 
-# Debian 8-9. Ubuntu 14.04-19.04
+# Debian 8-11. Ubuntu 14.04-20.04
 if [[ -n "$(command -v apt-get || true)" ]]; then
   libicu=$(apt-cache search libicu | grep -E '^libicu[0-9]* ' | awk '{print $1}')
   # libssl=$(apt-cache search libssl | grep -E '^libssl1\.0\.[0-9]* ' | awk '{print $1}')
