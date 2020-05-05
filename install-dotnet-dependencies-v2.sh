@@ -6,7 +6,10 @@ set -e
 
 # Open SUSE 42/15, SLES 12/15?
 if [[ -n "$(command -v zypper || true)" ]]; then
-  sudo zypper install -y lttng-ust curl libopenssl1_0_0 krb5 libicu zlib
+  # examples of libicu: opensuse/leap:15 - libicu60_2, opensuse:tumbleweed - libicu66
+  libicu=$(zypper se libicu | awk -F'|' '{n=$2; gsub(/ /,"", n); if (n ~ /^libicu[_0-9]*$/) { print n} }')
+  # for .net net 3x we need libopenssl1_1 instead of libopenssl1_0_0
+  sudo zypper install -y liblttng-ust0 curl libopenssl1_0_0 krb5 "$libicu" zlib
 fi
 
 # Alpine Linux?
