@@ -4,7 +4,7 @@
 
 set -e
 
-# Open SUSE 42/15, SLES 12/15?
+# Open SUSE Leap 42/15 & tumbleweed. SLES 12/15?
 if [[ -n "$(command -v zypper || true)" ]]; then
   # examples of libicu: opensuse/leap:15 - libicu60_2, opensuse:tumbleweed - libicu66
   libicu=$(zypper se libicu | awk -F'|' '{n=$2; gsub(/ /,"", n); if (n ~ /^libicu[_0-9]*$/) { print n} }')
@@ -16,7 +16,7 @@ if [[ -n "$(command -v zypper || true)" ]]; then
   sudo zypper install -y $lttng_legacy $lttng_current curl libopenssl1_0_0 $libssl1_1 krb5 "$libicu" zlib
 fi
 
-# Alpine Linux?
+# Alpine Linux 3.7, 3.8
 if [[ -n "$(command -v apk || true)" ]]; then
   # either libssl1.0 or libssl1.1 depending on Alpine version
   libssl=$(apk search libssl | awk -F'-' '{n=$1; gsub(/ /,"", n); if (n ~ /^libssl[\.0-9]*$/) { print n} }')
@@ -24,7 +24,7 @@ if [[ -n "$(command -v apk || true)" ]]; then
     krb5-libs libgcc libstdc++ libintl $libssl libstdc++ lttng-ust tzdata userspace-rcu zlib
 fi
 
-# CentOS/Fedora?
+# CentOS 6,7,8. Fedora 26 - 31
 if [[ -n "$(command -v dnf || true)" ]]; then
   sudo dnf install -y --nogpg --nogpgcheck --allowerasing lttng-ust libcurl openssl-libs krb5-libs libicu zlib
   # .NET 2x needs openssl 1.0.*
@@ -44,7 +44,7 @@ elif [[ -n "$(command -v yum || true)" ]]; then
   )
 fi
 
-# Debian 8-11. Ubuntu 14.04-20.04
+# Debian 8-11. Ubuntu 12.04-20.04 including non-LTS versions
 if [[ -n "$(command -v apt-get || true)" ]]; then
   libicu=$(apt-cache search libicu | grep -E '^libicu[0-9]* ' | awk '{print $1}')
   # libssl=$(apt-cache search libssl | grep -E '^libssl1\.0\.[0-9]* ' | awk '{print $1}')
