@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Here is one line installer 
-# url=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-dependencies.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash -e -s --update-repos
+# url=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-dependencies.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | UPDATE_REPOS=true bash -e
 
 function smart_sudo() {
   if [[ -n "$(command -v sudo || true)" ]]; then
@@ -11,12 +11,12 @@ function smart_sudo() {
   fi
 }
 
-if [[ "$1" == "--update-repos" ]]; then UPDATE_REPOS=true; else UPDATE_REPOS=false; fi
+UPDATE_REPOS="${UPDATE_REPOS:-false}"
 
 # Autotests: Open SUSE Leap 42/15 & Tumbleweed. 
 # Manual Tests: SLES 12 SP5, SLES 15 SP1
 if [[ -n "$(command -v zypper || true)" ]]; then
-  if [[ "$UPDATE_REPOS" == "true" ]]; then smart_sudo "zypper refresh -y"; fi
+  if [[ "$UPDATE_REPOS" == "true" ]]; then smart_sudo "zypper refresh || true"; fi
   # examples of libicu: opensuse/leap:15 - libicu60_2, opensuse:tumbleweed - libicu66
   libicu=$(zypper se libicu | awk -F'|' '{n=$2; gsub(/ /,"", n); if (n ~ /^libicu[_0-9]*$/) { print n} }')
   # For .net net 3x we need libopenssl1_1 instead of libopenssl1_0_0
@@ -61,9 +61,9 @@ fi
 
 # Debian 8-11. Ubuntu 12.04-20.04 including non-LTS versions
 if [[ -n "$(command -v apt-get || true)" ]]; then
-  if [[ "$UPDATE_REPOS" == "true" ]]; then smart_sudo "apt-get update -y -q"; fi
+  if [[ "$UPDATE_REPOS" == "true" ]]; then smart_sudo "apt-get update --allow-unauthenticated -y -q"; fi
   libicu=$(apt-cache search libicu | grep -E '^libicu[0-9]* ' | awk '{print $1}')
   # libssl=$(apt-cache search libssl | grep -E '^libssl1\.0\.[0-9]* ' | awk '{print $1}')
   # The curl package here is a hack that installs correct version of both libssl and libcurl
-  smart_sudo "apt-get install -y liblttng-ust0 curl libkrb5-3 zlib1g $libicu"
+  smart_sudo "apt-get install -y -q --allow-unauthenticated liblttng-ust0 curl libkrb5-3 zlib1g $libicu"
 fi
