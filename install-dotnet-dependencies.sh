@@ -1,18 +1,22 @@
 #!/usr/bin/env bash
 # Here is one line installer 
-# url=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-dependencies.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
+# url=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-dependencies.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash -e -s --update-repos
 
 function smart_sudo() {
   if [[ -n "$(command -v sudo || true)" ]]; then
     eval "sudo $1"
   else
+    # docker containers ususally does not have preinstalled sudo because it is good enough without sudo.
     eval "$1"
   fi
 }
 
+if [[ "$1" == "--update-repos" ]]; then UPDATE_REPOS=true; else UPDATE_REPOS=false; fi
+
 # Autotests: Open SUSE Leap 42/15 & Tumbleweed. 
 # Manual Tests: SLES 12 SP5, SLES 15 SP1
 if [[ -n "$(command -v zypper || true)" ]]; then
+  if [[ "$UPDATE_REPOS" == "true" ]]; then smart_sudo "zypper refresh -y"; fi
   # examples of libicu: opensuse/leap:15 - libicu60_2, opensuse:tumbleweed - libicu66
   libicu=$(zypper se libicu | awk -F'|' '{n=$2; gsub(/ /,"", n); if (n ~ /^libicu[_0-9]*$/) { print n} }')
   # For .net net 3x we need libopenssl1_1 instead of libopenssl1_0_0
@@ -38,7 +42,7 @@ if [[ -n "$(command -v dnf || true)" ]]; then
   # .NET 2x needs openssl 1.0.*
   dnf info compat-openssl10 -y >/dev/null 2>&1 && (
     printf "\nInstalling openssl 1.0 compatiblity\n"
-    smart_sudo "dnf install -y compat-openssl10"
+    smart_sudo "dnf install -y --nogpg --nogpgcheck compat-openssl10"
   )
 # Tested: CentOS/RHEL 6, 7
 elif [[ -n "$(command -v yum || true)" ]]; then
@@ -47,16 +51,17 @@ elif [[ -n "$(command -v yum || true)" ]]; then
   # missing --allowerasing on CentOS 7
   # openssl11 for RHEL 7 only, for CentOS 7 & RHEL 6 it is missing
   openssl11=$(yum search openssl11 -y 2>/dev/null | awk -F'.' '{n=$1; gsub(/ /,"", n); if (n ~ /^openssl11$/) { print n} }')
-  smart_sudo "yum install -y lttng-ust libcurl $openssl11 openssl-libs krb5-libs libicu zlib"
+  smart_sudo "yum install -y --nogpg --nogpgcheck lttng-ust libcurl $openssl11 openssl-libs krb5-libs libicu zlib"
   # .NET 2x needs openssl 1.0.*
   yum info -y compat-openssl10 -y >/dev/null 2>&1 && (
     printf "\nInstalling openssl 1.0 compatiblity\n"
-    smart_sudo "yum install -y compat-openssl10"
+    smart_sudo "yum install -y --nogpg --nogpgcheck compat-openssl10"
   )
 fi
 
 # Debian 8-11. Ubuntu 12.04-20.04 including non-LTS versions
 if [[ -n "$(command -v apt-get || true)" ]]; then
+  if [[ "$UPDATE_REPOS" == "true" ]]; then smart_sudo "apt-get update -y -q"; fi
   libicu=$(apt-cache search libicu | grep -E '^libicu[0-9]* ' | awk '{print $1}')
   # libssl=$(apt-cache search libssl | grep -E '^libssl1\.0\.[0-9]* ' | awk '{print $1}')
   # The curl package here is a hack that installs correct version of both libssl and libcurl
