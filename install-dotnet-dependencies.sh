@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # Here is one line installer 
-# url=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-dependencies-v2.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
+# url=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-dependencies.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
 
-# Open SUSE Leap 42/15 & tumbleweed. SLES 12/15?
+# Autotests: Open SUSE Leap 42/15 & Tumbleweed. 
+# Manual Tests: SLES 12 SP5, SLES 15 SP1
 if [[ -n "$(command -v zypper || true)" ]]; then
   # examples of libicu: opensuse/leap:15 - libicu60_2, opensuse:tumbleweed - libicu66
   libicu=$(zypper se libicu | awk -F'|' '{n=$2; gsub(/ /,"", n); if (n ~ /^libicu[_0-9]*$/) { print n} }')
@@ -11,7 +12,8 @@ if [[ -n "$(command -v zypper || true)" ]]; then
   lttng_legacy=$(zypper se lttng-ust | awk -F'|' '{n=$2; gsub(/ /,"", n); if (n ~ /^lttng-ust$/) { print n} }')
   lttng_current=$(zypper se liblttng-ust0 | awk -F'|' '{n=$2; gsub(/ /,"", n); if (n ~ /^liblttng-ust0$/) { print n} }')
   libssl1_1=$(zypper se libopenssl1_1 | awk -F'|' '{n=$2; gsub(/ /,"", n); if (n ~ /^libopenssl1_1$/) { print n} }')
-  sudo zypper install -y $lttng_legacy $lttng_current curl libopenssl1_0_0 $libssl1_1 krb5 "$libicu" zlib
+  libssl1_0_0=$(zypper se libopenssl1_0_0 | awk -F'|' '{n=$2; gsub(/ /,"", n); if (n ~ /^libopenssl1_0_0$/) { print n} }')
+  sudo zypper install -y $lttng_legacy $lttng_current curl $libssl1_0_0 $libssl1_1 krb5 "$libicu" zlib
 fi
 
 # Alpine Linux 3.7, 3.8
