@@ -2,6 +2,14 @@
 # Here is one line installer 
 # url=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-dependencies.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
 
+function smart_sudo() {
+  if [[ -n "$(command -v sudo || true)" ]]; then
+    eval "sudo $1"
+  else
+    eval "$1"
+  fi
+}
+
 # Autotests: Open SUSE Leap 42/15 & Tumbleweed. 
 # Manual Tests: SLES 12 SP5, SLES 15 SP1
 if [[ -n "$(command -v zypper || true)" ]]; then
@@ -13,25 +21,24 @@ if [[ -n "$(command -v zypper || true)" ]]; then
   lttng_current=$(zypper se liblttng-ust0 | awk -F'|' '{n=$2; gsub(/ /,"", n); if (n ~ /^liblttng-ust0$/) { print n} }')
   libssl1_1=$(zypper se libopenssl1_1 | awk -F'|' '{n=$2; gsub(/ /,"", n); if (n ~ /^libopenssl1_1$/) { print n} }')
   libssl1_0_0=$(zypper se libopenssl1_0_0 | awk -F'|' '{n=$2; gsub(/ /,"", n); if (n ~ /^libopenssl1_0_0$/) { print n} }')
-  sudo zypper install -y $lttng_legacy $lttng_current curl $libssl1_0_0 $libssl1_1 krb5 "$libicu" zlib
+  smart_sudo "zypper install -y $lttng_legacy $lttng_current curl $libssl1_0_0 $libssl1_1 krb5 $libicu zlib"
 fi
 
 # Alpine Linux 3.7, 3.8
 if [[ -n "$(command -v apk || true)" ]]; then
   # either libssl1.0 or libssl1.1 depending on Alpine version
   libssl=$(apk search libssl | awk -F'-' '{n=$1; gsub(/ /,"", n); if (n ~ /^libssl[\.0-9]*$/) { print n} }')
-  apk add --no-cache --update sudo bash icu-libs ca-certificates \
-    krb5-libs libgcc libstdc++ libintl $libssl libstdc++ lttng-ust tzdata userspace-rcu zlib
+  smart_sudo "apk add --no-cache --update sudo bash icu-libs ca-certificates krb5-libs libgcc libstdc++ libintl $libssl libstdc++ lttng-ust tzdata userspace-rcu zlib"
 fi
 
 # CentOS 8. Fedora 26 - 31, 
 # Manual Tests: Red Hat 8.2
 if [[ -n "$(command -v dnf || true)" ]]; then
-  sudo yum install -y --nogpg --nogpgcheck --allowerasing lttng-ust libcurl openssl-libs krb5-libs libicu zlib
+  smart_sudo "yum install -y --nogpg --nogpgcheck --allowerasing lttng-ust libcurl openssl-libs krb5-libs libicu zlib"
   # .NET 2x needs openssl 1.0.*
-  sudo dnf info compat-openssl10 -y >/dev/null 2>&1 && (
+  dnf info compat-openssl10 -y >/dev/null 2>&1 && (
     printf "\nInstalling openssl 1.0 compatiblity\n"
-    sudo dnf install -y compat-openssl10
+    smart_sudo "dnf install -y compat-openssl10"
   )
 # Tested: CentOS/RHEL 6, 7
 elif [[ -n "$(command -v yum || true)" ]]; then
@@ -42,9 +49,9 @@ elif [[ -n "$(command -v yum || true)" ]]; then
   openssl11=$(yum search openssl11 -y 2>/dev/null | awk -F'.' '{n=$1; gsub(/ /,"", n); if (n ~ /^openssl11$/) { print n} }')
   sudo yum install -y lttng-ust libcurl $openssl11 openssl-libs krb5-libs libicu zlib
   # .NET 2x needs openssl 1.0.*
-  sudo yum info -y compat-openssl10 -y >/dev/null 2>&1 && (
+  yum info -y compat-openssl10 -y >/dev/null 2>&1 && (
     printf "\nInstalling openssl 1.0 compatiblity\n"
-    sudo yum install -y compat-openssl10
+    smart_sudo "yum install -y compat-openssl10"
   )
 fi
 
@@ -53,5 +60,5 @@ if [[ -n "$(command -v apt-get || true)" ]]; then
   libicu=$(apt-cache search libicu | grep -E '^libicu[0-9]* ' | awk '{print $1}')
   # libssl=$(apt-cache search libssl | grep -E '^libssl1\.0\.[0-9]* ' | awk '{print $1}')
   # The curl package here is a hack that installs correct version of both libssl and libcurl
-  sudo apt-get install -y liblttng-ust0 curl libkrb5-3 zlib1g $libicu
+  smart_sudo "apt-get install -y liblttng-ust0 curl libkrb5-3 zlib1g $libicu"
 fi
