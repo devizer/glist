@@ -24,7 +24,7 @@ if [[ -n "$(command -v apk || true)" ]]; then
     krb5-libs libgcc libstdc++ libintl $libssl libstdc++ lttng-ust tzdata userspace-rcu zlib
 fi
 
-# CentOS 6,7,8. Fedora 26 - 31, 
+# CentOS 8. Fedora 26 - 31, 
 # Manual Tests: Red Hat 8.2
 if [[ -n "$(command -v dnf || true)" ]]; then
   sudo yum install -y --nogpg --nogpgcheck --allowerasing lttng-ust libcurl openssl-libs krb5-libs libicu zlib
@@ -33,7 +33,7 @@ if [[ -n "$(command -v dnf || true)" ]]; then
     printf "\nInstalling openssl 1.0 compatiblity\n"
     sudo dnf install -y compat-openssl10
   )
-# REDHAT 7.8, 6
+# Tested: CentOS/RHEL 6, 7
 elif [[ -n "$(command -v yum || true)" ]]; then
   # probably --nogpg is also needed
   # for Amazon Linux v1 and v2 lttng-ust is missing, but yum does not fail.
