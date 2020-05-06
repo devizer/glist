@@ -24,21 +24,25 @@ if [[ -n "$(command -v apk || true)" ]]; then
     krb5-libs libgcc libstdc++ libintl $libssl libstdc++ lttng-ust tzdata userspace-rcu zlib
 fi
 
-# CentOS 6,7,8. Fedora 26 - 31
+# CentOS 6,7,8. Fedora 26 - 31, 
+# Manual Tests: Red Hat 8.2
 if [[ -n "$(command -v dnf || true)" ]]; then
-  sudo dnf install -y --nogpg --nogpgcheck --allowerasing lttng-ust libcurl openssl-libs krb5-libs libicu zlib
+  sudo yum install -y --nogpg --nogpgcheck --allowerasing lttng-ust libcurl openssl-libs krb5-libs libicu zlib
   # .NET 2x needs openssl 1.0.*
-  sudo dnf info compat-openssl10 >/dev/null 2>&1 && (
+  sudo dnf info compat-openssl10 -y >/dev/null 2>&1 && (
     printf "\nInstalling openssl 1.0 compatiblity\n"
     sudo dnf install -y compat-openssl10
   )
-# REDHAT?
+# REDHAT 7.8, 6
 elif [[ -n "$(command -v yum || true)" ]]; then
   # probably --nogpg is also needed
-  # for amazon linux v1 and v2 lttng-ust is missing
-  sudo yum install -y lttng-ust libcurl openssl-libs krb5-libs libicu zlib
+  # for Amazon Linux v1 and v2 lttng-ust is missing, but yum does not fail.
+  # missing --allowerasing on CentOS 7
+  # openssl11 for RHEL 7 only, for CentOS 7 & RHEL 6 it is missing
+  openssl11=$(yum search openssl11 -y 2>/dev/null | awk -F'.' '{n=$1; gsub(/ /,"", n); if (n ~ /^openssl11$/) { print n} }')
+  sudo yum install -y lttng-ust libcurl $openssl11 openssl-libs krb5-libs libicu zlib
   # .NET 2x needs openssl 1.0.*
-  sudo yum info -y compat-openssl10 >/dev/null 2>&1 && (
+  sudo yum info -y compat-openssl10 -y >/dev/null 2>&1 && (
     printf "\nInstalling openssl 1.0 compatiblity\n"
     sudo yum install -y compat-openssl10
   )
