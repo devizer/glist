@@ -47,7 +47,7 @@ elif [[ -n "$(command -v yum || true)" ]]; then
   # missing --allowerasing on CentOS 7
   # openssl11 for RHEL 7 only, for CentOS 7 & RHEL 6 it is missing
   openssl11=$(yum search openssl11 -y 2>/dev/null | awk -F'.' '{n=$1; gsub(/ /,"", n); if (n ~ /^openssl11$/) { print n} }')
-  sudo yum install -y lttng-ust libcurl $openssl11 openssl-libs krb5-libs libicu zlib
+  smart_sudo "yum install -y lttng-ust libcurl $openssl11 openssl-libs krb5-libs libicu zlib"
   # .NET 2x needs openssl 1.0.*
   yum info -y compat-openssl10 -y >/dev/null 2>&1 && (
     printf "\nInstalling openssl 1.0 compatiblity\n"
