@@ -15,6 +15,7 @@ UPDATE_REPOS="${UPDATE_REPOS:-false}"
 
 # Autotests: Open SUSE Leap 42/15 & Tumbleweed. 
 # Manual Tests: SLES 12 SP5, SLES 15 SP1
+# After creating SLES 12/15 image in a cloud, it needs to wait for a few minutes for background repos maintenance tasks
 if [[ -n "$(command -v zypper || true)" ]]; then
   if [[ "$UPDATE_REPOS" == "true" ]]; then smart_sudo "zypper refresh || true"; fi
   # examples of libicu: opensuse/leap:15 - libicu60_2, opensuse:tumbleweed - libicu66
@@ -46,10 +47,9 @@ if [[ -n "$(command -v dnf || true)" ]]; then
   )
 # Tested: CentOS/RHEL 6, 7
 elif [[ -n "$(command -v yum || true)" ]]; then
-  # probably --nogpg is also needed
   # for Amazon Linux v1 and v2 lttng-ust is missing, but yum does not fail.
   # missing --allowerasing on CentOS 7
-  # openssl11 for RHEL 7 only, for CentOS 7 & RHEL 6 it is missing
+  # openssl11 is for RHEL 7 only, for CentOS 7 & RHEL 6 it is missing
   openssl11=$(yum search openssl11 -y 2>/dev/null | awk -F'.' '{n=$1; gsub(/ /,"", n); if (n ~ /^openssl11$/) { print n} }')
   smart_sudo "yum install -y --nogpg --nogpgcheck lttng-ust libcurl $openssl11 openssl-libs krb5-libs libicu zlib"
   # .NET 2x needs openssl 1.0.*
