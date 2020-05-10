@@ -116,7 +116,7 @@ function extract () {
   if [[ "$(command -v curl)" == "" ]]; then
     sudo wget --no-check-certificate -O $TMPDIR/dotnet-tmp/$filename $url
   else
-    sudo curl -L -o $TMPDIR/dotnet-tmp/$filename $url
+    sudo curl -ksSL -o $TMPDIR/dotnet-tmp/$filename $url
   fi
   sudo mkdir -p $todir
   pushd $todir >/dev/null
