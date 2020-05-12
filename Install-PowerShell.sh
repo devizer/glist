@@ -34,9 +34,9 @@ function install_powershell() {
     sudo rm -rf *
     file=$(basename $url)
     echo "Downloading $url"
-    cmd="sudo wget -q -nv --no-check-certificate -O pwsh.tar.gz $url 2>/dev/null || sudo curl -kSL -o pwsh.tar.gz $url"
+    cmd="sudo wget -q -nv --no-check-certificate -O pwsh.tar.gz $url 2>/dev/null || sudo curl -ksSL -o pwsh.tar.gz $url"
     # retry pattern
-    eval "$cmd" || eval "$cmd" || eval "$cmd"
+    eval "$cmd" || echo "Try 2/3: Downloading $url" && eval "$cmd" || echo "Try 3/3: Downloading $url" && eval "$cmd" || echo "Error downloading $url"
     sudo tar xzf pwsh.tar.gz
     sudo rm -f pwsh.tar.gz
     echo '#!/usr/bin/env bash
@@ -50,8 +50,10 @@ function install_powershell() {
     ' | sudo tee /usr/local/bin/pwsh > /dev/null
     sudo chmod +x /usr/local/bin/pwsh
 
-    echo -e "PowerShell version is:\n$(pwsh -c '$PSVersionTable')"
+    error=0
+    echo -e "PowerShell version is:\n$(pwsh -c '$PSVersionTable || error=1')"
     popd
 }
 
 install_powershell
+exit $error
