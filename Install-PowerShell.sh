@@ -37,6 +37,7 @@ function install_powershell() {
     cmd="sudo wget -q -nv --no-check-certificate -O pwsh.tar.gz $url 2>/dev/null || sudo curl -ksSL -o pwsh.tar.gz $url"
     # retry pattern
     eval "$cmd" || echo "Try 2/3: Downloading $url" && eval "$cmd" || echo "Try 3/3: Downloading $url" && eval "$cmd" || echo "Error downloading $url"
+    echo "Extracting framework dependent pwsh.tar.gz to: ${PS_INSTALL_DIR}" 
     sudo tar xzf pwsh.tar.gz
     sudo rm -f pwsh.tar.gz
     echo '#!/usr/bin/env bash
