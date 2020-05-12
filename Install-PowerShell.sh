@@ -17,7 +17,9 @@ echo "
 " >/dev/null
 
 ps_url_stable=https://github.com/PowerShell/PowerShell/releases/download/v6.2.3/powershell-6.2.3-linux-x64-fxdependent.tar.gz
+ps_url_stable=https://github.com/PowerShell/PowerShell/releases/download/v6.2.4/powershell-6.2.4-linux-x64-fxdependent.tar.gz
 ps_url_prerelase=https://github.com/PowerShell/PowerShell/releases/download/v7.0.0-preview.6/powershell-7.0.0-preview.6-linux-x64-fxdependent.tar.gz
+ps_url_prerelase=https://github.com/PowerShell/PowerShell/releases/download/v7.1.0-preview.2/powershell-7.1.0-preview.2-linux-x64-fxdependent.tar.gz
 
 PS_INSTALL_DIR=${PS_INSTALL_DIR:-/opt/powershell}
 url=$ps_url_stable
