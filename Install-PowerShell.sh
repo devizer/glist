@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # export PS_INSTALL_DIR=/opt/powershell PS_VER="stable|prerelase"; url=https://raw.githubusercontent.com/devizer/glist/master/Install-PowerShell.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
+# export PS_INSTALL_DIR=/opt/pwsh PS_VER="stable|prerelase"; url=https://raw.githubusercontent.com/devizer/glist/master/Install-PowerShell.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
 
 echo "
    Install:
