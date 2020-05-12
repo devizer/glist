@@ -30,7 +30,7 @@ fi
 
 function install_powershell() {
     sudo mkdir -p "${PS_INSTALL_DIR}"
-    pushd "${PS_INSTALL_DIR}"
+    pushd "${PS_INSTALL_DIR}" >/dev/null
     sudo rm -rf *
     file=$(basename $url)
     echo "Downloading $url"
@@ -53,7 +53,7 @@ function install_powershell() {
 
     error=0
     echo -e "PowerShell version is:\n$(pwsh -c '$PSVersionTable' || error=1)"
-    popd
+    popd >/dev/null
 }
 
 install_powershell
