@@ -52,9 +52,9 @@ function install_powershell() {
     sudo chmod +x /usr/local/bin/pwsh
 
     error=0
-    echo -e "PowerShell version is:\n$(pwsh -c '$PSVersionTable || error=1')"
+    echo -e "PowerShell version is:\n$(pwsh -c '$PSVersionTable' || error=1)"
     popd
 }
 
 install_powershell
-exit $error
+exit $error;
