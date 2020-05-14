@@ -63,7 +63,12 @@ fi
 if [[ -n "$(command -v apt-get || true)" ]]; then
   if [[ "$UPDATE_REPOS" == "true" ]]; then smart_sudo "apt-get update --allow-unauthenticated -y -q"; fi
   libicu=$(apt-cache search libicu | grep -E '^libicu[0-9]* ' | awk '{print $1}')
+  # libssl1.1 libssl1.0.0
+  libssl11=$(apt-cache search libssl1.1 | grep -E '^libssl1\.1 ' | awk '{print $1}')
+  libssl10=$(apt-cache search libssl1.0.0 | grep -E '^libssl1\.0\.0 ' | awk '{print $1}')
+  packages="liblttng-ust0 curl libkrb5-3 zlib1g $libicu $libssl10 $libssl11"
+  echo "Installing packages: $packages"
   # libssl=$(apt-cache search libssl | grep -E '^libssl1\.0\.[0-9]* ' | awk '{print $1}')
   # The curl package here is a hack that installs correct version of both libssl and libcurl
-  smart_sudo "apt-get install -y -q --allow-unauthenticated liblttng-ust0 curl libkrb5-3 zlib1g $libicu"
+  smart_sudo "apt-get install -y -q --allow-unauthenticated $packages"
 fi
