@@ -11,6 +11,14 @@ System requirements: GLIBC_2.17+, GLIBCXX_3.4.20+'
 TMPDIR="${TMPDIR:-/tmp}"
 echo Download buffer location: $TMPDIR
 
+is_jessie=false
+if [[ -f /etc/os-release ]]; then
+  source /etc/os-release
+  if [[ "$VERSION_ID" == "8" && "$ID" == "debian" ]]; then
+  	is_jessie=true
+  fi
+fi
+
 # ARM 64
 # https://download.visualstudio.microsoft.com/download/pr/39601b46-a250-46c3-92f0-68493e07fe5c/3bc40cf7868dcdd05ce353e253fd266c/dotnet-sdk-3.0.100-preview4-011223-linux-arm64.tar.gz
 export links_arm64='
@@ -23,6 +31,7 @@ export link_node_arm64='https://nodejs.org/dist/v10.16.0/node-v10.16.0-linux-arm
 export link_node_arm64='https://nodejs.org/dist/v12.12.0/node-v12.12.0-linux-arm64.tar.xz'
 export link_node_arm64='https://nodejs.org/dist/v12.16.1/node-v12.16.1-linux-arm64.tar.xz'
 export link_node_arm64='https://nodejs.org/dist/v12.16.3/node-v12.16.3-linux-arm64.tar.xz'
+test "$is_jessie" == "true" && export link_node_arm64='https://nodejs.org/dist/latest-v10.x/node-v10.20.1-linux-arm64.tar.xz'
 export link_pwsh_arm64='https://github.com/PowerShell/PowerShell/releases/download/v6.2.0/powershell-6.2.0-linux-arm64.tar.gz'
 export link_pwsh_arm64='https://github.com/PowerShell/PowerShell/releases/download/v6.2.2/powershell-6.2.2-linux-arm64.tar.gz'
 export link_pwsh_arm64='https://github.com/PowerShell/PowerShell/releases/download/v6.2.3/powershell-6.2.3-linux-arm64.tar.gz'
@@ -40,6 +49,7 @@ export link_node_x64='https://nodejs.org/dist/v10.15.3/node-v10.15.3-linux-x64.t
 export link_node_x64='https://nodejs.org/dist/v12.12.0/node-v12.12.0-linux-x64.tar.xz'
 export link_node_x64='https://nodejs.org/dist/v12.16.1/node-v12.16.1-linux-x64.tar.xz'
 export link_node_x64='https://nodejs.org/dist/v12.16.3/node-v12.16.3-linux-x64.tar.xz'
+test "$is_jessie" == "true" && export link_node_x64='https://nodejs.org/dist/latest-v10.x/node-v10.20.1-linux-x64.tar.xz'
 export link_pwsh_x64='https://github.com/PowerShell/PowerShell/releases/download/v6.2.0/powershell-6.2.0-linux-x64.tar.gz'
 export link_pwsh_x64='https://github.com/PowerShell/PowerShell/releases/download/v6.2.3/powershell-6.2.3-linux-x64.tar.gz'
 export link_pwsh_x64='https://github.com/PowerShell/PowerShell/releases/download/v6.2.4/powershell-6.2.4-linux-x64.tar.gz'
@@ -56,6 +66,7 @@ export link_node_arm32='https://nodejs.org/dist/v10.15.3/node-v10.15.3-linux-arm
 export link_node_arm32='https://nodejs.org/dist/v12.12.0/node-v12.12.0-linux-armv7l.tar.xz'
 export link_node_arm32='https://nodejs.org/dist/v12.16.1/node-v12.16.1-linux-armv7l.tar.xz'
 export link_node_arm32='https://nodejs.org/dist/v12.16.3/node-v12.16.3-linux-armv7l.tar.xz'
+test "$is_jessie" == "true" && export link_node_arm32='https://nodejs.org/dist/latest-v10.x/node-v10.20.1-linux-armv7l.tar.gz'
 
 export link_pwsh_arm32='https://github.com/PowerShell/PowerShell/releases/download/v6.2.0/powershell-6.2.0-linux-arm32.tar.gz'
 export link_pwsh_arm32='https://github.com/PowerShell/PowerShell/releases/download/v6.2.3/powershell-6.2.3-linux-arm32.tar.gz'
