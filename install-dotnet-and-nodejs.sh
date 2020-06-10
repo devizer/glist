@@ -55,7 +55,7 @@ export link_node_x64='https://nodejs.org/dist/v12.16.1/node-v12.16.1-linux-x64.t
 export link_node_x64='https://nodejs.org/dist/v12.16.3/node-v12.16.3-linux-x64.tar.xz'
 export link_node_x64='https://nodejs.org/dist/'$NODE_VER'/node-'$NODE_VER'-linux-x64.tar.xz'
 # on x64 12x also works?
-test "$is_jessie" == "true" && export link_node_x64='https://nodejs.org/dist/'$NODE_VER_JESSIE'/node-'$NODE_VER_JESSIE'-darwin-x64.tar.gz'
+test "$is_jessie" == "true" && export link_node_x64='https://nodejs.org/dist/'$NODE_VER_JESSIE'/node-'$NODE_VER_JESSIE'-linux-x64.tar.gz'
 export link_pwsh_x64='https://github.com/PowerShell/PowerShell/releases/download/v6.2.0/powershell-6.2.0-linux-x64.tar.gz'
 export link_pwsh_x64='https://github.com/PowerShell/PowerShell/releases/download/v6.2.3/powershell-6.2.3-linux-x64.tar.gz'
 export link_pwsh_x64='https://github.com/PowerShell/PowerShell/releases/download/v6.2.4/powershell-6.2.4-linux-x64.tar.gz'
