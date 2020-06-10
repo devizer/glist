@@ -79,6 +79,8 @@ export link_pwsh_arm32='https://github.com/PowerShell/PowerShell/releases/downlo
 export link_pwsh_arm32='https://github.com/PowerShell/PowerShell/releases/download/v6.2.3/powershell-6.2.3-linux-arm32.tar.gz'
 export link_pwsh_arm32='https://github.com/PowerShell/PowerShell/releases/download/v6.2.4/powershell-6.2.4-linux-arm32.tar.gz'
 
+test "$is_jessie" == "true" && export link_pwsh_arm32='https://github.com/PowerShell/PowerShell/releases/download/v6.0.5/powershell-6.0.5-linux-arm32.tar.gz'
+
 
 
 # OSX
