@@ -1,1 +1,1 @@
-"C:\Apps\7-Zip-x86\7z.exe" a sql-express-all.7z.exe -r- -sfx7zCon.sfx ..\*.ps1 ..\*.cmd
+"C:\Program Files\7-Zip\7z.exe" a sql-express-all.7z.exe -r- -sfx7zCon.sfx ..\*.ps1 ..\*.cmd
