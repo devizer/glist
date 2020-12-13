@@ -8,7 +8,9 @@ if Not Defined NEW_SQL_INSTANCE_NAME (
 echo Installing new instance [%NEW_SQL_INSTANCE_NAME%] of [%KEY%]
 
 echo DOWNLOADING %KEY%.exe
+rem EXPIRED
 set url=https://download.microsoft.com/download/0/F/D/0FD88169-F86F-46E1-8B3B-56C44F6E9505/SQLEXPR_x64_ENU.exe
+set url=https://dl.bintray.com/devizer/archive/database-engine-x64-10.0.5500.exe/database-engine-x64-10.0.5500.exe
 set outfile=%AppData%\Temp\%KEY%.exe
 mkdir "%AppData%\Temp" 1>nul 2>&1
 echo [System.Net.ServicePointManager]::ServerCertificateValidationCallback={$true}; $d=new-object System.Net.WebClient; $d.DownloadFile("$Env:url","$Env:outfile") | powershell -command -
