@@ -39,12 +39,12 @@ $Sql_Servers_Definition = @(
    },
   @{  Title = "SQL SERVER LocalDB 2019"; LocalDB = $true;
       Keys = @("LocalDB", "2019", "Latest", "x64");  #todo: test everywhere
-      Script = 'powershell -f .\Install-SQL-LocalDB.ps1 15; cp "$($Env:USERPROFILE)\AppData\Local\Temp\LocalDB-Installer\SqlLocaLDB-v14-x64.log" "$($Env:SQL_SETUP_LOG_FOLDER)";'
+      Script = 'powershell -f .\Install-SQL-LocalDB.ps1 15; cp "$($Env:USERPROFILE)\AppData\Local\Temp\LocalDB-Installer\*.log" "$($Env:SQL_SETUP_LOG_FOLDER)";'
       Comment = "Actual Version is 2014 on the AppVeyor VS 2015 image. For x86 Windows it installs LocalDB 2014"
    },
   @{  Title = "SQL SERVER LocalDB 2017"; LocalDB = $true;
       Keys = @("LocalDB", "2017", "x64");
-      Script = 'powershell -f .\Install-SQL-LocalDB.ps1; cp "$($Env:USERPROFILE)\AppData\Local\Temp\LocalDB-Installer\SqlLocaLDB-v14-x64.log" "$($Env:SQL_SETUP_LOG_FOLDER)";'
+      Script = 'powershell -f .\Install-SQL-LocalDB.ps1; cp "$($Env:USERPROFILE)\AppData\Local\Temp\LocalDB-Installer\*.log" "$($Env:SQL_SETUP_LOG_FOLDER)";'
       Comment = "Actual Version is 2014 on the AppVeyor VS 2015 image. For x86 Windows it installs LocalDB 2014"
    },
   @{  Title = "SQL SERVER LocalDB 2016 SP1 CU8"; LocalDB = $true;
