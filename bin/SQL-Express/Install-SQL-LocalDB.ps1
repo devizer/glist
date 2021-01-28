@@ -163,6 +163,11 @@ Write-Host "LocalDB MSI: $msiUrl"
 $pars=@("`"$download_To`"", $msiUrl)
 pushd "$($Essentials.Temp)"
 & "$($Essentials.ParallelDownloader)" $pars
+if ($LASTEXITCODE) {
+	Write-Host "Fail $($Essentials.ParallelDownloader)"
+	Write-Host "Retring using curl"
+	curl -ksSL -o "$download_To\$msiFileName" $msiUrl
+}
 popd
 
 if (Get-Command Add-WindowsFeature -errorAction SilentlyContinue)
