@@ -159,6 +159,7 @@ $download_To="$($Essentials.Temp)\LocalDB-Installer"
 if ($essentials.IsX64) { $suffix="v$needVersion-x64"; } Else { $suffix="v12-x86"; }
 $msiFileName="local-databaseengine-$suffix.msi"
 $msiUrl="https://dl.bintray.com/devizer/archive/$msiFileName"
+Write-Host "LocalDB MSI: $msiUrl"
 $pars=@("`"$download_To`"", $msiUrl)
 pushd "$($Essentials.Temp)"
 & "$($Essentials.ParallelDownloader)" $pars
