@@ -166,7 +166,7 @@ pushd "$($Essentials.Temp)"
 if ($LASTEXITCODE) {
 	Write-Host "Fail $($Essentials.ParallelDownloader)"
 	Write-Host "Retring using curl"
-	curl -ksSL -o "$download_To\$msiFileName" $msiUrl
+	& curl -ksSL -o "$download_To\$msiFileName" $msiUrl
 }
 popd
 
