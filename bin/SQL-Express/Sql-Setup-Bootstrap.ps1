@@ -238,7 +238,7 @@ if ($Env:SQL_SETUP_BOOTSTRAP_TEST) {
       @{ Args = @("SqlServer");                       Expected="SQL SERVER 2019 (Developer)" },
       @{ Args = @("LocalDB", "2019");                 Expected="SQL SERVER LocalDB 2019" },
       @{ Args = @("LocalDB", "2017");                 Expected="SQL SERVER LocalDB 2017" },
-      @{ Args = @("LocalDB", "2016");                 Expected="SQL SERVER LocalDB 2016 SP1 CU8" }
+      @{ Args = @("LocalDB", "2016");                 Expected="SQL SERVER LocalDB 2016 SP2" }
       @{ Args = @("LocalDB");                         Expected="SQL SERVER LocalDB 2019" },
       @{ Args = @("No Such SQL Server");              Expected=""; }
     )
