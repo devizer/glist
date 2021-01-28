@@ -1,34 +1,9 @@
-param($needVersion = "") 
+param($needVersion = "14") 
 # example: powershell -f Install-SQL-LocalDB.ps1 -NeedVersion 15
 #          version is ignored for x86 windows: always installs 12th
 
 # One Line Installer
 # @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "[System.Net.ServicePointManager]::ServerCertificateValidationCallback={$true}; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/devizer/glist/master/bin/sql-LocalDB/Install-SQL-LocalDB.ps1'))"
-
-$ErrorActionPreference = 'SilentlyContinue'
-[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls11;
-
-function Is-X64 {
-	return ("$($Env:PROCESSOR_ARCHITECTURE)" -eq "AMD64");
-}
-
-function Get-Supported-LocalDB-Version {
-  # 2016 & 2017: https://docs.microsoft.com/en-us/sql/sql-server/install/hardware-and-software-requirements-for-installing-sql-server?view=sql-server-ver15
-  # 2019: https://docs.microsoft.com/en-us/sql/sql-server/install/hardware-and-software-requirements-for-installing-sql-server-ver15?view=sql-server-ver15
-  # Win7 (6.1): 2014 v12, Win 8 (6.2): v13 & v14 with .NET 4.6, 
-  $major = [System.Environment]::OSVersion.Version.Major;
-  $minor = [System.Environment]::OSVersion.Version.Minor;
-  if ($major -ge 10) { $ret = 15; }
-  elseif ($major -eq 6 -and $minor -ge 2) { $ret = 14; }
-  elseif ($major -eq 6 -and $minor -eq 1) { $ret = 12; }
-  else {
-  	Write-Host "LocalDB requires Windows 7 or above" -ForegroundColor DardRed 
-  	return "unsupported";
-  }
-  if (-not (Is-X64)) { $ret = 12; }
-  return $ret;
-}
-
 function Download-Essentials {
   $files=$("Essentials.7z.exe")
   $baseUrl="https://raw.githubusercontent.com/devizer/glist/master/Essentials/"
@@ -36,7 +11,7 @@ function Download-Essentials {
   $Temp="$($Env:LocalAppData)"; if ($Temp -eq "") { $Temp="$($Env:UserProfile)"; }
   $Temp="$Temp\Temp"
   $Essentials="$Temp\Essentials"
-  Write-Host "Downloading essentials (7z, parallel-download) to the [$Essentials] folder"
+  Write-Host "downloading essentials (7z, parallel-download) to the [$Essentials] folder"
   New-Item $Essentials -type directory -force -EA SilentlyContinue | out-null
   [System.Net.ServicePointManager]::ServerCertificateValidationCallback={$true};
   foreach($file in $files) {
@@ -153,10 +128,8 @@ function ShowLocalDbVersion
 
 $Essentials = Download-Essentials;
 
-if (-not $needVersion) { $needVersion = Get-Supported-LocalDB-Version }
-
 $download_To="$($Essentials.Temp)\LocalDB-Installer"
-if ($essentials.IsX64) { $suffix="v$needVersion-x64"; } Else { $suffix="v12-x86"; }
+if ($essentials.IsX64) { $suffix="v$needVersion-x64"; } Else { $suffix="v$needVersion-x86"; }
 $msiFileName="local-databaseengine-$suffix.msi"
 $msiUrl="https://dl.bintray.com/devizer/archive/$msiFileName"
 $pars=@("`"$download_To`"", $msiUrl)
