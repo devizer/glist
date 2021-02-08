@@ -175,8 +175,8 @@ counter=0;total=4; for dotnet_url in $links; do total=$((total+2)); done
 # node, npm and yarn
 function install_node() {
   sudo rm -rf /opt/node >/dev/null 2>&1
-  extract $link_node "/opt/node" 'skip-symlinks'
   echo node url: $link_node
+  extract $link_node "/opt/node" 'skip-symlinks'
 
   # adding support for global packages
   npm=$(ls -1 /opt/node/node*/bin/npm)
@@ -185,7 +185,7 @@ function install_node() {
   printf "\n\n"'export PATH="'$nodePath':$PATH"'"\n\n" | tee -a ~/.bashrc >/dev/null
 
   header "Upgrading and installing" 'npm & yarn (latest)'
-  sudo bash -c "PATH=\"$nodePath:$PATH\"; npm install yarn npm npm-check-updates --global"
+  sudo bash -c "PATH=\"$nodePath:$PATH\"; npm install yarn npm-check-updates --global"
   sudo rm -rf ~/.npm
   add_symlinks 'node*/bin/*' /opt/node
 }
