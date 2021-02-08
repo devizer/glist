@@ -176,6 +176,7 @@ counter=0;total=4; for dotnet_url in $links; do total=$((total+2)); done
 function install_node() {
   sudo rm -rf /opt/node >/dev/null 2>&1
   extract $link_node "/opt/node" 'skip-symlinks'
+  echo node url: $link_node
 
   # adding support for global packages
   npm=$(ls -1 /opt/node/node*/bin/npm)
