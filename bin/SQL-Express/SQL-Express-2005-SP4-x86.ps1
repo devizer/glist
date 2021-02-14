@@ -62,7 +62,8 @@ $exe="$target\MSSQL.1\MSSQL\Binn\sqlservr.exe"
 & netsh firewall add allowedprogram `"$exe`" `"SQL Express 2005 SP4 x86`" ENABLE
 
 Write-Host "$(Get-Elapsed) Set Permission for $($Env:NEW_SQL_INSTANCE_NAME) SQL Server databse engine instance"
-& sc.exe config "MSSQL`$$($Env:NEW_SQL_INSTANCE_NAME)" obj="NT AUTHORITY\SYSTEM"
+$serviceName = "MSSQL`$$($Env:NEW_SQL_INSTANCE_NAME)"; if ($Env:NEW_SQL_INSTANCE_NAME -eq "MSSQLSERVER") { $serviceName="MSSQLSERVER" }
+& sc.exe config "$serviceName" obj="NT AUTHORITY\SYSTEM"
 Write-Host "$(Get-Elapsed) Restart SQL_2005_SP4_X86 service"
 & net stop "MSSQL`$$($Env:NEW_SQL_INSTANCE_NAME)"
 & net start "MSSQL`$$($Env:NEW_SQL_INSTANCE_NAME)"
