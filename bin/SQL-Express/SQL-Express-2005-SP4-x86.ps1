@@ -57,7 +57,7 @@ Write-Host "$(Get-Elapsed) Launch setup.exe at $(Get-Location)"
 cmd /c .\setup.exe /qn ADDLOCAL=SQL_Engine INSTANCENAME=$($Env:NEW_SQL_INSTANCE_NAME) DISABLENETWORKPROTOCOLS=0 SECURITYMODE=SQL SAPWD=``1qazxsw2 INSTALLSQLDIR="$target" 
 popd
 
-Remove-Item -Recurse -Force "$temp\SQL-Express-2005-SP4-x86"
+try { Remove-Item -Recurse -Force "$temp\SQL-Express-2005-SP4-x86" -SilentContinue } catch {}
 $exe="$target\MSSQL.1\MSSQL\Binn\sqlservr.exe"
 & netsh firewall add allowedprogram `"$exe`" `"SQL Express 2005 SP4 x86`" ENABLE
 
