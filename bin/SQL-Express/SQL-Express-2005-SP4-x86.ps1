@@ -65,6 +65,6 @@ Write-Host "$(Get-Elapsed) Set Permission for $($Env:NEW_SQL_INSTANCE_NAME) SQL 
 $serviceName = "MSSQL`$$($Env:NEW_SQL_INSTANCE_NAME)"; if ($Env:NEW_SQL_INSTANCE_NAME -eq "MSSQLSERVER") { $serviceName="MSSQLSERVER" }
 & sc.exe config "$serviceName" obj="NT AUTHORITY\SYSTEM"
 Write-Host "$(Get-Elapsed) Restart SQL_2005_SP4_X86 service"
-& net stop "MSSQL`$$($Env:NEW_SQL_INSTANCE_NAME)"
-& net start "MSSQL`$$($Env:NEW_SQL_INSTANCE_NAME)"
+& net stop "$serviceName"
+& net start "$serviceName"
 Write-Host "$(Get-Elapsed) Done"
