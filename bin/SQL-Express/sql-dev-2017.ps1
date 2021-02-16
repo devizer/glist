@@ -76,6 +76,9 @@ pushd "${Env:AppData}\Temp"
 & cmd /c "$KEY.exe" /ENU /IAcceptSqlServerLicenseTerms /Quiet /Verbose /ConfigurationFile=.\2017-DEV.ini /Action=Install /Language=en-US /InstallPath="${Env:SystemDrive}\SQL"
 popd
 
+Write-Host "$(Get-Elapsed) Finished. Log Files are below"
+Get-ChildItem -Path "C:\Program Files\Microsoft SQL Server\140\Setup Bootstrap\Log" -Recurse -ErrorAction SilentlyContinue -Force
+
 & cmd /c rd /q /s "${Env:SystemDrive}\SQLServer2017Media\Developer_ENU"
 
 "Done"
