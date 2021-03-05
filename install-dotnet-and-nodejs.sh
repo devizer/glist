@@ -17,7 +17,7 @@ echo Download buffer location: $TMPDIR
 is_jessie=false
 if [[ -f /etc/os-release ]]; then
   source /etc/os-release
-  if [[ "$VERSION_ID" == "8" && "$ID" == "debian" ]]; then
+  if [[ "${VERSION_ID:-}" == "8" && "$ID" == "debian" ]]; then
   	is_jessie=true
   fi
 fi
