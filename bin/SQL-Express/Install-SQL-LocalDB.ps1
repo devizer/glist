@@ -33,6 +33,7 @@ function Download-Essentials {
   $files=$("Essentials.7z.exe")
   $baseUrl="https://raw.githubusercontent.com/devizer/glist/master/Essentials/"
   $baseUrl="https://dl.bintray.com/devizer/archive/"
+  $baseUrl="https://master.dl.sourceforge.net/project/db-engine/"
   $Temp="$($Env:LocalAppData)"; if ($Temp -eq "") { $Temp="$($Env:UserProfile)"; }
   $Temp="$Temp\Temp"
   $Essentials="$Temp\Essentials"
@@ -40,7 +41,9 @@ function Download-Essentials {
   New-Item $Essentials -type directory -force -EA SilentlyContinue | out-null
   [System.Net.ServicePointManager]::ServerCertificateValidationCallback={$true};
   foreach($file in $files) {
-    $d=new-object System.Net.WebClient; $d.DownloadFile("$baseurl/$file","$Essentials\$file");
+    $fullUrl="$baseurl/$($file)?viasf=1"
+    Write-Host "Full Url: [$fullUrl]"
+    $d=new-object System.Net.WebClient; $d.DownloadFile("$baseurl/$($file)?viasf=1","$Essentials\$file");
   }
   pushd $Essentials
   $extract_log = (& .\Essentials.7z.exe -y 2>&1)
@@ -158,15 +161,16 @@ if (-not $needVersion) { $needVersion = Get-Supported-LocalDB-Version }
 $download_To="$($Essentials.Temp)\LocalDB-Installer"
 if ($essentials.IsX64) { $suffix="v$needVersion-x64"; } Else { $suffix="v12-x86"; }
 $msiFileName="local-databaseengine-$suffix.msi"
-$msiUrl="https://dl.bintray.com/devizer/archive/$msiFileName"
+$msiUrl="https://dl.bintray.com/devizer/archive/$($msiFileName)"
+$msiUrl="https://master.dl.sourceforge.net/project/db-engine/$($msiFileName)?viasf=1"
 Write-Host "LocalDB MSI: $msiUrl"
 $pars=@("`"$download_To`"", $msiUrl)
 pushd "$($Essentials.Temp)"
 & "$($Essentials.ParallelDownloader)" $pars
 if ($LASTEXITCODE) {
 	Write-Host "Fail $($Essentials.ParallelDownloader)"
-	Write-Host "Retring using curl"
-	& curl -ksSL -o "$download_To\$msiFileName" $msiUrl
+	Write-Host "Retring using curl: [$msiUrl]"
+	& curl.exe -kSL -o "$download_To\$msiFileName" $msiUrl
 }
 popd
 
