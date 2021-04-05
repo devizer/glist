@@ -288,3 +288,4 @@ __pycache__/
 *.xsd.cs
 
 /bin/SQL-Express/debug.ps1
+/bin/SQL-Express/SQL-Express-2008-SP3-x64.cmd-2021-04-04
