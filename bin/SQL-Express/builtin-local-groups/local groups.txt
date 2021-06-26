@@ -1,0 +1,75 @@
+﻿PS C:\Users\Administrator> Get-LocalGroup | Select Name, Objectclass, Principalsource,sid
+
+Name                                           ObjectClass PrincipalSource SID
+----                                           ----------- --------------- ---
+SQLServer2005MSSQLServerADHelperUser$VLAD64    Group                 Local S-1-5-21-2572037744-2614211606-2458567891-1008
+SQLServer2005MSSQLUser$VLAD64$SQL_2005_SP4_X86 Group                 Local S-1-5-21-2572037744-2614211606-2458567891-1009
+SQLServer2005SQLBrowserUser$VLAD64             Group                 Local S-1-5-21-2572037744-2614211606-2458567891-1002
+SQLServerFDHostUser$VLAD64$DEV_2008_R2         Group                 Local S-1-5-21-2572037744-2614211606-2458567891-1012
+SQLServerMSSQLServerADHelperUser$VLAD64        Group                 Local S-1-5-21-2572037744-2614211606-2458567891-1003
+SQLServerMSSQLUser$VLAD64$DEV_2008_R2          Group                 Local S-1-5-21-2572037744-2614211606-2458567891-1010
+SQLServerMSSQLUser$VLAD64$SQL_2008_R2_X86      Group                 Local S-1-5-21-2572037744-2614211606-2458567891-1004
+SQLServerMSSQLUser$VLAD64$SQL_2008_SP3         Group                 Local S-1-5-21-2572037744-2614211606-2458567891-1006
+SQLServerSQLAgentUser$VLAD64$DEV_2008_R2       Group                 Local S-1-5-21-2572037744-2614211606-2458567891-1011
+SQLServerSQLAgentUser$VLAD64$SQL_2008_R2_X86   Group                 Local S-1-5-21-2572037744-2614211606-2458567891-1005
+SQLServerSQLAgentUser$VLAD64$SQL_2008_SP3      Group                 Local S-1-5-21-2572037744-2614211606-2458567891-1007
+__vmware__                                     Group                 Local S-1-5-21-2572037744-2614211606-2458567891-1013
+Access Control Assistance Operators            Group                 Local S-1-5-32-579
+Administrators                                 Group                 Local S-1-5-32-544
+Backup Operators                               Group                 Local S-1-5-32-551
+Certificate Service DCOM Access                Group                 Local S-1-5-32-574
+Cryptographic Operators                        Group                 Local S-1-5-32-569
+Device Owners                                  Group                 Local S-1-5-32-583
+Distributed COM Users                          Group                 Local S-1-5-32-562
+Event Log Readers                              Group                 Local S-1-5-32-573
+Guests                                         Group                 Local S-1-5-32-546
+Hyper-V Administrators                         Group                 Local S-1-5-32-578
+IIS_IUSRS                                      Group                 Local S-1-5-32-568
+Network Configuration Operators                Group                 Local S-1-5-32-556
+Performance Log Users                          Group                 Local S-1-5-32-559
+Performance Monitor Users                      Group                 Local S-1-5-32-558
+Power Users                                    Group                 Local S-1-5-32-547
+Print Operators                                Group                 Local S-1-5-32-550
+RDS Endpoint Servers                           Group                 Local S-1-5-32-576
+RDS Management Servers                         Group                 Local S-1-5-32-577
+RDS Remote Access Servers                      Group                 Local S-1-5-32-575
+Remote Desktop Users                           Group                 Local S-1-5-32-555
+Remote Management Users                        Group                 Local S-1-5-32-580
+Replicator                                     Group                 Local S-1-5-32-552
+Storage Replica Administrators                 Group                 Local S-1-5-32-582
+System Managed Accounts Group                  Group                 Local S-1-5-32-581
+Users                                          Group                 Local S-1-5-32-545
+
+
+Get-LocalGroup | Select Name, Objectclass, Principalsource,sid
+
+Name                                                    ObjectClass PrincipalSource SID
+----                                                    ----------- --------------- ---
+SQLServer2005MSSQLServerADHelperUser$DESKTOP-6LM4MRQ    Группа                Local S-1-5-21-1027005724-3699015910-1205189512-1008
+SQLServer2005MSSQLUser$DESKTOP-6LM4MRQ$SQL_2005_SP4_X86 Группа                Local S-1-5-21-1027005724-3699015910-1205189512-1009
+SQLServer2005SQLBrowserUser$DESKTOP-6LM4MRQ             Группа                Local S-1-5-21-1027005724-3699015910-1205189512-1002
+SQLServerMSSQLServerADHelperUser$DESKTOP-6LM4MRQ        Группа                Local S-1-5-21-1027005724-3699015910-1205189512-1003
+SQLServerMSSQLUser$DESKTOP-6LM4MRQ$SQL_2008_R2_X86      Группа                Local S-1-5-21-1027005724-3699015910-1205189512-1004
+SQLServerMSSQLUser$DESKTOP-6LM4MRQ$SQL_2008_SP3         Группа                Local S-1-5-21-1027005724-3699015910-1205189512-1006
+SQLServerSQLAgentUser$DESKTOP-6LM4MRQ$SQL_2008_R2_X86   Группа                Local S-1-5-21-1027005724-3699015910-1205189512-1005
+SQLServerSQLAgentUser$DESKTOP-6LM4MRQ$SQL_2008_SP3      Группа                Local S-1-5-21-1027005724-3699015910-1205189512-1007
+IIS_IUSRS                                               Группа                Local S-1-5-32-568
+Администраторы                                          Группа                Local S-1-5-32-544
+Администраторы Hyper-V                                  Группа                Local S-1-5-32-578
+Владельцы устройства                                    Группа                Local S-1-5-32-583
+Гости                                                   Группа                Local S-1-5-32-546
+Криптографические операторы                             Группа                Local S-1-5-32-569
+Операторы архива                                        Группа                Local S-1-5-32-551
+Операторы настройки сети                                Группа                Local S-1-5-32-556
+Операторы помощи по контролю учетных записей            Группа                Local S-1-5-32-579
+Опытные пользователи                                    Группа                Local S-1-5-32-547
+Пользователи                                            Группа                Local S-1-5-32-545
+Пользователи DCOM                                       Группа                Local S-1-5-32-562
+Пользователи журналов производительности                Группа                Local S-1-5-32-559
+Пользователи системного монитора                        Группа                Local S-1-5-32-558
+Пользователи удаленного рабочего стола                  Группа                Local S-1-5-32-555
+Пользователи удаленного управления                      Группа                Local S-1-5-32-580
+Репликатор                                              Группа                Local S-1-5-32-552
+Управляемая системой группа учетных записей             Группа                Local S-1-5-32-581
+Читатели журнала событий                                Группа                Local S-1-5-32-573
+
