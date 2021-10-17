@@ -31,6 +31,9 @@ rem   Client Tools Connectivity,
 rem   Integration Services, 
 rem   and SQL Client Connectivity SDK.
 
+for /f "delims=;" %%i in ('powershell -command "(Get-WmiObject -Class Win32_Group | where { $_.SID -eq \"S-1-5-32-545\" }).Name"') DO set users=%%i
+If Not Defined users Set users=Users
+
 "%AppData%\Temp\%KEY%\extracted\Setup.exe" /QUIETSIMPLE /ENU /INDICATEPROGRESS /ACTION=Install ^
   /IAcceptSQLServerLicenseTerms /IACCEPTROPENLICENSETERMS ^
   /UpdateEnabled=True ^
@@ -45,7 +48,7 @@ rem   and SQL Client Connectivity SDK.
   /SQLSVCSTARTUPTYPE=AUTOMATIC ^
   /BROWSERSVCSTARTUPTYPE=AUTOMATIC ^
   /ADDCURRENTUSERASSQLADMIN=False ^
-  /SQLSYSADMINACCOUNTS="BUILTIN\USERS" ^
+  /SQLSYSADMINACCOUNTS="BUILTIN\%USERS%" ^
   /TCPENABLED=1 /NPENABLED=1
 
 rd /q /s "%AppData%\Temp\%KEY%"
