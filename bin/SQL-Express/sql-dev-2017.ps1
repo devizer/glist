@@ -20,6 +20,10 @@ if (! "$($Env:NEW_SQL_INSTANCE_NAME)") {
 }
 Write-Host "$(Get-Elapsed) Installing new instance [$($Env:NEW_SQL_INSTANCE_NAME)] of [SQL Server 2017 (Developer)]"
 
+try {
+  $usersGroup = (Get-WmiObject -Class Win32_Group | where { $_.SID -eq "S-1-5-32-545" }).Name
+} catch {}
+if ("$usersGroup" -eq "") { $usersGroup = "Users"; }
 
 '
 [OPTIONS]
@@ -54,7 +58,7 @@ ENABLERANU="False"
 SQLCOLLATION="Latin1_General_CI_AS"
 SQLSVCACCOUNT="NT AUTHORITY\SYSTEM"
 SQLSVCINSTANTFILEINIT="True"
-SQLSYSADMINACCOUNTS="BUILTIN\Users"
+SQLSYSADMINACCOUNTS="BUILTIN\' + $usersGroup + '"
 ADDCURRENTUSERASSQLADMIN="False"
 SECURITYMODE="SQL"
 SAPWD="`1qazxsw2"
