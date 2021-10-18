@@ -4,7 +4,7 @@ set v=2016-SP2-Express-with-Tools
 set KEY=SQL-%v%
 
 if Not Defined NEW_SQL_INSTANCE_NAME (
-  set NEW_SQL_INSTANCE_NAME=ADVANVED_2016SP2
+  set NEW_SQL_INSTANCE_NAME=ADVANCED_2016SP2
 )
 echo Installing new instance [%NEW_SQL_INSTANCE_NAME%] of [%KEY%]
 
