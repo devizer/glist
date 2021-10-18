@@ -28,6 +28,10 @@ $Sql_Servers_Definition = @(
       Keys = @("Express", "2008R2", "SqlServer", "x86");
       Script = ".\SQL-Express-2008-R2-SP2-x86.cmd"
    },
+  @{  Title = "SQL SERVER 2008 R2 SP2 x64+x86 (Advanced Express)";
+      Keys = @("Express", "2008R2", "SqlServer", "x86", "x64", "Advanced");
+      Script = ".\SQL-2008R2-SP2-Express-with-Tools.cmd"
+   },
   @{  Title = "SQL SERVER 2008 SP3 (Express)";
       Keys = @("Express", "2008", "SqlServer", "x86", "x64");
       Script = ".\SQL-Express-2008-SP3-x64.cmd"
@@ -233,6 +237,7 @@ if ($Env:SQL_SETUP_BOOTSTRAP_TEST) {
       @{ Args = @("SqlServer", "2014", "Express");    Expected="SQL SERVER 2014 SP2 x86 (Express)" },
       @{ Args = @("SqlServer", "2012", "Express");    Expected="SQL SERVER 2012 SP3 (Express)" },
       @{ Args = @("SqlServer", "2008R2", "Express");  Expected="SQL SERVER 2008 R2 SP2 x86 (Express)" },
+      @{ Args = @("SqlServer", "2008R2", "Express", "Advanced");  Expected="SQL SERVER 2008 R2 SP2 x64+x86 (Advanced Express)" },
       @{ Args = @("SqlServer", "2008", "Express");    Expected="SQL SERVER 2008 SP3 (Express)" },
       @{ Args = @("SqlServer", "2005", "Express");    Expected="SQL SERVER 2005 SP4 x86 (Express)" },
       @{ Args = @("SqlServer");                       Expected="SQL SERVER 2019 (Developer)" },
