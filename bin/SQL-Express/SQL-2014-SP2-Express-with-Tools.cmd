@@ -1,16 +1,16 @@
 @echo off
 
-set v=2008R2-SP2-Express-with-Tools
+set v=2014-SP2-Express-with-Tools
 set KEY=SQL-%v%
 
 if Not Defined NEW_SQL_INSTANCE_NAME (
-  set NEW_SQL_INSTANCE_NAME=ADV_2008R2_SP2
+  set NEW_SQL_INSTANCE_NAME=ADV_2014_SP2
 )
 echo Installing new instance [%NEW_SQL_INSTANCE_NAME%] of [%KEY%]
 
-echo DOWNLOADING SQL %v% (about 1 Gb)
-Set url64=https://download.microsoft.com/download/0/4/B/04BE03CD-EAF3-4797-9D8D-2E08E316C998/SQLEXPRADV_x64_ENU.exe
-Set url86=https://download.microsoft.com/download/0/4/B/04BE03CD-EAF3-4797-9D8D-2E08E316C998/SQLEXPRADV_x86_ENU.exe
+echo DOWNLOADING SQL %v% (about 1.4 Gb)
+Set url64=https://download.microsoft.com/download/2/A/5/2A5260C3-4143-47D8-9823-E91BB0121F94/SQLEXPRADV_x64_ENU.exe
+Set url86=https://download.microsoft.com/download/2/A/5/2A5260C3-4143-47D8-9823-E91BB0121F94/SQLEXPRADV_x86_ENU.exe
 If "%PROCESSOR_ARCHITECTURE%"=="AMD64" (
   Set url=%url64% 
   Set Shared=x64
@@ -35,4 +35,4 @@ popd
 
 
 del /q "%outfile%" >nul 2>&1
-rem rd /q /s "%AppData%\Temp\%KEY%"
+rd /q /s "%AppData%\Temp\%KEY%"
