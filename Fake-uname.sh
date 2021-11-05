@@ -27,10 +27,11 @@ echo "uname -a: $(uname -a)"
 OPTIND=1         # Reset in case getopts has been used previously in the shell.
 
 if [ $# -eq 0 ]; then
-	/bin/uname
+	/bin/uname-bak
 fi
 
 while getopts "asnrvmpio" opt; do
+# while getopts -o "asnrvmpio" --long "all,kernel-name,nodename,kernel-release,kernel-version,machine,processor,hardware-platform,operating-system" opt; do
  case "$opt" in
   a) echo "Linux $(hostname) 4.19.0-18-armmp-lpae #1 SMP Debian 4.19.208-1 (2021-09-29) armv7l GNU/Linux" ;;
   s) echo "Linux" ;;
@@ -43,3 +44,7 @@ while getopts "asnrvmpio" opt; do
   o) echo "GNU/Linux" ;;
  esac
 done
+
+
+
+                
