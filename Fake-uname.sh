@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Tool to fake the output in chroot to adjust the
 # used kernel version in different Makefiles.
@@ -6,7 +6,7 @@
 # prepare system by rehash uname from /bin/uname
 # to /tmp/uname: "hash -p /tmp/uname uname"
 
-funtion _generate_() {
+function _generate_() {
 for a in a s n r v m p i o; do eval "uname -$a"; done
 for a in a s n r v m p i o; do v=$(eval "uname -$a"); echo $a') echo "'$v'" ;;'; done
 }
@@ -17,7 +17,7 @@ if [[ ! -f /usr/bin/uname-bak ]]; then
 fi
 script=https://raw.githubusercontent.com/devizer/glist/master/Fake-uname.sh; 
 cmd="(wget --no-check-certificate -O /tmp/Fake-uname.sh $script 2>/dev/null || curl -kSL -o /tmp/Fake-uname.sh $script)"
-eval "$cmd || $cmd || $cmd" && sudo cp /tmp/Fake-uname.sh /usr/bin/uname && echo "OK"
+eval "$cmd || $cmd || $cmd" && sudo cp /tmp/Fake-uname.sh /usr/bin/uname && sudo chmod +x /usr/bin/uname; echo "OK"
 }
 
 # A POSIX variable
