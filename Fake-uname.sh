@@ -27,7 +27,7 @@ echo "uname -a: $(uname -a)"
 OPTIND=1         # Reset in case getopts has been used previously in the shell.
 
 if [ $# -eq 0 ]; then
-	/bin/uname-bak
+	/usr/bin/uname-bak
 fi
 
 while getopts "asnrvmpio" opt; do
