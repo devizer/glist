@@ -10,7 +10,7 @@ for %%f in (RegisterFont.exe RegisterFont.exe.config unzip.exe) DO (
 )
 
 
-for %%z in (Roboto Fira OpenSans liberation ubuntu-font-family Google-SuperFamilies Barlow_Semi_Condensed) DO (
+for %%z in (Barlow_Semi_Condensed Roboto Fira OpenSans liberation ubuntu-font-family Google-SuperFamilies) DO (
   set url=https://raw.githubusercontent.com/devizer/glist/master/fonts/%%z.zip
   set outfile=%work%\%%z.zip
   echo Downloading "%%z" into [%work%\%%z]

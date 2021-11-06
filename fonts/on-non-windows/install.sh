@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 pushd /tmp
-for f in Roboto Fira OpenSans liberation ubuntu-font-family Google-SuperFamilies Barlow_Semi_Condensed; do
+for f in Barlow_Semi_Condensed Roboto Fira OpenSans liberation ubuntu-font-family Google-SuperFamilies; do
   echo $f
   wget --no-check-certificate -O $f.zip https://raw.githubusercontent.com/devizer/glist/master/fonts/$f.zip
   unzip -o $f.zip -d fontfiles/
