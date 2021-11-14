@@ -1,19 +1,23 @@
 # https://stackoverflow.com/questions/43291389/using-jq-to-assign-multiple-output-variables
 API_BASE="${API_BASE:-https://dev.azure.com/devizer/Universe.CpuUsage}"
 ARTIFACT_NAME="${ARTIFACT_NAME:-BinTests}"
+# PIPELINE_NAME="" - optional of more then one pipeline produce same ARTIFACT_NAME
 
 
 function GetNewestArtifact() {
   ARTIFACT_URL=
   ARTIFACT_ID=
   local builds=$(GetBuilds)
-  local build_id build_name build_status build_result
-  while IFS="|" read -r build_id build_name build_status build_result; do
+  local build_id build_name pipeline_name build_status build_result
+  while IFS="|" read -r build_id build_name pipeline_name build_status build_result; do
     local artifacts=$(GetArtifacts "$build_id")
     local artifact_id artifact_name artifact_url
     while IFS="|" read -r artifact_id artifact_name artifact_url; do
       echo "try the [$build_id: $build_name] build of [$(basename $API_BASE)]"
       if [[ "$artifact_name" == "$ARTIFACT_NAME" ]]; then
+        if [[ -n "$PIPELINE_NAME" ]] && [[ "$PIPELINE_NAME" != "$pipeline_name" ]]; then
+          continue;
+        fi
         BUILD_ID="$build_id"
         BUILD_NAME="$build_name"
         BUILD_STATUS="$build_status"
@@ -74,7 +78,7 @@ function GetBuilds() {
   local url="${API_BASE}/_apis/build/builds?api-version=6.0"
   local file=$(GetTempFileFullName builds);
   local json=$(DownloadJson "$url" "$file.json")
-  f='.value | map({"id":.id|tostring, "buildNumber":.buildNumber, r:.result, s:.status}) | map([.id, .buildNumber, .r, .s] | join("|")) | join("\n") '
+  f='.value | map({"id":.id|tostring, "buildNumber":.buildNumber, p:.definition?.name?, r:.result, s:.status}) | map([.id, .buildNumber, .p, .r, .s] | join("|")) | join("\n") '
   jq -r "$f" "$file.json" | sort -r -k1 -n -t"|" > "$file.txt"
   echo "$file.txt"
 }
