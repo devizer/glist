@@ -21,7 +21,7 @@ function GetNewestArtifact() {
         ARTIFACT_ID="$artifact_id"
         ARTIFACT_URL="$artifact_url"
         FetchCommit $build_id
-        Say "Newest Artifact '$ARTIFACT_NAME'
+        Say "The Newest '$ARTIFACT_NAME' Artifact:
 Build:   $build_id $build_name
 Commit:  $COMMIT_HASH
 Author:  $COMMIT_AUTHOR
