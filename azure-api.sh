@@ -84,7 +84,7 @@ function DownloadJson() {
   # try-and-retry wget $header1 -q -nv --no-check-certificate -O "$file" "$url" 2>/dev/null || curl $header2 -ksSL -o "$file" "$url"
   # echo try-and-retry wget $header1 --no-check-certificate -O "$file" "$url" 2>/dev/null || curl $header2 -kSL -o "$file" "$url"
   # 
-  eval try-and-retry wget $header1 --no-check-certificate -O "$file" "$url" 2>/dev/null || eval try-and-retry curl $header2 -kSL -o "$file" "$url"
+  eval try-and-retry wget $header1 --no-check-certificate -O "$file" "$url" 2>/dev/null || eval try-and-retry curl $header2 -ksSL -o "$file" "$url"
   echo "$file"
 }
 
