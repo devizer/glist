@@ -68,30 +68,30 @@ function GetTempFileFullName() {
   echo "$ret"
 }
 
-function DownloadJson() {
+function DownloadViaApi() {
   local url=$1
+  local file=$2;
   local header1="";
   local header2="";
   if [[ -n "$API_PAT" ]]; then 
     local B64_PAT=$(printf "%s"":$API_PAT" | base64)
-    # echo B64_PAT: $B64_PAT
     header1='--header="Authorization: Basic '${B64_PAT}'"'
-    # echo header1: $header1
     header2='--header "Authorization: Basic '${B64_PAT}'"'
-    # echo header2: $header2
   fi
-  local file=$2;
-  # try-and-retry wget $header1 -q -nv --no-check-certificate -O "$file" "$url" 2>/dev/null || curl $header2 -ksSL -o "$file" "$url"
-  # echo try-and-retry wget $header1 --no-check-certificate -O "$file" "$url" 2>/dev/null || curl $header2 -kSL -o "$file" "$url"
-  # 
-  eval try-and-retry wget $header1 --no-check-certificate -O "$file" "$url" 2>/dev/null || eval try-and-retry curl $header2 -ksSL -o "$file" "$url"
+  local progress1="2>/dev/null";
+  local progress2="-s"
+  if [[ -z "API_SHOW_PROGRESS" ]]; then
+    progress1=""
+    progress2=""
+  fi
+  eval try-and-retry wget $header1 --no-check-certificate -O "$file" "$url" $progress1 || eval try-and-retry curl $header2 $progress2 -kSL -o "$file" "$url"
   echo "$file"
 }
 
 function GetBuilds() {
   local url="${API_BASE}/_apis/build/builds?api-version=6.0"
   local file=$(GetTempFileFullName builds);
-  local json=$(DownloadJson "$url" "$file.json")
+  local json=$(DownloadViaApi "$url" "$file.json")
   f='.value | map({"id":.id|tostring, "buildNumber":.buildNumber, p:.definition?.name?, r:.result, s:.status}) | map([.id, .buildNumber, .p, .r, .s] | join("|")) | join("\n") '
   jq -r "$f" "$file.json" | sort -r -k1 -n -t"|" > "$file.txt"
   echo "$file.txt"
@@ -101,7 +101,7 @@ function GetArtifacts() {
   local buildId=$1
   local url="${API_BASE}/_apis/build/builds/${buildId}/artifacts?api-version=6.0"
   local file=$(GetTempFileFullName artifacts-$buildId);
-  local json=$(DownloadJson "$url" "$file.json")
+  local json=$(DownloadViaApi "$url" "$file.json")
   f='.value | map({"id":.id|tostring, "name":.name, "url":.resource?.downloadUrl?}) | map([.id, .name, .url] | join("|")) | join("\n")'
   jq -r "$f" "$file.json" > "$file.txt"
   echo "$file.txt"
@@ -116,7 +116,7 @@ function FetchCommit() {
   COMMIT_LINK=
   local url="${API_BASE}/_apis/build/builds/${buildId}/changes?api-version=6.0"
   local file=$(GetTempFileFullName changes-$buildId);
-  local json=$(DownloadJson "$url" "$file.json")
+  local json=$(DownloadViaApi "$url" "$file.json")
   f='.value | map({"id":.id, "m":.message, "a":.author?.displayName?, "t":.timestamp, "u":.displayUri}) | map([.id, .m, .a, .t, .u] | join("|")) | join("\n")'
   jq -r "$f" "$file.json" > "$file.txt"
   COMMIT_HASH=$(cat "$file.json" | jq -r '.value[0].id')
@@ -128,10 +128,3 @@ function FetchCommit() {
 
 
 # GetNewestArtifact
-
-function _pat_example_() {
-MY_PAT=yourPAT # replace "yourPAT" with your actual PAT
-B64_PAT=$(printf "%s"":$MY_PAT" | base64)
-git -c http.extraHeader="Authorization: Basic ${B64_PAT}" clone https://dev.azure.com/yourOrgName/yourProjectName/_git/yourRepoName 
-
-}
