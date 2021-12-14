@@ -80,11 +80,11 @@ function DownloadViaApi() {
   fi
   local progress1="";
   local progress2="";
-  if [[ -z "$API_SHOW_PROGRESS" ]]; then
+  if [[ "$API_SHOW_PROGRESS" != "True" ]]; then
     progress1="-q -nv"
     progress2="-s"
   fi
-  eval try-and-retry wget $header1 $progress1 --no-check-certificate -O "$file" '$url' || eval try-and-retry curl $header2 $progress2 -kSL -o "$file" '$url'
+  eval try-and-retry wget $header1 $progress1 --no-check-certificate -O '$file' '$url' || eval try-and-retry curl $header2 $progress2 -kSL -o '$file' '$url'
   echo "$file"
 }
 
