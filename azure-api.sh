@@ -78,13 +78,13 @@ function DownloadViaApi() {
     header1='--header="Authorization: Basic '${B64_PAT}'"'
     header2='--header "Authorization: Basic '${B64_PAT}'"'
   fi
-  local progress1="2>/dev/null";
+  local progress1="-q -nv";
   local progress2="-s";
   if [[ -z "$API_SHOW_PROGRESS" ]]; then
     progress1=""
     progress2=""
   fi
-  eval try-and-retry wget $header1 --no-check-certificate -O "$file" "$url" $progress1 || eval try-and-retry curl $header2 $progress2 -kSL -o "$file" "$url"
+  eval try-and-retry wget $header1 $progress1 --no-check-certificate -O "$file" '$url' || eval try-and-retry curl $header2 $progress2 -kSL -o "$file" '$url'
   echo "$file"
 }
 
