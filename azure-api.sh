@@ -1,6 +1,7 @@
 # https://stackoverflow.com/questions/43291389/using-jq-to-assign-multiple-output-variables
 API_BASE="${API_BASE:-https://dev.azure.com/devizer/Universe.CpuUsage}"
 ARTIFACT_NAME="${ARTIFACT_NAME:-BinTests}"
+API_PAT="${API_PAT:-}"; # empty for public project, mandatory for private
 # PIPELINE_NAME="" - optional of more then one pipeline produce same ARTIFACT_NAME
 
 
@@ -69,8 +70,15 @@ function GetTempFileFullName() {
 
 function DownloadJson() {
   local url=$1
+  local header1="";
+  local header2="";
+  if [[ -n "$API_PAT" ]]; then 
+    local B64_PAT=$(printf "%s"":$API_PAT" | base64)
+    header1='--header="Authorization: Basic '${B64_PAT}'"'
+    header2='--header "Authorization: Basic '${B64_PAT}'"'
+  fi
   local file=$2;
-  try-and-retry wget -q -nv --no-check-certificate -O "$file" "$url" 2>/dev/null || curl -ksSL -o "$file" "$url"
+  try-and-retry wget $header1 -q -nv --no-check-certificate -O "$file" "$url" 2>/dev/null || curl $header2 -ksSL -o "$file" "$url"
   echo "$file"
 }
 
@@ -114,3 +122,10 @@ function FetchCommit() {
 
 
 # GetNewestArtifact
+
+function _pat_example_() {
+MY_PAT=yourPAT # replace "yourPAT" with your actual PAT
+B64_PAT=$(printf "%s"":$MY_PAT" | base64)
+git -c http.extraHeader="Authorization: Basic ${B64_PAT}" clone https://dev.azure.com/yourOrgName/yourProjectName/_git/yourRepoName 
+
+}

@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# url=https://raw.githubusercontent.com/devizer/glist/master/fonts/on-non-windows/install.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -sSL $url) | bash
+
 pushd /tmp
 for f in Barlow_Semi_Condensed Roboto Fira OpenSans liberation ubuntu-font-family Google-SuperFamilies; do
   echo $f
