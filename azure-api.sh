@@ -69,8 +69,8 @@ function GetTempFileFullName() {
 }
 
 function DownloadViaApi() {
-  local url=$1
-  local file=$2;
+  local url="$1"
+  local file="$2";
   local header1="";
   local header2="";
   if [[ -n "$API_PAT" ]]; then 
@@ -79,8 +79,8 @@ function DownloadViaApi() {
     header2='--header "Authorization: Basic '${B64_PAT}'"'
   fi
   local progress1="2>/dev/null";
-  local progress2="-s"
-  if [[ -z "API_SHOW_PROGRESS" ]]; then
+  local progress2="-s";
+  if [[ -z "$API_SHOW_PROGRESS" ]]; then
     progress1=""
     progress2=""
   fi
