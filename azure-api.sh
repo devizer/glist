@@ -74,17 +74,17 @@ function DownloadJson() {
   local header2="";
   if [[ -n "$API_PAT" ]]; then 
     local B64_PAT=$(printf "%s"":$API_PAT" | base64)
-    echo B64_PAT: $B64_PAT
+    # echo B64_PAT: $B64_PAT
     header1='--header="Authorization: Basic '${B64_PAT}'"'
-    echo header1: $header1
+    # echo header1: $header1
     header2='--header "Authorization: Basic '${B64_PAT}'"'
-    echo header2: $header2
+    # echo header2: $header2
   fi
   local file=$2;
   # try-and-retry wget $header1 -q -nv --no-check-certificate -O "$file" "$url" 2>/dev/null || curl $header2 -ksSL -o "$file" "$url"
-  echo try-and-retry wget $header1 --no-check-certificate -O "$file" "$url" 2>/dev/null || curl $header2 -kSL -o "$file" "$url"
+  # echo try-and-retry wget $header1 --no-check-certificate -O "$file" "$url" 2>/dev/null || curl $header2 -kSL -o "$file" "$url"
   # 
-  eval try-and-retry wget $header1 --no-check-certificate -O "$file" "$url" || eval curl $header2 -kSL -o "$file" "$url"
+  eval try-and-retry wget $header1 --no-check-certificate -O "$file" "$url" 2>/dev/null || eval try-and-retry curl $header2 -kSL -o "$file" "$url"
   echo "$file"
 }
 
