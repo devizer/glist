@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# url=https://raw.githubusercontent.com/devizer/glist/master/bin/net-test-runners.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -sSL $url) | bash
 export NET_TEST_RUNNERS_INSTALL_DIR=/opt;
 archive=https://raw.githubusercontent.com/devizer/glist/master/bin/net-test-runners.tar.gz;
 cmd="(wget -O /tmp/net-test-runners.tar.gz --no-check-certificate $archive 2>/dev/null || curl -o /tmp/net-test-runners.tar.gz -kSL $archive)"
