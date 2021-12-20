@@ -14,7 +14,7 @@ function download_runtimes() {
   eval "$cmd" || eval "$cmd" || eval "$cmd" || rm -f $file
   echo "Extracting $name"
   unzip -o -q -d $work $file
-  cp -r $work/runtimes .
+  cp -rf $work/runtimes .
   for ext in pdb dll xml; do
     find runtimes -name '*.'$ext -exec sh -c "echo deleting {}; rm {}" \;
   done
