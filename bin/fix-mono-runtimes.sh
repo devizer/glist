@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env bash
+#!/usr/bin/env bash
 # url=https://raw.githubusercontent.com/devizer/glist/master/bin/fix-mono-runtimes.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -sSL $url) | bash
 
 function download_runtimes() {
