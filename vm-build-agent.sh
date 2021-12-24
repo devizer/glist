@@ -76,8 +76,9 @@ function RunVM() {
   local mapto="$VM_STORAGE/$vm_key/fs"
   VM_ROOT_FS="$mapto"
   echo "SSH is ready"
-  echo "Mapping root fs of the $vm_key to [$mapto]"
   mkdir -p "$mapto"
+  Say "Mapping root fs of the $vm_key to [$mapto]"
   echo "${VM_PASS}" | time sshfs -o password_stdin,cache_timeout=120 root@localhost:/ -p "${VM_SSH_PORT}" "$mapto"
+  Say "Mapping finished"
 }
 
