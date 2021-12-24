@@ -79,6 +79,7 @@ function RunVM() {
   mkdir -p "$mapto"
   Say "Mapping root fs of the $vm_key to [$mapto]"
   echo "${VM_PASS}" | time sshfs -o password_stdin,cache_timeout=120 root@localhost:/ -p "${VM_SSH_PORT}" "$mapto"
-  Say "Mapping finished"
+  local mapError=$?;
+  Say "Mapping finished. Exit code $mapError";
 }
 
