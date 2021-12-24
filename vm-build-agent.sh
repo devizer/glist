@@ -31,7 +31,7 @@ function DownloadVM() {
       Say "
 FROM: $url
   TO: $full_name"
-      wget --no-check-certificate -O "$full_name" $url || curl -kSL -o "$full_name" $url
+      wget -q --show-progress --progress=bar:force --no-check-certificate -O "$full_name" $url || curl -ksSL -o "$full_name" $url
       if [ $? -ne 0 ]; then
         rm -f "$full_name"
       else
