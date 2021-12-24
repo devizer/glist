@@ -28,7 +28,7 @@ function DownloadVM() {
     if [[ -s "$full_name.ok" ]] && [[ -s "$full_name" ]]; then
       echo "Already downloaded $full_name"
     else
-      Say "
+      Say "$n
 FROM: $url
   TO: $full_name"
       wget -q --no-check-certificate -O "$full_name" $url || curl -ksSL -o "$full_name" $url
