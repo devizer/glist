@@ -44,7 +44,7 @@ FROM: $url
 function ShutdownVM() {
   local vm_key="$1"
   Say "Shutdown $vm_key on port $VM_SSH_PORT"
-  sshpass -p "${VM_PASS}" ssh -o StrictHostKeyChecking=no "${VM_USER}@127.0.0.1" -p "${VM_SSH_PORT}" shutdown now
+  sshpass -p "${VM_PASS}" ssh -o StrictHostKeyChecking=no "${VM_USER}@127.0.0.1" -p "${VM_SSH_PORT}" shutdown now || true
 }
 
 function EvaluateCommand() {
