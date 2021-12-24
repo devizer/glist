@@ -61,8 +61,8 @@ function RunVM() {
   local n=120
   while [ $n -gt 0 ]; do
     echo "Waiting for ssh connection to $vm_key on port $VM_SSH_PORT"
-    echo sshpass -p "${VM_PASS}" ssh -o StrictHostKeyChecking=no "${VM_USER}@127.0.0.1" -p "${VM_SSH_PORT}" "sh -c 'echo; echo what the hell; uname; rm -f /etc/profile.d/NVM.sh; echo VM HOST NAME is $(hostname)'"
-    sshpass -p "${VM_PASS}" ssh -o StrictHostKeyChecking=no "${VM_USER}@127.0.0.1" -p "${VM_SSH_PORT}" "sh -c 'echo; echo what the hell; uname; rm -f /etc/profile.d/NVM.sh; echo VM HOST NAME is $(hostname)'"
+    echo sshpass -p "${VM_PASS}" ssh -o StrictHostKeyChecking=no "${VM_USER}@127.0.0.1" -p "${VM_SSH_PORT}" "sh -c 'echo; echo what the hell; uname -a; rm -f /etc/profile.d/NVM.sh; echo VM HOST NAME is $(hostname)'"
+    sshpass -p "${VM_PASS}" ssh -o StrictHostKeyChecking=no "${VM_USER}@127.0.0.1" -p "${VM_SSH_PORT}" "sh -c 'echo; echo what the hell; uname -a; rm -f /etc/profile.d/NVM.sh; echo VM HOST NAME is \$(hostname)'"
     local ok=$?;
     if [ $ok -eq 0 ]; then break; fi
     sleep 1
