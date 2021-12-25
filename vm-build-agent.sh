@@ -15,7 +15,7 @@ function DownloadVM() {
   elif [[ "$vm_key" == "ARMv7" ]]; then
     files="ephemeral.qcow2 initrd.img vmlinuz Debian-10-arm-final.qcow2 start-vm.sh"
     url_base="https://sourceforge.net/projects/debian-vm/files/ARMv7"
-  elif [[ "$vm_key" == "ARMv7" ]]; then
+  elif [[ "$vm_key" == "ARMv7-Stretch" ]]; then
     files="initrd.img vmlinuz Debian-9-arm.qcow2 start-vm.sh"
     url_base="https://sourceforge.net/projects/debian-vm/files/ARMv7-Stretch"
   else
