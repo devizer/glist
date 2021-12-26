@@ -80,9 +80,9 @@ function RunVM() {
   VM_ROOT_FS="$mapto"
   echo "SSH is ready"
   mkdir -p "$mapto"
-  Say "Mapping root fs of the $vm_key to [$mapto] (127.0.0.1) with advanced options v3"
+  Say "Mapping root fs of the $vm_key to [$mapto] (127.0.0.1) with advanced options v4"
   # -o SSHOPT=StrictHostKeyChecking=no: fuse: unknown option `SSHOPT=StrictHostKeyChecking=no'
-  echo "${VM_PASS}" | time sudo sshfs ${VM_USER}@127.0.0.1:/ "$mapto" -p "${VM_SSH_PORT}" -o password_stdin
+  echo "${VM_PASS}" | sshfs ${VM_USER}@127.0.0.1:/ "$mapto" -p "${VM_SSH_PORT}" -o password_stdin
   local mapError=$?;
   Say "Mapping finished. Exit code $mapError";
 }
