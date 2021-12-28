@@ -4,7 +4,7 @@
 
 function Install_Docker_Compose() {
   local tmp="${TMPDIR:-/tmp}"
-  DCDIR="${DCDIR:-/opt/pwsh}"
+  DCDIR="${DCDIR:-/usr/local/bin}"
   if [[ -z "$DCVER" ]]; then
     local RawVer="$(Get-GitHub-Latest-Release docker compose)"
     DCVER="${RawVer#*v}";
@@ -24,7 +24,7 @@ function Install_Docker_Compose() {
     [[ "$uname" == armv6* ]] && suf=linux-armv6
   fi
   local url="https://github.com/docker/compose/releases/download/v$DCVER/docker-compose-$suf"
-  local file="$DCDIR/docker-compose"
+  local file="$(basename $url)"
   Say  "Downloading Docker Compose [$DCVER] for [$uname] into [$DCDIR]"
   echo "       url: $url"
   echo "      file: $tmp/$file"
