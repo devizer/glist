@@ -12,9 +12,9 @@ function Install_PowerShell() {
   PSVER="${PSVER:-7.2.1}";
   local suf=linux-x64; [[ "$(uname -m)" == aarch64 ]] && suf=linux-arm64; [[ "$(uname -m)" == armv7* ]] && suf=linux-arm32
   # osx
-  local System="${System:-$(uname -s)}"
+  local system="$(uname -s)"
   local uname="$(uname -m)"
-  if [[ "$System" == "Darwin" ]]; then
+  if [[ "$system" == "Darwin" ]]; then
     suf=osx-x64; [[ "$uname" == arm* ]] && suf=osx-arm64 # x86_64 for intel
   else
     # Linux?
@@ -25,12 +25,13 @@ function Install_PowerShell() {
   Say  "Downloading PowerShell [$PSVER] for [$(uname -m)] into [$PSDIR]"
   echo "       url: $url"
   echo "      file: $tmp/$file"
-  try-and-retry wget --no-check-certificate -O "$tmp/$file" "$url" || try-and-retry curl -kSL -o "$tmp/$file" "$url" || rm -f "$tmp/$file"
+  try-and-retry curl -kSL -o "$tmp/$file" "$url" || try-and-retry wget --no-check-certificate -O "$tmp/$file" "$url" || rm -f "$tmp/$file"
   sudo mkdir -p "$PSDIR"
   pushd $PSDIR >/dev/null
   if [[ -n "$(command -v pv)" ]]; then pv "$tmp/$file" | sudo tar xzf -; else sudo tar xzf "$tmp/$file"; fi
   popd >/dev/null
   rm -f "$tmp/$file"
+  sudo chmod +x "$PSDIR/pwsh" 2>/dev/null
   test -s "$PSDIR/pwsh" && sudo ln -f -s "$PSDIR/pwsh" /usr/local/bin/pwsh
   Say "PowerShell version: $(pwsh --version)"
 }
