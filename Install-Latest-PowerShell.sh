@@ -3,6 +3,7 @@
 # url=https://raw.githubusercontent.com/devizer/glist/master/Install-Latest-PowerShell.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
 
 function Install_PowerShell() {
+  local tmp="${TMPDIR:-/tmp}"
   PSDIR="${PSDIR:-/opt/pwsh}"
   if [[ -z "$PSVER" ]]; then
     local RawVer="$(Get-GitHub-Latest-Release PowerShell PowerShell)"
@@ -23,13 +24,14 @@ function Install_PowerShell() {
   local file="$(basename $url)"
   Say  "Downloading PowerShell [$PSVER] for [$(uname -m)] into [$PSDIR]"
   echo "       url: $url"
-  try-and-retry wget --no-check-certificate -O "/tmp/$file" "$url" || try-and-retry curl -kSL -o "/tmp/$file" "$url" || rm -f "/tmp/$file"
+  echo "      file: $tmp/$file"
+  try-and-retry wget --no-check-certificate -O "$tmp/$file" "$url" || try-and-retry curl -kSL -o "$tmp/$file" "$url" || rm -f "$tmp/$file"
   sudo mkdir -p "$PSDIR"
   pushd $PSDIR >/dev/null
-  if [[ -n "$(command -v pv)" ]]; then pv "/tmp/$file" | sudo tar xzf -; else sudo tar xzf "/tmp/$file"; fi
+  if [[ -n "$(command -v pv)" ]]; then pv "$tmp/$file" | sudo tar xzf -; else sudo tar xzf "$tmp/$file"; fi
   popd >/dev/null
-  rm -f "/tmp/$file"
-  test -s $PSDIR/pwsh && ln -f -s $PSDIR/pwsh /usr/local/bin/pwsh
+  rm -f "$tmp/$file"
+  test -s "$PSDIR/pwsh" && sudo ln -f -s "$PSDIR/pwsh" /usr/local/bin/pwsh
   Say "PowerShell version: $(pwsh --version)"
 }
 
