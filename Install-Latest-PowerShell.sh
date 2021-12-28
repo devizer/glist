@@ -10,15 +10,17 @@ function Install_PowerShell() {
     PSVER="${RawVer#*v}";
   fi
   PSVER="${PSVER:-7.2.1}";
-  local suf=linux-x64; [[ "$(uname -m)" == aarch64 ]] && suf=linux-arm64; [[ "$(uname -m)" == armv7* ]] && suf=linux-arm32
-  # osx
+  # url depends on os and arch
   local system="$(uname -s)"
   local uname="$(uname -m)"
+  local suf
   if [[ "$system" == "Darwin" ]]; then
     suf=osx-x64; [[ "$uname" == arm* ]] && suf=osx-arm64 # x86_64 for intel
   else
     # Linux?
-    suf=linux-x64; [[ "$uname" == aarch64 ]] && suf=linux-arm64; [[ "$uname" == armv7* ]] && suf=linux-arm32
+    suf=linux-x64; 
+    [[ "$uname" == aarch64 ]] && suf=linux-arm64; 
+    [[ "$uname" == armv7* ]] && suf=linux-arm32
   fi
   local url="https://github.com/PowerShell/PowerShell/releases/download/v$PSVER/powershell-$PSVER-$suf.tar.gz"
   local file="$(basename $url)"
