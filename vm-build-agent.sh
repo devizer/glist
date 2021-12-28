@@ -18,6 +18,9 @@ function DownloadVM() {
   elif [[ "$vm_key" == "ARMv7-Stretch" ]]; then
     files="initrd.img vmlinuz debian-9-arm.qcow2 start-vm.sh"
     url_base="https://sourceforge.net/projects/debian-vm/files/ARMv7-Stretch"
+  elif [[ "$vm_key" == "ARMv7-Bullseye" ]]; then
+    files="initrd.img vmlinuz disk.qcow2 start-vm.sh"
+    url_base="https://sourceforge.net/projects/debian-vm/files/ARMv7-Bullseye"
   else
     echo "vm build agent ERROR: VM [$vm_key] is not supported"
     return 1;
