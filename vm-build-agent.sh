@@ -4,7 +4,7 @@ export VM_STORAGE="${VM_STORAGE:-$home/vm}"
 export VM_USER="${VM_USER:-root}"
 export VM_PASS="${VM_PASS:-pass}"
 export VM_SSH_PORT="${VM_SSH_PORT:-2202}"
-export VM_MEM="${VM_MEM:-300M}"
+export VM_MEM="${VM_MEM:-1200M}"
 
 
 function DownloadVM() {
