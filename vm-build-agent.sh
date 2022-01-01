@@ -4,7 +4,7 @@ export VM_STORAGE="${VM_STORAGE:-$home/vm}"
 export VM_USER="${VM_USER:-root}"
 export VM_PASS="${VM_PASS:-pass}"
 export VM_SSH_PORT="${VM_SSH_PORT:-2202}"
-export VM_MEM=300M
+export VM_MEM="${VM_MEM:-300M}"
 
 
 function DownloadVM() {
@@ -21,6 +21,9 @@ function DownloadVM() {
   elif [[ "$vm_key" == "ARMv7-Bullseye" ]]; then
     files="initrd.img vmlinuz disk.qcow2 start-vm.sh"
     url_base="https://sourceforge.net/projects/debian-vm/files/ARMv7-Bullseye"
+  elif [[ "$vm_key" == "ARMv8-Bullseye" ]]; then
+    files="initrd.img vmlinuz disk.qcow2 start-vm.sh"
+    url_base="https://sourceforge.net/projects/debian-vm/files/ARMv8-Bullseye"
   else
     echo "vm build agent ERROR: VM [$vm_key] is not supported"
     return 1;
