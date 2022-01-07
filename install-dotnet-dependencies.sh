@@ -39,11 +39,11 @@ fi
 # CentOS 8. Fedora 26 - 31, 
 # Manual Tests: Red Hat 8.2
 if [[ -n "$(command -v dnf || true)" ]]; then
-  smart_sudo "yum install -y --nogpg --nogpgcheck --allowerasing lttng-ust libcurl openssl-libs krb5-libs libicu zlib"
+  smart_sudo "yum install -y -q --nogpg --nogpgcheck --allowerasing lttng-ust libcurl openssl-libs krb5-libs libicu zlib"
   # .NET 2x needs openssl 1.0.*
   dnf info compat-openssl10 -y >/dev/null 2>&1 && (
     printf "\nInstalling openssl 1.0 compatiblity\n"
-    smart_sudo "dnf install -y --nogpg --nogpgcheck compat-openssl10"
+    smart_sudo "dnf install -y -q --nogpg --nogpgcheck compat-openssl10"
   )
 # Tested: CentOS/RHEL 6, 7
 elif [[ -n "$(command -v yum || true)" ]]; then
@@ -51,11 +51,11 @@ elif [[ -n "$(command -v yum || true)" ]]; then
   # missing --allowerasing on CentOS 7
   # openssl11 is for RHEL 7 only, for CentOS 7 & RHEL 6 it is missing
   openssl11=$(yum search openssl11 -y 2>/dev/null | awk -F'.' '{n=$1; gsub(/ /,"", n); if (n ~ /^openssl11$/) { print n} }')
-  smart_sudo "yum install -y --nogpg --nogpgcheck lttng-ust libcurl $openssl11 openssl-libs krb5-libs libicu zlib"
+  smart_sudo "yum install -y -q --nogpg --nogpgcheck lttng-ust libcurl $openssl11 openssl-libs krb5-libs libicu zlib"
   # .NET 2x needs openssl 1.0.*
   yum info -y compat-openssl10 -y >/dev/null 2>&1 && (
     printf "\nInstalling openssl 1.0 compatiblity\n"
-    smart_sudo "yum install -y --nogpg --nogpgcheck compat-openssl10"
+    smart_sudo "yum install -y -q --nogpg --nogpgcheck compat-openssl10"
   )
 fi
 
