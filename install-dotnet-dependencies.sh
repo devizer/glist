@@ -69,7 +69,7 @@ if [[ -n "$(command -v apt-get || true)" ]]; then
   # libssl1.1 libssl1.0.0
   libssl11=$(apt-cache search libssl1.1 | grep -E '^libssl1\.1 ' | awk '{print $1}')
   libssl10=$(apt-cache search libssl1.0.0 | grep -E '^libssl1\.0\.0 ' | awk '{print $1}')
-  packages="liblttng-ust0 curl libkrb5-3 zlib1g $libicu $libssl10 $libssl11 $libunwind $libuuid $liblttng"
+  packages="curl libkrb5-3 zlib1g $libicu $libssl10 $libssl11 $libunwind $libuuid $liblttng"
   # Replace newlines by spaces
   packages=$(echo "$packages" | sed ':a;N;$!ba;s/\n/ /g')
   echo "Installing .net core dependencies: $packages"
