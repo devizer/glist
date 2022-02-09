@@ -72,8 +72,10 @@ if [[ -n "$(command -v apt-get || true)" ]]; then
   packages="curl libkrb5-3 zlib1g $libicu $libssl10 $libssl11 $libunwind $libuuid $liblttng"
   # Replace newlines by spaces
   packages=$(echo "$packages" | sed ':a;N;$!ba;s/\n/ /g')
+  # Replace double-spaces by spaces
+  packages=$(echo "$packages" | sed ':a;N;$!ba;s/  / /g')
   echo "Installing .net core dependencies: $packages"
   # libssl=$(apt-cache search libssl | grep -E '^libssl1\.0\.[0-9]* ' | awk '{print $1}')
   # The curl package here is a hack that installs correct version of both libssl and libcurl
-  smart_sudo "apt-get install -y -qq --allow-unauthenticated $packages"
+  smart_sudo "apt-get install -y -q --allow-unauthenticated $packages"
 fi
