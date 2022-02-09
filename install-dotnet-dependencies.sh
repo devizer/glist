@@ -62,17 +62,18 @@ fi
 # Debian 8-11. Ubuntu 12.04-20.04 including non-LTS versions
 if [[ -n "$(command -v apt-get || true)" ]]; then
   if [[ "$UPDATE_REPOS" == "true" ]]; then smart_sudo "apt-get update --allow-unauthenticated -y -q"; fi
+  liblttng=$(apt-cache search liblttng-ust0 | awk '{print $1}' | grep 'liblttng-ust0')
   libicu=$(apt-cache search libicu | grep -E '^libicu[0-9]* ' | awk '{print $1}')
   libunwind=$(apt-cache search libunwind | grep -E '^libunwind[0-9]* ' | awk '{print $1}')
   libuuid=$(apt-cache search libuuid | grep -E '^libuuid[0-9]* ' | awk '{print $1}')
   # libssl1.1 libssl1.0.0
   libssl11=$(apt-cache search libssl1.1 | grep -E '^libssl1\.1 ' | awk '{print $1}')
   libssl10=$(apt-cache search libssl1.0.0 | grep -E '^libssl1\.0\.0 ' | awk '{print $1}')
-  packages="liblttng-ust0 curl libkrb5-3 zlib1g $libicu $libssl10 $libssl11 $libunwind $libuuid"
+  packages="liblttng-ust0 curl libkrb5-3 zlib1g $libicu $libssl10 $libssl11 $libunwind $libuuid $liblttng"
   # Replace newlines by spaces
   packages=$(echo "$packages" | sed ':a;N;$!ba;s/\n/ /g')
   echo "Installing .net core dependencies: $packages"
   # libssl=$(apt-cache search libssl | grep -E '^libssl1\.0\.[0-9]* ' | awk '{print $1}')
   # The curl package here is a hack that installs correct version of both libssl and libcurl
-  smart_sudo "apt-get install -y -q --allow-unauthenticated $packages"
+  smart_sudo "apt-get install -y -qq --allow-unauthenticated $packages"
 fi
