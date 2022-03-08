@@ -71,3 +71,4 @@ function Install_PowerShell() {
 }
 
 Install_PowerShell
+# TODO: Debian 8 - 6.0.5 is the latest ver

@@ -30,15 +30,18 @@ if [ $# -eq 0 ]; then
 	/usr/bin/uname-bak
 fi
 
+uname_m=armv7l
+if [[ -s /etc/system-uname-m ]]; then uname_m=$(</etc/system-uname-m); fi
+
 while getopts "asnrvmpio" opt; do
 # while getopts -o "asnrvmpio" --long "all,kernel-name,nodename,kernel-release,kernel-version,machine,processor,hardware-platform,operating-system" opt; do
  case "$opt" in
-  a) echo "Linux $(hostname) 4.19.0-18-armmp-lpae #1 SMP Debian 4.19.208-1 (2021-09-29) armv7l GNU/Linux" ;;
+  a) echo "Linux $(hostname) 4.19.0-18-armmp-lpae #1 SMP Debian 4.19.208-1 (2021-09-29) ${uname_m} GNU/Linux" ;;
   s) echo "Linux" ;;
   n) echo "$(hostname)" ;;
   r) echo "4.19.0-18-armmp-lpae" ;;
   v) echo "#1 SMP Debian 4.19.208-1 (2021-09-29)" ;;
-  m) echo "armv7l" ;;
+  m) echo "${uname_m}" ;;
   p) echo "unknown" ;;
   i) echo "unknown" ;;
   o) echo "GNU/Linux" ;;
