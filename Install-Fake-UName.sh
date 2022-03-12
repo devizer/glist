@@ -3,14 +3,6 @@
 
 set -eu
 
-machine="$(uname -m)"; 
-bit="$(getconf LONG_BIT)"
-[[ "$machine" == x86_64 ]]  && [[ "$bit" == "32" ]] && machine=i686
-if [[ "$machine" == aarch64 ]] && [[ "$bit" == "32" ]]; then
-  machine=armv7l
-  [[ "$(dpkg --print-architecture)" == armel ]] && machine=armv5l
-fi
-
 # green yellow red
 function say() { 
    local NC='\033[0m' Color_Green='\033[1;32m' Color_Red='\033[1;31m' Color_Yellow='\033[1;33m'; 
@@ -19,6 +11,15 @@ function say() {
    shift 
    printf "${color:-}$*${NC}\n";
 }
+
+machine="$(uname -m)"; 
+bit="$(getconf LONG_BIT)"
+[[ "$machine" == x86_64 ]]  && [[ "$bit" == "32" ]] && machine=i686
+if [[ "$machine" == aarch64 || "$machine" == arm* ]] && [[ "$bit" == "32" ]]; then
+  machine=armv7l
+  say Yellow "dpkg --print-architecture: [$(dpkg --print-architecture)]"
+  [[ "$(dpkg --print-architecture)" == armel ]] && machine=armv5l
+fi
 
 say Yellow "Installing FAKE UNAME for $(uname -m)]"
 say Green "Adjected machine: [${machine}]"
