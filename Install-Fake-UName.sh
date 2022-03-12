@@ -22,7 +22,7 @@ function say() {
 
 say Yellow "Installing FAKE UNAME for $(uname -m)]"
 say Green "Adjected machine: [${machine}]"
-echo ${UNAME_M} > /etc/system-uname-m
+echo ${machine} > /etc/system-uname-m
 uname="$(command -v uname)"
 sudo cp "${uname}" /usr/bin/uname-bak;
 script=https://raw.githubusercontent.com/devizer/glist/master/Fake-uname.sh;
