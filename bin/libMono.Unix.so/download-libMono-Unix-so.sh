@@ -27,4 +27,4 @@ find "$dir" -name "Mono.Unix.dll" | while read file; do
   n=$((n+1))
 done
 echo "Done. Below is results"
-ls "$(find "$dir" -name "*Mono.Unix*")"
+ls $(find "$dir" -name "*Mono.Unix*") # without quotes
