@@ -1,4 +1,8 @@
+#!/usr/bin/env bash
+# dir="."; url=https://github.com/devizer/glist/blob/master/bin/libMono.Unix.so/download-libMono-Unix-so.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -sSL $url) | bash -s "$dir"
+
 set -eu; set -o pipefail
+
 machine=$(uname -m);
 [[ $machine == x86_64 ]] && [[ "$(getconf LONG_BIT)" == "32" ]] && machine=i386
 [[ $machine == aarch64 ]] && machine=arm64
