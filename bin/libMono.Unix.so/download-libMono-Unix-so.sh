@@ -11,7 +11,8 @@ machine=$(uname -m);
 
 url="https://raw.githubusercontent.com/devizer/glist/master/bin/libMono.Unix.so/${machine}/libMono.Unix.so"
 file=/tmp/libMono.Unix.so
-echo "  url: $url
+echo "Downloading libMono.Unix.so for the current cpu arch
+  url: $url
  file: $file"
 
 curl -fkSL -o "$file" "$url" || curl -fkSL -o "$file" "$url" || curl -fkSL -o "$file" "$url"
