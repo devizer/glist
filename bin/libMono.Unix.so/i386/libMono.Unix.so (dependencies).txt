@@ -1,0 +1,4 @@
+	linux-gate.so.1 =>  (0xf7f99000)
+	libm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7f42000)
+	libc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7df0000)
+	/lib/ld-linux.so.2 (0xf7f9b000)

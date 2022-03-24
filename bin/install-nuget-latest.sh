@@ -1,6 +1,7 @@
 #!/bin/bash
 f=/usr/lib/NUGET-Latest.exe
 url=https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
+url=https://dist.nuget.org/win-x86-commandline/v5.6.0/nuget.exe
 cmd=/usr/local/bin/nuget
 echo -e "\nInstalling nuget (Latest) as [$cmd]"
 (command -v wget >> /dev/null) && sudo wget --no-check-certificate -O $f $url
