@@ -26,4 +26,5 @@ find "$dir" -name "Mono.Unix.dll" | while read file; do
   cp -f "$file" "$to/libMono.Unix.so"
   n=$((n+1))
 done
-echo "Done. Total libMono.Unix.so deployed: [$n]"
+echo "Done. Below is results"
+find "$dir" -name "*Mono.Unix*"
