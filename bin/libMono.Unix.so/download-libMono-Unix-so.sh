@@ -21,12 +21,10 @@ ls -la $file
 
 dir="${1:-$(pwd)}"
 echo "Searching Mono.Unix.dll in [$dir]"
-n=0
 find "$dir" -name "Mono.Unix.dll" | while read file; do
   to="$(dirname "$file")"
   echo "Copying libMono.Unix.so to [$to]"
-  cp -f "$file" "$to/libMono.Unix.so"
-  n=$((n+1))
+  cp -fv "$file" "$to/libMono.Unix.so"
 done
 echo "Done. Below is results"
 ls $(find "$dir" -name "*Mono.Unix*") # without quotes
