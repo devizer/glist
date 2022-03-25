@@ -16,6 +16,8 @@ echo "Downloading libMono.Unix.so for the current cpu arch
  file: $file"
 
 curl -fkSL -o "$file" "$url" || curl -fkSL -o "$file" "$url" || curl -fkSL -o "$file" "$url"
+echo "Downloaded $file"
+ls -la $file
 
 dir="${1:-$(pwd)}"
 echo "Searching Mono.Unix.dll in [$dir]"
