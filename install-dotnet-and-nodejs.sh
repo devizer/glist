@@ -2,7 +2,7 @@
 # Here is one line installer 
 # script=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-and-nodejs.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash -s dotnet node pwsh
 
-NODE_VER=${NODE_VER:-v14.15.4}
+NODE_VER=${NODE_VER:-v14.19.1}
 NODE_VER_JESSIE=${NODE_VER_JESSIE:-v10.21.0}
 
 set -e
