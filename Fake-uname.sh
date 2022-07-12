@@ -12,15 +12,13 @@ for a in a s n r v m p i o; do v=$(eval "uname -$a"); echo $a') echo "'$v'" ;;';
 }
 
 function _install_() {
-if [[ ! -f /usr/bin/uname-bak ]]; then
-  sudo cp /usr/bin/uname /usr/bin/uname-bak 
-fi
-script=https://raw.githubusercontent.com/devizer/glist/master/Fake-uname.sh; 
-cmd="(wget --no-check-certificate -O /tmp/Fake-uname.sh $script 2>/dev/null || curl -kSL -o /tmp/Fake-uname.sh $script)"
-eval "$cmd || $cmd || $cmd" && sudo cp /tmp/Fake-uname.sh /usr/bin/uname && sudo chmod +x /usr/bin/uname; echo "OK"
-echo "uname -m: $(uname -m)"
-echo "uname -s: $(uname -s)"
-echo "uname -a: $(uname -a)"
+  if [[ ! -f /usr/bin/uname-bak ]]; then sudo cp /usr/bin/uname /usr/bin/uname-bak; fi
+  script=https://raw.githubusercontent.com/devizer/glist/master/Fake-uname.sh; 
+  cmd="(wget --no-check-certificate -O /tmp/Fake-uname.sh $script 2>/dev/null || curl -kSL -o /tmp/Fake-uname.sh $script)"
+  eval "$cmd || $cmd || $cmd" && sudo cp /tmp/Fake-uname.sh /usr/bin/uname && sudo chmod +x /usr/bin/uname; echo "OK"
+  echo "uname -m: $(uname -m)"
+  echo "uname -s: $(uname -s)"
+  echo "uname -a: $(uname -a)"
 }
 
 # A POSIX variable
