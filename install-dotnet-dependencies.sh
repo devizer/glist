@@ -17,16 +17,16 @@ UPDATE_REPOS="${UPDATE_REPOS:-false}"
 # Manual Tests: SLES 12 SP5, SLES 15 SP1
 # After creating SLES 12/15 image in a cloud, it needs to wait for a few minutes for background repos maintenance tasks
 if [[ -n "$(command -v zypper || true)" ]]; then
-  if [[ "$UPDATE_REPOS" == "true" ]]; then smart_sudo "zypper refresh || true"; fi
+  if [[ "$UPDATE_REPOS" == "true" ]]; then smart_sudo "zypper -n refresh || true"; fi
   # examples of libicu: opensuse/leap:15 - libicu60_2, opensuse:tumbleweed - libicu66
-  libicu=$(zypper se libicu | awk -F'|' '{n=$2; gsub(/ /,"", n); if (n ~ /^libicu[_0-9]*$/) { print n} }')
+  libicu=$(zypper -n se libicu | awk -F'|' '{n=$2; gsub(/ /,"", n); if (n ~ /^libicu[_0-9]*$/) { print n} }')
   # For .net net 3x we need libopenssl1_1 instead of libopenssl1_0_0
   # For the old OpenSUSE 42 we need lttng-ust. For current - liblttng-ust0
-  lttng_legacy=$(zypper se lttng-ust | awk -F'|' '{n=$2; gsub(/ /,"", n); if (n ~ /^lttng-ust$/) { print n} }')
-  lttng_current=$(zypper se liblttng-ust0 | awk -F'|' '{n=$2; gsub(/ /,"", n); if (n ~ /^liblttng-ust0$/) { print n} }')
-  libssl1_1=$(zypper se libopenssl1_1 | awk -F'|' '{n=$2; gsub(/ /,"", n); if (n ~ /^libopenssl1_1$/) { print n} }')
-  libssl1_0_0=$(zypper se libopenssl1_0_0 | awk -F'|' '{n=$2; gsub(/ /,"", n); if (n ~ /^libopenssl1_0_0$/) { print n} }')
-  smart_sudo "zypper install -y $lttng_legacy $lttng_current curl $libssl1_0_0 $libssl1_1 krb5 $libicu zlib"
+  lttng_legacy=$(zypper -n se lttng-ust | awk -F'|' '{n=$2; gsub(/ /,"", n); if (n ~ /^lttng-ust$/) { print n} }')
+  lttng_current=$(zypper -n se liblttng-ust0 | awk -F'|' '{n=$2; gsub(/ /,"", n); if (n ~ /^liblttng-ust0$/) { print n} }')
+  libssl1_1=$(zypper -n se libopenssl1_1 | awk -F'|' '{n=$2; gsub(/ /,"", n); if (n ~ /^libopenssl1_1$/) { print n} }')
+  libssl1_0_0=$(zypper -n se libopenssl1_0_0 | awk -F'|' '{n=$2; gsub(/ /,"", n); if (n ~ /^libopenssl1_0_0$/) { print n} }')
+  smart_sudo "zypper install -y -n $lttng_legacy $lttng_current curl $libssl1_0_0 $libssl1_1 krb5 $libicu zlib"
 fi
 
 # Alpine Linux 3.7, 3.8
