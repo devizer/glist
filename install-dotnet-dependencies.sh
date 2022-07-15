@@ -26,7 +26,8 @@ if [[ -n "$(command -v zypper || true)" ]]; then
   lttng_current=$(zypper -n se liblttng-ust0 | awk -F'|' '{n=$2; gsub(/ /,"", n); if (n ~ /^liblttng-ust0$/) { print n} }')
   libssl1_1=$(zypper -n se libopenssl1_1 | awk -F'|' '{n=$2; gsub(/ /,"", n); if (n ~ /^libopenssl1_1$/) { print n} }')
   libssl1_0_0=$(zypper -n se libopenssl1_0_0 | awk -F'|' '{n=$2; gsub(/ /,"", n); if (n ~ /^libopenssl1_0_0$/) { print n} }')
-  smart_sudo "zypper install -y -n $lttng_legacy $lttng_current curl $libssl1_0_0 $libssl1_1 krb5 $libicu zlib"
+  smart_sudo "zypper install -y -n $lttng_legacy $lttng_current curl $libssl1_0_0 $libssl1_1 krb5 $libicu"
+  smart_sudo "zypper install -y -n zlib" # opensuse 42 is expired, zlib is list
 fi
 
 # Alpine Linux 3.7, 3.8
