@@ -19,8 +19,8 @@ echo Y | "%outfile%" /ENU /Q /Action=Download /MEDIATYPE=CAB /MEDIAPATH="%AppDat
 set file=SQLEXPR_x64_ENU.exe
 echo "DIR CONTENT"
 dir "%AppData%\Temp\%KEY%"
-"%AppData%\Temp\%KEY%\SQLServer2012-DEV-x64-ENU.exe" /qs /x:"%AppData%\Temp\%KEY%\extracted"
-del /q "%AppData%\Temp\%KEY%\SQLServer2019-x64-ENU.exe" >nul 2>&1
+"%AppData%\Temp\%KEY%\SQLServer2022-x64-ENU.exe" /qs /x:"%AppData%\Temp\%KEY%\extracted"
+del /q "%AppData%\Temp\%KEY%\SQLServer2022-x64-ENU.exe" >nul 2>&1
 
 rem The supported features on Windows Server Core are: 
 rem   Database Engine Services, 
