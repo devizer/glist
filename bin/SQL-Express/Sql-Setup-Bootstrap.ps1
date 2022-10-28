@@ -4,6 +4,10 @@ $Sql_Servers_Definition = @(
       Keys = @("Developer", "2019", "SqlServer", "Latest", "x64");
       Script = ".\SQL-2019-RTM.cmd"
    },
+  @{  Title = "SQL SERVER 2012 (Developer)";
+      Keys = @("Developer", "2022", "SqlServer", "Preview", "x64");
+      Script = ".\SQL-2022.cmd"
+   },
   @{  Title = "SQL SERVER 2017 (Developer)";
       Keys = @("Developer", "2017", "SqlServer", "x64"); 
       Script = 'powershell -f .\sql-dev-2017.ps1; @(${Env:ProgramFiles(x86)}, $Env:ProgramFiles) | % { $log_dir="$($_)\Microsoft SQL Server\140\Setup Bootstrap\LOG"; if (Test-Path $log_dir) { Write-Host "Store $log_dir as [Sql 2017 Setup.7z]"; & 7z a -t7z -mx=3 "$($Env:SQL_SETUP_LOG_FOLDER)\Sql 2017 Setup Log.7z" "$log_dir" *> "$Env:TEMP\_" } }'
