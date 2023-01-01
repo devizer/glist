@@ -1,10 +1,11 @@
 # Env Variables: SQL_SETUP_LOG_FOLDER (no default value)
+# For default instalnce set name to MSSQLSERVER
 $Sql_Servers_Definition = @(
   @{  Title = "SQL SERVER 2019 (Developer)";
       Keys = @("Developer", "2019", "SqlServer", "Latest", "x64");
       Script = ".\SQL-2019-RTM.cmd"
    },
-  @{  Title = "SQL SERVER 2012 (Developer)";
+  @{  Title = "SQL SERVER 2022 (Developer)";
       Keys = @("Developer", "2022", "SqlServer", "Preview", "x64");
       Script = ".\SQL-2022.cmd"
    },
