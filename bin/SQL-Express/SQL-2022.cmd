@@ -10,6 +10,7 @@ echo Installing new instance [%NEW_SQL_INSTANCE_NAME%] of [%KEY%]
 
 echo DOWNLOADING SQL %v% BOOTSTRAPPER
 set url=https://download.microsoft.com/download/e/9/5/e95d4bc4-1834-477f-8444-09d848202c87/SQL2022-SSEI-Eval.exe
+set url=https://download.microsoft.com/download/4/1/b/41b9a8c3-c2b4-4fcc-a3d5-62feed9e6885/SQL2022-SSEI-Eval.exe?culture=en-us&country=us
 set outfile=%AppData%\Temp\%KEY%.exe
 mkdir "%AppData%\Temp" 1>nul 2>&1
 echo [System.Net.ServicePointManager]::ServerCertificateValidationCallback={$true}; $d=new-object System.Net.WebClient; $d.DownloadFile("$Env:url","$Env:outfile") | powershell -command -
