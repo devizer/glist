@@ -159,6 +159,8 @@ Setup-Raid0-on-Loop
 
 if [[ -n "${MOVE_DOCKER_TO_RAID:-}" ]]; then
   echo "Moving docker to the raid ..."
+  docker image ls
+  docker ps -a
   sudo systemctl stop docker
   tmp=$(mktemp); cp -f 
   jq '.experimental = "enabled"' /etc/docker/daemon.json > "$tmp" && sudo mv -f "$tmp" /etc/docker/daemon.json
