@@ -106,6 +106,7 @@ function Setup-Raid0-on-Loop() {
     Wrap-Cmd sudo losetup -l
     # Wrap-Cmd sudo mdadm --zero-superblock --verbose --force /dev/loop{21,22}
 
+    Wrap-Cmd sudo fdisk -l 
     Say "mdadm --create ..."
     yes | sudo mdadm --create /dev/md0 --chunk=32 --level=0 --raid-devices=2 "$second_raid_disk" /dev/loop22 || true
     local err=$?
