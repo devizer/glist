@@ -59,7 +59,7 @@ w
 
     Say "fdisk -l ${sdb_path}"
     sudo fdisk -l ${sdb_path}
-    sleep 5
+    sleep 1
     sudo mkswap -f "${sdb_path}1" || true # DEBUG ONLY
     sudo swapon -f "${sdb_path}1" || true # DEBUG ONLY
     Say "swapon"
