@@ -60,6 +60,7 @@ w
     Say "fdisk -l ${sdb_path}"
     sudo fdisk -l ${sdb_path}
     sleep 1
+    Say "Creating swap on '${sdb_path}1'"
     sudo mkswap -f "${sdb_path}1" || true # DEBUG ONLY
     sudo swapon -f "${sdb_path}1" || true # DEBUG ONLY
     Say "swapon"
@@ -169,8 +170,11 @@ if [[ -n "${MOVE_DOCKER_TO_RAID:-}" ]]; then
   err=""
   sudo systemctl start docker || err="fail"
   if [[ -n "${err:-}" ]]; then
+    Say --Display-As=Error "Docker start failed"
     sudo systemctl status docker.service
     sudo journalctl -u docker.service -b | cat
+  else
+    Say "Docker successfully moved to the raid"
   fi
-  Say "Docker successfully moved to the raid"
+  
 fi
