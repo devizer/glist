@@ -7,8 +7,10 @@ script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-b
 Say --Reset-Stopwatch
 fi
 
-FS=BTRFS-Compressed
+LOOP_TYPE="${LOOP_TYPE:-0}"
+FS="${FS:-BTRFS-Compressed}"
 CMD_COUNT=0
+
 function Wrap-Cmd() {
     local cmd="$*"
     cmd="${cmd//[\/]/\∕}"
