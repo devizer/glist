@@ -162,10 +162,11 @@ if [[ -n "${MOVE_DOCKER_TO_RAID:-}" ]]; then
   docker image ls
   docker ps -a
   sudo systemctl stop docker
-  tmp=$(mktemp); cp -f 
+  tmp="$(mktemp)";
   jq '.experimental = "enabled"' /etc/docker/daemon.json > "$tmp" && sudo mv -f "$tmp" /etc/docker/daemon.json
   jq '.data-root = "/raid-'${LOOP_TYPE}'/docker"' /etc/docker/daemon.json > "$tmp" && sudo mv -f "$tmp" /etc/docker/daemon.json
   cat /etc/docker/daemon.json
   sudo systemctl start docker
   Say "Docker successfully moved to the raid"
+  docker image ls
 fi
