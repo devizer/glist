@@ -69,8 +69,8 @@ w
 
 }
 
-Say "apt-get install util-linux fio"
-sudo apt-get install util-linux fio tree -y -qq >/dev/null
+# Say "apt-get install util-linux fio"
+# sudo apt-get install util-linux fio tree -y -qq >/dev/null
 Wrap-Cmd sudo tree -a -h -u /mnt
 Wrap-Cmd sudo swapon
 sudo cp -f /mnt/*.txt "$SYSTEM_ARTIFACTSDIRECTORY/"
