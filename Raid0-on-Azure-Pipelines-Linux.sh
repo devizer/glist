@@ -156,3 +156,13 @@ function Setup-Raid0-on-Loop() {
 
 Wrap-Cmd sudo cat /etc/mdadm/mdadm.conf
 Setup-Raid0-on-Loop
+
+if [[ -n "${MOVE_DOCKER_TO_RAID:-}" ]]; then
+  echo "Moving docker to the raid ..."
+  sudo systemctl stop docker
+  tmp=$(mktemp)
+  jq '.experimental = "enabled"' /etc/docker/daemon.json > "$tmp" && mv "$tmp" /etc/docker/daemon.json
+  jq '.data-root = "/raid-'${LOOP_TYPE}'/docker"' /etc/docker/daemon.json > "$tmp" && mv "$tmp" /etc/docker/daemon.json
+  cat /etc/docker/daemon.json
+  sudo systemctl start docker
+fi
