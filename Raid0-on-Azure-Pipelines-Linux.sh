@@ -165,4 +165,5 @@ if [[ -n "${MOVE_DOCKER_TO_RAID:-}" ]]; then
   jq '.data-root = "/raid-'${LOOP_TYPE}'/docker"' /etc/docker/daemon.json > "$tmp" && sudo mv -f "$tmp" /etc/docker/daemon.json
   cat /etc/docker/daemon.json
   sudo systemctl start docker
+  Say "Docker successfully moved to the raid"
 fi
