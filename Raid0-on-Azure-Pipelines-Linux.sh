@@ -160,19 +160,17 @@ Setup-Raid0-on-Loop
 if [[ -n "${MOVE_DOCKER_TO_RAID:-}" ]]; then
   echo "Moving docker to the raid ..."
   sudo mkdir -p "/raid-${LOOP_TYPE}/docker"
-  cat /etc/docker/daemon.json
-  docker image ls
-  docker ps -a
+  # cat /etc/docker/daemon.json
   sudo systemctl stop docker
-  tmp="$(mktemp)";
-  # echo "Apply .experimental for docker"
-  # jq '.experimental = "enabled"' /etc/docker/daemon.json > "$tmp" && sudo mv -f "$tmp" /etc/docker/daemon.json
-  Say "Apply .data-root for docker (v2)"
+  tmp="$(mktemp)"
+  echo "Apply .data-root='/raid-${LOOP_TYPE}/docker' for docker daemon config"
   jq '."data-root" = "/raid-'${LOOP_TYPE}'/docker"' /etc/docker/daemon.json > "$tmp" && sudo mv -f "$tmp" /etc/docker/daemon.json
-  cat /etc/docker/daemon.json
-  sudo systemctl start docker
-  sudo systemctl status docker.service
-  sudo journalctl -u docker.service -b | cat
+  # cat /etc/docker/daemon.json
+  err=""
+  sudo systemctl start docker || err="fail"
+  if [[ -n "${err:-}" ]]; then
+    sudo systemctl status docker.service
+    sudo journalctl -u docker.service -b | cat
+  fi
   Say "Docker successfully moved to the raid"
-  docker image ls
 fi
