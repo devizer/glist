@@ -152,3 +152,4 @@ function Setup-Raid0-on-Loop() {
 }
 
 Wrap-Cmd sudo cat /etc/mdadm/mdadm.conf
+Setup-Raid0-on-Loop
