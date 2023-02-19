@@ -27,15 +27,15 @@ sdb_path="$(sudo df | grep "/mnt" | awk '{print $1}')"
 sdb_path="${sdb_path::-1}"
 sda_path="/dev/sda"; [[ "$sdb_path" == "/dev/sda" ]] && sda_path="/dev/sdb";
 Say "/mnt disk: [${sdb_path}1]; / (the root) disk: ${sda_path}1"
-sudo mount
+sudo mount | grep "/ \|/mnt "
 
 sudo swapoff /mnt/swapfile
 sudo rm -f /mnt/swapfile
 
 Say "sudo fdisk -l"
-sudo fdisk -l
+sudo fdisk -l | grep "Disk /dev/sd"
 Say "sudo df -h -T"
-sudo df -h -T
+sudo df -h -T | grep -E "(/|/mnt)$"
 
 function Reset-Sdb-Disk() {
     Say "Reset-Sdb-Disk [$sdb_path]"
