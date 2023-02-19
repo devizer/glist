@@ -225,6 +225,7 @@ echo "${RESET_FOLDERS_TO_RAID:-}" | awk -F';' '{ for(i=1; i<=NF; ++i) print $i; 
   # sudo rm -rf "/raid-${LOOP_TYPE}/${sv}"
   # size="$(sudo du -h -d 0 "$folder" | awk '{print $1}')"; echo "Original size: '$size'"
   sudo mount -t btrfs /dev/md0 "$folder" -o "defaults,noatime,nodiratime${COMPRESSION_OPTION},commit=2000,nodiscard,nobarrier,subvol=${sv}"
+  test -z "$chmod" && sudo chmod -R "$chmod" "$folder"
   sudo chown -R "$(whoami)" "$folder"
   echo "Subvolume '${sv}' successfully mounted as '${folder}'"
 fi; done
