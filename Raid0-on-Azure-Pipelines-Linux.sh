@@ -204,6 +204,7 @@ echo "${RESET_FOLDERS_TO_RAID:-}" | awk -F';' '{ for(i=1; i<=NF; ++i) print $i; 
   sv="${sv#"${sv%%[!\-]*}"}"   # remove leading "-" characters
   # sv="${sv##*(-)}" - also works
   Say "Create subvolume vNew [$sv] for '$folder'"
+  sudo mkdir -p "$folder"
   sudo btrfs subvolume create /raid-${LOOP_TYPE}/${sv}
   # sudo btrfs subvolume list /raid-${LOOP_TYPE} | sort
   # echo "DO NOT RM /raid-${LOOP_TYPE}/${sv} ????"
