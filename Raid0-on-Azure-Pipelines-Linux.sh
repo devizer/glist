@@ -128,7 +128,8 @@ function Setup-Raid0-on-Loop() {
       exit $err
     fi
 
-    sleep 1
+    Say "SKIPPING SLEEEEEEEEEEEEEEEEEP"
+    # sleep 1
     Wrap-Cmd sudo mdadm --detail /dev/md0
 
     Say "sudo mkfs.btrfs /dev/md0; and mount"
