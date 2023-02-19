@@ -29,6 +29,10 @@ function Wrap-Cmd() {
     LOG_FILE="$fileName"
 }
 
+if Say [[ -z "$(command -v jq)" ]]; then
+  Say --Display-As=Error "Warning! jq is not found. docker data can not be moved to raid"
+fi
+
 sdb_path="/dev/sdb"
 sdb_path="$(sudo df | grep "/mnt" | awk '{print $1}')"
 sdb_path="${sdb_path::-1}"
@@ -231,7 +235,7 @@ echo "${RESET_FOLDERS_TO_RAID:-}" | awk -F';' '{ for(i=1; i<=NF; ++i) print $i; 
   if [[ -n "$uowner" ]] && [[ -n "$gowner" ]]; then sudo chown "$uowner:$gowner" "$folder" || true; fi
   uowner="$(sudo stat -c '%U' "$folder")"
   gowner="$(sudo stat -c '%G' "$folder")"
-  echo "V2: Subvolume '${sv}' successfully mounted as '${folder}', actual chmod is '$chmod', owner is '$uowner:$gowner'"
+  echo "Subvolume '${sv}' successfully mounted as '${folder}', actual chmod is '$chmod', actual owner is '$uowner:$gowner'"
 fi; done
 else
   if [[ -n "${RESET_FOLDERS_TO_RAID:-}" ]]; then
