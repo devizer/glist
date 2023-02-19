@@ -124,7 +124,7 @@ function Setup-Raid0-on-Loop() {
     # Wrap-Cmd sudo mdadm --zero-superblock --verbose --force /dev/loop{21,22}
 
     Say "Async creating 100Mb swap as '/mnt/swap100m'"
-    nohup sudo bash -c "dd if=/dev/zero of=/mnt/swap100m bs=128K count=782; mkswap /mnt/swap100m; swapon /mnt/swap100m" &
+    nohup sudo bash -c "dd if=/dev/zero of=/mnt/swap100m bs=128K count=805; mkswap /mnt/swap100m; swapon /mnt/swap100m" &
 
 
     # Wrap-Cmd sudo fdisk -l BLOCK ONLY
