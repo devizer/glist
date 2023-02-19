@@ -38,7 +38,7 @@ sudo swapoff /mnt/swapfile
 sudo rm -f /mnt/swapfile
 
 function Create-New-Swap() {
-  sudo dd if=/dev/zero of=/mnt/swap100m bs=1M count=100
+  sudo dd if=/dev/zero of=/mnt/swap100m bs=128K count=782
   sudo mkswap /mnt/swap100m
   sudo swapon /mnt/swap100m
 }
