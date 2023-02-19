@@ -206,8 +206,10 @@ echo "${RESET_FOLDERS_TO_RAID:-}" | awk -F';' '{ for(i=1; i<=NF; ++i) print $i; 
   Say "Create subvolume [$sv] for '$folder'"
   sudo btrfs subvolume create /raid-${LOOP_TYPE}/${sv}
   # sudo btrfs subvolume list /raid-${LOOP_TYPE} | sort
-  echo "DO NOT RM /raid-${LOOP_TYPE}/${sv} ????"
+  # echo "DO NOT RM /raid-${LOOP_TYPE}/${sv} ????"
   # sudo rm -rf "/raid-${LOOP_TYPE}/${sv}"
+  size="$(du -h -d 0 "$folder" | awk '{print $}')"
+  echo "Original size: '$size'"
   sudo mount -t btrfs /dev/md0 "$folder" -o defaults,noatime,nodiratime,compress-force=lzo:1,commit=2000,nodiscard,nobarrier,subvol="${sv}"
   sudo chown -R "$(whoami)" "$folder"
 fi; done
