@@ -170,7 +170,7 @@ function Setup-Raid0-on-Loop() {
     sudo chown -R "$(whoami)" /raid-${LOOP_TYPE}
     # ls -la /raid-${LOOP_TYPE}
 
-    Say "Setup-Raid0 as ${LOOP_TYPE} loop complete"
+    Say "Setup-Raid0 on /raid-${LOOP_TYPE} completed"
     
 }
 
@@ -193,7 +193,7 @@ if [[ -n "${MOVE_DOCKER_TO_RAID:-}" ]]; then
     sudo systemctl status docker.service
     sudo journalctl -u docker.service -b | cat
   else
-    Say "Docker successfully moved to the raid"
+    Say "Docker data successfully moved to the /raid-${LOOP_TYPE}/docker-file-system on raid"
   fi
 fi
 
