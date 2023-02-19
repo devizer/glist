@@ -123,7 +123,7 @@ function Setup-Raid0-on-Loop() {
     sudo losetup -a | grep "loop21\|loop22"
     # Wrap-Cmd sudo mdadm --zero-superblock --verbose --force /dev/loop{21,22}
 
-    Say "Async create 100Mb swap as '/mnt/swap100m'"
+    Say "Async creating 100Mb swap as '/mnt/swap100m'"
     nohup sudo bash -c "dd if=/dev/zero of=/mnt/swap100m bs=128K count=782; mkswap /mnt/swap100m; swapon /mnt/swap100m" &
 
 
