@@ -60,7 +60,7 @@ w
     Say "fdisk -l ${sdb_path}"
     sudo fdisk -l ${sdb_path}
     sleep 1
-    Say "Creating swap on '${sdb_path}1'"
+    Say "Creating swap on '${sdb_path}1' (v2)"
     sudo mkswap -f "${sdb_path}1" || true # DEBUG ONLY
     sudo swapon "${sdb_path}1" || true # DEBUG ONLY
     Say "swapon"
