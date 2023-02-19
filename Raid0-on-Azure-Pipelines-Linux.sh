@@ -228,7 +228,10 @@ echo "${RESET_FOLDERS_TO_RAID:-}" | awk -F';' '{ for(i=1; i<=NF; ++i) print $i; 
   test -n "$chmod" && sudo chmod -R "$chmod" "$folder"
   sudo chown -R "$(whoami)" "$folder"
   chmod="$(stat --format '%a' "$folder")"
-  echo "Subvolume '${sv}' successfully mounted as '${folder}', actual chmod is '$chmod'"
+  if [[ -n "$uowner" ]] && [[ -n "$gowner" ]]; then sudo chown "$uowner:$gowner" "$folder" || true; fi
+  uowner="$(stat -c '%U' "$folder")"
+  gowner="$(stat -c '%G' "$folder")"
+  echo "Subvolume '${sv}' successfully mounted as '${folder}', actual chmod is '$chmod', owner is '$uowner:$gowner'"
 fi; done
 else
   if [[ -n "${RESET_FOLDERS_TO_RAID:-}" ]]; then
