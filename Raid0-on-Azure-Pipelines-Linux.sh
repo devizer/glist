@@ -12,6 +12,7 @@ if [[ "$(uname -s)" != Linux ]]; then
   exit 0;
 fi
 
+SECOND_DISK_MODE="${SECOND_DISK_MODE:-LOOP}"
 LOOP_TYPE="${LOOP_TYPE:-0}"
 FS="${FS:-BTRFS-Compressed}"
 CMD_COUNT=0
