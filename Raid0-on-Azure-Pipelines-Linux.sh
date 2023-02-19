@@ -95,14 +95,16 @@ function Get-Working-Set-for-Directory-in-KB() {
 function Setup-Raid0-on-Loop() {
     local freeSpace="$(Get-Free-Space-For-Directory-in-KB "/mnt")"
     local size=$(((freeSpace-500*1000)/1024))
-    size=$((12*1025))
+    # size=$((12*1025))
     if [[ "$SECOND_DISK_MODE" == "LOOP" ]]; then
+      Say "Creating loop-file '/mnt/disk-on-mnt' sized as ${size}M"
       Wrap-Cmd sudo fallocate -l "${size}M" /mnt/disk-on-mnt
       Wrap-Cmd sudo losetup --direct-io=${LOOP_DIRECT_IO} /dev/loop21 /mnt/disk-on-mnt
       second_raid_disk="/dev/loop21"
     else
       second_raid_disk="${sdb_path}2"
     fi
+    Say "Creating loop-file '/disk-on-root' sized as ${size}M"
     Wrap-Cmd sudo fallocate -l "${size}M" /disk-on-root
     Wrap-Cmd sudo losetup --direct-io=${LOOP_DIRECT_IO} /dev/loop22 /disk-on-root
     Wrap-Cmd sudo losetup -a
