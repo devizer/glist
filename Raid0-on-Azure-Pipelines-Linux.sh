@@ -37,6 +37,14 @@ sudo mount | grep "/ \|/mnt "
 sudo swapoff /mnt/swapfile
 sudo rm -f /mnt/swapfile
 
+function Create-New-Swap() {
+  sudo dd if=/dev/zero of=/mnt/swap100m bs=1M count=100
+  sudo mkswap /mnt/swap100m
+  sudo swapon /mnt/swap100m
+}
+Create-New-Swap &
+
+
 Say "sudo fdisk -l"
 sudo fdisk -l | grep "Disk /dev/sd"
 Say "sudo df -h -T"
