@@ -140,7 +140,7 @@ function Setup-Raid0-on-Loop() {
       Wrap-Cmd sudo mount -t btrfs /dev/md0 /raid-${LOOP_TYPE} -o defaults,noatime,nodiratime,commit=2000,nodiscard,nobarrier
     elif [[ "$FS" == BTRFS-Compressed ]]; then
       # slower? 
-      Wrap-Cmd sudo mkfs.btrfs -m single -d single -f -O ^extref,^skinny-metadata /dev/md0
+      Wrap-Cmd sudo mkfs.btrfs -K -m single -d single -f -O ^extref,^skinny-metadata /dev/md0
       Wrap-Cmd sudo mount -t btrfs /dev/md0 /raid-${LOOP_TYPE} -o defaults,noatime,nodiratime,compress-force=lzo:1,commit=2000,nodiscard,nobarrier
     else
       echo "WRONG FS [$FS]"
