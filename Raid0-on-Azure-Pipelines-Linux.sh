@@ -187,8 +187,8 @@ if [[ -n "${MOVE_DOCKER_TO_RAID:-}" ]]; then
     sudo mkdir -p "/raid-${LOOP_TYPE}/docker-file-system"
   else
     docker_data="/docker"
-    mkdir -p "$docker_data"
     echo "Create docker-data subvolume for $docker_data folder ..."
+    sudo mkdir -p "$docker_data"
     sudo btrfs subvolume create /raid-${LOOP_TYPE}/docker-data
     sudo mount -t btrfs /dev/md0 "$docker_data" -o "defaults,noatime,nodiratime,compress-force=lzo:1,commit=2000,nodiscard,nobarrier,subvol=docker-data"
   fi
