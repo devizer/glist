@@ -98,20 +98,19 @@ function Setup-Raid0-on-Loop() {
     # size=$((12*1025))
     if [[ "$SECOND_DISK_MODE" == "LOOP" ]]; then
       Say "Creating loop-file '/mnt/disk-on-mnt' sized as ${size}M"
-      Wrap-Cmd sudo fallocate -l "${size}M" /mnt/disk-on-mnt
-      Wrap-Cmd sudo losetup --direct-io=${LOOP_DIRECT_IO} /dev/loop21 /mnt/disk-on-mnt
+      sudo fallocate -l "${size}M" /mnt/disk-on-mnt
+      sudo losetup --direct-io=${LOOP_DIRECT_IO} /dev/loop21 /mnt/disk-on-mnt
       second_raid_disk="/dev/loop21"
     else
       second_raid_disk="${sdb_path}2"
     fi
     Say "Creating loop-file '/disk-on-root' sized as ${size}M"
-    Wrap-Cmd sudo fallocate -l "${size}M" /disk-on-root
-    Wrap-Cmd sudo losetup --direct-io=${LOOP_DIRECT_IO} /dev/loop22 /disk-on-root
-    Wrap-Cmd sudo losetup -a
-    Wrap-Cmd sudo losetup -l
+    sudo fallocate -l "${size}M" /disk-on-root
+    sudo losetup --direct-io=${LOOP_DIRECT_IO} /dev/loop22 /disk-on-root
+    sudo losetup -a | grep "loop21\|loop22"
     # Wrap-Cmd sudo mdadm --zero-superblock --verbose --force /dev/loop{21,22}
 
-    Wrap-Cmd sudo fdisk -l 
+    # Wrap-Cmd sudo fdisk -l BLOCK ONLY
     Say "mdadm --create ..."
     yes | sudo mdadm --create /dev/md0 --chunk=32 --level=0 --raid-devices=2 "$second_raid_disk" /dev/loop22 || true
     local err=$?
@@ -128,7 +127,7 @@ function Setup-Raid0-on-Loop() {
     Wrap-Cmd sudo mdadm --detail /dev/md0
 
     Say "sudo mkfs.btrfs /dev/md0; and mount"
-    Wrap-Cmd sudo mkdir -p /raid-${LOOP_TYPE}
+    sudo mkdir -p /raid-${LOOP_TYPE}
     # wrap next two lines to parameters
     if [[ "$FS" == EXT2 ]]; then
       Wrap-Cmd sudo mkfs.ext2 /dev/md0
@@ -148,10 +147,9 @@ function Setup-Raid0-on-Loop() {
       exit 77
     fi
     Say "FREE SPACE AFTER MOUNTING of the RAID"
-    Wrap-Cmd sudo df -h -T
-    Wrap-Cmd sudo chown -R "$(whoami)" /raid-${LOOP_TYPE}
-    Wrap-Cmd ls -la /raid-${LOOP_TYPE}
-    Wrap-Cmd sudo df -h -T
+    sudo df -h -T
+    sudo chown -R "$(whoami)" /raid-${LOOP_TYPE}
+    # ls -la /raid-${LOOP_TYPE}
 
     Say "Setup-Raid0 as ${LOOP_TYPE} loop complete"
     
