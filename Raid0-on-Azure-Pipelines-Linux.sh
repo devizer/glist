@@ -195,5 +195,14 @@ if [[ -n "${MOVE_DOCKER_TO_RAID:-}" ]]; then
   else
     Say "Docker successfully moved to the raid"
   fi
-  
+fi
+
+# RESET_FOLDERS_TO_RAID="/tmp;/var/a b c/d/e;"
+if [[ "$FS" == *"BTRFS"* ]]; then
+echo "${RESET_FOLDERS_TO_RAID:-}" | awk -F';' '{ for(i=1; i<=NF; ++i) print $i; }' | while IFS='' read -r folder; do if [[ -n "$folder" ]]; then
+  sv="${folder//[\/]/-}"; sv="${sv//[:]/-}"; sv="${sv//[\ ]/-}"
+  Say "$folder: [$sv]"
+  sudo btrfs btrfs subvolume create /raid-${LOOP_TYPE}/${sv}
+  btrfs subvolume list /raid-${LOOP_TYPE} | less
+fi; done
 fi
