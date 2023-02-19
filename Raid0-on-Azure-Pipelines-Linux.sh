@@ -8,7 +8,7 @@ Say --Reset-Stopwatch
 fi
 
 if [[ "$(uname -s)" != Linux ]]; then
-  echo "Skipping. Raid0-on-Azure-Pipelines-Linux.sh is supported on linux microsoft hosted agent"
+  echo "Skipping. Raid0-on-Azure-Pipelines-Linux.sh is supported on linux on microsoft hosted agent"
   exit 0;
 fi
 
