@@ -15,13 +15,14 @@ fi
 SECOND_DISK_MODE="${SECOND_DISK_MODE:-LOOP}"
 LOOP_TYPE="${LOOP_TYPE:-0}"
 FS="${FS:-BTRFS-Compressed}"
-CMD_COUNT=0
+COMPRESSION_OPTION=""; if [[ "$FS" == "BTRFS-Compressed" ]]; then COMPRESSION_OPTION=",compress-force=lzo:1"; fi
 
 function Wrap-Cmd() {
     local cmd="$*"
     cmd="${cmd//[\/]/\∕}"
     cmd="${cmd//[:]/˸}"
     Say "$cmd"
+    CMD_COUNT="${CMD_COUNT:-0}"
     CMD_COUNT=$((CMD_COUNT+1))
     local fileName="$SYSTEM_ARTIFACTSDIRECTORY/$(printf "%04u" "$CMD_COUNT") ${cmd}.log"
     eval "$@" |& tee "$fileName"
@@ -160,7 +161,7 @@ function Setup-Raid0-on-Loop() {
     elif [[ "$FS" == BTRFS-Compressed ]]; then
       # slower? 
       Wrap-Cmd sudo mkfs.btrfs -K -m single -d single -f -O ^extref,^skinny-metadata /dev/md0
-      Wrap-Cmd sudo mount -t btrfs /dev/md0 /raid-${LOOP_TYPE} -o "defaults,noatime,nodiratime,compress-force=lzo:1,commit=2000,nodiscard,nobarrier"
+      Wrap-Cmd sudo mount -t btrfs /dev/md0 /raid-${LOOP_TYPE} -o "defaults,noatime,nodiratime${COMPRESSION_OPTION},commit=2000,nodiscard,nobarrier"
     else
       echo "WRONG FS [$FS]"
       exit 77
@@ -190,7 +191,7 @@ if [[ -n "${MOVE_DOCKER_TO_RAID:-}" ]]; then
     echo "Create docker-data subvolume for $docker_data folder ..."
     sudo mkdir -p "$docker_data"
     sudo btrfs subvolume create /raid-${LOOP_TYPE}/docker-data
-    sudo mount -t btrfs /dev/md0 "$docker_data" -o "defaults,noatime,nodiratime,compress-force=lzo:1,commit=2000,nodiscard,nobarrier,subvol=docker-data"
+    sudo mount -t btrfs /dev/md0 "$docker_data" -o "defaults,noatime,nodiratime${COMPRESSION_OPTION},commit=2000,nodiscard,nobarrier,subvol=docker-data"
   fi
   # cat /etc/docker/daemon.json
   sudo systemctl stop docker
@@ -222,7 +223,7 @@ echo "${RESET_FOLDERS_TO_RAID:-}" | awk -F';' '{ for(i=1; i<=NF; ++i) print $i; 
   # echo "DO NOT RM /raid-${LOOP_TYPE}/${sv} ????"
   # sudo rm -rf "/raid-${LOOP_TYPE}/${sv}"
   # size="$(sudo du -h -d 0 "$folder" | awk '{print $1}')"; echo "Original size: '$size'"
-  sudo mount -t btrfs /dev/md0 "$folder" -o "defaults,noatime,nodiratime,compress-force=lzo:1,commit=2000,nodiscard,nobarrier,subvol=${sv}"
+  sudo mount -t btrfs /dev/md0 "$folder" -o "defaults,noatime,nodiratime${COMPRESSION_OPTION},commit=2000,nodiscard,nobarrier,subvol=${sv}"
   sudo chown -R "$(whoami)" "$folder"
   echo Subvolume '${sv}' successfully mounted as '${folder}'
 fi; done
@@ -231,3 +232,5 @@ else
     Say --Display-As=Error "Unable to reset folders '${RESET_FOLDERS_TO_RAID:-}' to raid. It is supported on BTRFS or BTRFS-Compressed file system"
   fi
 fi
+
+Say "V2222222222222222222222222222222"
