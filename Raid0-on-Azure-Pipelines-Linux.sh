@@ -214,8 +214,10 @@ echo "${RESET_FOLDERS_TO_RAID:-}" | awk -F';' '{ for(i=1; i<=NF; ++i) print $i; 
   sv="${sv#"${sv%%[!\-]*}"}"   # remove leading "-" characters
   # sv="${sv##*(-)}" - also works
   sudo mkdir -p "$folder"
-  $chmod="$(stat --format '%a' "$folder")"
-  Say "Creating subvolume [/raid-${LOOP_TYPE}/$sv] for '$folder' (chmod is '$chmod')"
+  chmod="$(stat --format '%a' "$folder")"
+  uowner="$(stat -c '%U' "$folder")"
+  gowner="$(stat -c '%G' "$folder")"
+  Say "Creating subvolume [/raid-${LOOP_TYPE}/$sv] for '$folder' (chmod is '$chmod', owner is '$uowner:$gowner')"
   sudo btrfs subvolume create /raid-${LOOP_TYPE}/${sv}
   echo "Subvolume '${sv}' successfully created. Mounting ..."
   # sudo btrfs subvolume list /raid-${LOOP_TYPE} | sort
