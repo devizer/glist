@@ -142,11 +142,9 @@ function Setup-Raid0-on-Loop() {
       exit $err
     fi
 
-    Say "SKIPPING SLEEEEEEEEEEEEEEEEEP"
     # sleep 1
     Wrap-Cmd sudo mdadm --detail /dev/md0
 
-    Say "sudo mkfs.btrfs /dev/md0; and mount"
     sudo mkdir -p /raid-${LOOP_TYPE}
     # wrap next two lines to parameters
     if [[ "$FS" == EXT2 ]]; then
@@ -163,7 +161,7 @@ function Setup-Raid0-on-Loop() {
       Wrap-Cmd sudo mkfs.btrfs -K -m single -d single -f -O ^extref,^skinny-metadata /dev/md0
       Wrap-Cmd sudo mount -t btrfs /dev/md0 /raid-${LOOP_TYPE} -o "defaults,noatime,nodiratime${COMPRESSION_OPTION},commit=2000,nodiscard,nobarrier"
     else
-      echo "WRONG FS [$FS]"
+      echo "WRONG FS [$FS]. Aborting"
       exit 77
     fi
     Say "FREE SPACE AFTER MOUNTING of the RAID"
@@ -215,8 +213,9 @@ echo "${RESET_FOLDERS_TO_RAID:-}" | awk -F';' '{ for(i=1; i<=NF; ++i) print $i; 
   sv="${folder//[\/]/-}"; sv="${sv//[:]/-}"; sv="${sv//[\ ]/-}"
   sv="${sv#"${sv%%[!\-]*}"}"   # remove leading "-" characters
   # sv="${sv##*(-)}" - also works
-  Say "Creating subvolume [/raid-${LOOP_TYPE}/$sv] for '$folder'"
   sudo mkdir -p "$folder"
+  $chmod="$(stat --format '%a' "$folder")"
+  Say "Creating subvolume [/raid-${LOOP_TYPE}/$sv] for '$folder' (chmod is '$chmod')"
   sudo btrfs subvolume create /raid-${LOOP_TYPE}/${sv}
   echo "Subvolume '${sv}' successfully created. Mounting ..."
   # sudo btrfs subvolume list /raid-${LOOP_TYPE} | sort
@@ -232,5 +231,3 @@ else
     Say --Display-As=Error "Unable to reset folders '${RESET_FOLDERS_TO_RAID:-}' to raid. It is supported on BTRFS or BTRFS-Compressed file system"
   fi
 fi
-
-Say "V2222222222222222222222222222222"
