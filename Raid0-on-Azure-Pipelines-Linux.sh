@@ -160,7 +160,7 @@ function Setup-Raid0-on-Loop() {
     elif [[ "$FS" == BTRFS-Compressed ]]; then
       # slower? 
       Wrap-Cmd sudo mkfs.btrfs -K -m single -d single -f -O ^extref,^skinny-metadata /dev/md0
-      Wrap-Cmd sudo mount -t btrfs /dev/md0 /raid-${LOOP_TYPE} -o defaults,noatime,nodiratime,compress-force=lzo:1,commit=2000,nodiscard,nobarrier
+      Wrap-Cmd sudo mount -t btrfs /dev/md0 /raid-${LOOP_TYPE} -o "defaults,noatime,nodiratime,compress-force=lzo:1,commit=2000,nodiscard,nobarrier"
     else
       echo "WRONG FS [$FS]"
       exit 77
@@ -203,14 +203,14 @@ echo "${RESET_FOLDERS_TO_RAID:-}" | awk -F';' '{ for(i=1; i<=NF; ++i) print $i; 
   sv="${folder//[\/]/-}"; sv="${sv//[:]/-}"; sv="${sv//[\ ]/-}"
   sv="${sv#"${sv%%[!\-]*}"}"   # remove leading "-" characters
   # sv="${sv##*(-)}" - also works
-  Say "Create subvolume [$sv] for '$folder'"
+  Say "Create subvolume vNew [$sv] for '$folder'"
   sudo btrfs subvolume create /raid-${LOOP_TYPE}/${sv}
   # sudo btrfs subvolume list /raid-${LOOP_TYPE} | sort
   # echo "DO NOT RM /raid-${LOOP_TYPE}/${sv} ????"
   # sudo rm -rf "/raid-${LOOP_TYPE}/${sv}"
   size="$(sudo du -h -d 0 "$folder" | awk '{print $1}')"
   echo "Original size: '$size'"
-  sudo mount -t btrfs /dev/md0 "$folder" -o defaults,noatime,nodiratime,compress-force=lzo:1,commit=2000,nodiscard,nobarrier,subvol="${sv}"
+  sudo mount -t btrfs /dev/md0 "$folder" -o "defaults,noatime,nodiratime,compress-force=lzo:1,commit=2000,nodiscard,nobarrier,subvol=${sv}"
   sudo chown -R "$(whoami)" "$folder"
 fi; done
 fi
