@@ -214,9 +214,9 @@ echo "${RESET_FOLDERS_TO_RAID:-}" | awk -F';' '{ for(i=1; i<=NF; ++i) print $i; 
   sv="${sv#"${sv%%[!\-]*}"}"   # remove leading "-" characters
   # sv="${sv##*(-)}" - also works
   sudo mkdir -p "$folder"
-  chmod="$(stat --format '%a' "$folder")"
-  uowner="$(stat -c '%U' "$folder")"
-  gowner="$(stat -c '%G' "$folder")"
+  chmod="$(sudo stat --format '%a' "$folder")"
+  uowner="$(sudo stat -c '%U' "$folder")"
+  gowner="$(sudo stat -c '%G' "$folder")"
   Say "Creating subvolume [/raid-${LOOP_TYPE}/$sv] for '$folder' (chmod is '$chmod', owner is '$uowner:$gowner')"
   sudo btrfs subvolume create /raid-${LOOP_TYPE}/${sv}
   echo "Subvolume '${sv}' successfully created. Mounting ..."
@@ -227,11 +227,11 @@ echo "${RESET_FOLDERS_TO_RAID:-}" | awk -F';' '{ for(i=1; i<=NF; ++i) print $i; 
   sudo mount -t btrfs /dev/md0 "$folder" -o "defaults,noatime,nodiratime${COMPRESSION_OPTION},commit=2000,nodiscard,nobarrier,subvol=${sv}"
   test -n "$chmod" && sudo chmod -R "$chmod" "$folder"
   sudo chown -R "$(whoami)" "$folder"
-  chmod="$(stat --format '%a' "$folder")"
+  chmod="$(sudo stat --format '%a' "$folder")"
   if [[ -n "$uowner" ]] && [[ -n "$gowner" ]]; then sudo chown "$uowner:$gowner" "$folder" || true; fi
-  uowner="$(stat -c '%U' "$folder")"
-  gowner="$(stat -c '%G' "$folder")"
-  echo "Subvolume '${sv}' successfully mounted as '${folder}', actual chmod is '$chmod', owner is '$uowner:$gowner'"
+  uowner="$(sudo stat -c '%U' "$folder")"
+  gowner="$(sudo stat -c '%G' "$folder")"
+  echo "V2: Subvolume '${sv}' successfully mounted as '${folder}', actual chmod is '$chmod', owner is '$uowner:$gowner'"
 fi; done
 else
   if [[ -n "${RESET_FOLDERS_TO_RAID:-}" ]]; then
