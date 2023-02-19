@@ -204,7 +204,7 @@ if [[ -n "${MOVE_DOCKER_TO_RAID:-}" ]]; then
     sudo systemctl status docker.service
     sudo journalctl -u docker.service -b | cat
   else
-    Say "Docker data successfully moved to the /raid-${LOOP_TYPE}/docker-file-system on raid"
+    Say "Docker data successfully moved to the '$docker_data' on raid"
   fi
 fi
 
@@ -214,16 +214,17 @@ echo "${RESET_FOLDERS_TO_RAID:-}" | awk -F';' '{ for(i=1; i<=NF; ++i) print $i; 
   sv="${folder//[\/]/-}"; sv="${sv//[:]/-}"; sv="${sv//[\ ]/-}"
   sv="${sv#"${sv%%[!\-]*}"}"   # remove leading "-" characters
   # sv="${sv##*(-)}" - also works
-  Say "Create subvolume vNew [/raid-${LOOP_TYPE}/$sv] for '$folder'"
+  Say "Creating subvolume [/raid-${LOOP_TYPE}/$sv] for '$folder'"
   sudo mkdir -p "$folder"
   sudo btrfs subvolume create /raid-${LOOP_TYPE}/${sv}
-  echo subvolume created. Mounting ...
+  echo Subvolume successfully created. Mounting ...
   # sudo btrfs subvolume list /raid-${LOOP_TYPE} | sort
   # echo "DO NOT RM /raid-${LOOP_TYPE}/${sv} ????"
   # sudo rm -rf "/raid-${LOOP_TYPE}/${sv}"
   # size="$(sudo du -h -d 0 "$folder" | awk '{print $1}')"; echo "Original size: '$size'"
   sudo mount -t btrfs /dev/md0 "$folder" -o "defaults,noatime,nodiratime,compress-force=lzo:1,commit=2000,nodiscard,nobarrier,subvol=${sv}"
   sudo chown -R "$(whoami)" "$folder"
+  echo Subvolume '${sv}' successfully mounted as '${folder}'
 fi; done
 else
   if [[ -n "${RESET_FOLDERS_TO_RAID:-}" ]]; then
