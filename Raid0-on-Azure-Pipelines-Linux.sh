@@ -155,7 +155,7 @@ function Setup-Raid0-on-Loop() {
     
 }
 
-Wrap-Cmd sudo cat /etc/mdadm/mdadm.conf
+# Wrap-Cmd sudo cat /etc/mdadm/mdadm.conf
 Setup-Raid0-on-Loop
 
 if [[ -n "${MOVE_DOCKER_TO_RAID:-}" ]]; then
