@@ -178,15 +178,24 @@ function Setup-Raid0-on-Loop() {
 Setup-Raid0-on-Loop
 
 if [[ -n "${MOVE_DOCKER_TO_RAID:-}" ]]; then
-  # TODO: Create sub-volume /docker if BTRFS or BTRFS-Compressed
   err=""
-  echo "Moving docker to the raid ..."
-  sudo mkdir -p "/raid-${LOOP_TYPE}/docker-file-system"
+  docker_data=""
+  if [[ "${FS:-}" != *"BTRFS"* ]]; then 
+    # TODO: Create sub-volume /docker if BTRFS or BTRFS-Compressed
+    docker_data="/raid-${LOOP_TYPE}/docker-file-system"
+    echo "Moving docker to the raid as folder '$docker_data' ..."
+    sudo mkdir -p "/raid-${LOOP_TYPE}/docker-file-system"
+  else
+    docker_data="/docker"
+    echo "Create docker-data subvolume for $docker_data folder ..."
+    sudo btrfs subvolume create /raid-${LOOP_TYPE}/docker-data
+    sudo mount -t btrfs /dev/md0 "$docker_data" -o "defaults,noatime,nodiratime,compress-force=lzo:1,commit=2000,nodiscard,nobarrier,subvol=docker-data"
+  fi
   # cat /etc/docker/daemon.json
   sudo systemctl stop docker
   tmp="$(mktemp)"
   echo "Apply .data-root='/raid-${LOOP_TYPE}/docker-file-system' for docker daemon config"
-  jq '."data-root" = "/raid-'${LOOP_TYPE}'/docker-file-system"' /etc/docker/daemon.json > "$tmp" && sudo mv -f "$tmp" /etc/docker/daemon.json || err="fail"
+  jq '."data-root" = "'"$docker_data"'"' /etc/docker/daemon.json > "$tmp" && sudo mv -f "$tmp" /etc/docker/daemon.json || err="fail"
   # cat /etc/docker/daemon.json
   sudo systemctl start docker || err="fail"
   if [[ -n "${err:-}" ]]; then
@@ -199,7 +208,7 @@ if [[ -n "${MOVE_DOCKER_TO_RAID:-}" ]]; then
 fi
 
 # RESET_FOLDERS_TO_RAID="/tmp;/var/a b c/d/e;"
-if [[ "$FS" == *"BTRFS"* ]]; then
+if [[ "${FS:-}" == *"BTRFS"* ]]; then
 echo "${RESET_FOLDERS_TO_RAID:-}" | awk -F';' '{ for(i=1; i<=NF; ++i) print $i; }' | while IFS='' read -r folder; do if [[ -n "$folder" ]]; then
   sv="${folder//[\/]/-}"; sv="${sv//[:]/-}"; sv="${sv//[\ ]/-}"
   sv="${sv#"${sv%%[!\-]*}"}"   # remove leading "-" characters
