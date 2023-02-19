@@ -42,7 +42,7 @@ function Create-New-Swap() {
   sudo mkswap /mnt/swap100m
   sudo swapon /mnt/swap100m
 }
-Create-New-Swap &
+# Create-New-Swap &
 
 
 Say "sudo fdisk -l"
@@ -122,6 +122,10 @@ function Setup-Raid0-on-Loop() {
     sudo losetup --direct-io=${LOOP_DIRECT_IO} /dev/loop22 /disk-on-root
     sudo losetup -a | grep "loop21\|loop22"
     # Wrap-Cmd sudo mdadm --zero-superblock --verbose --force /dev/loop{21,22}
+
+    Say "Async create 100Mb swap as '/mnt/swap100m'"
+    nohup sudo bash -c "dd if=/dev/zero of=/mnt/swap100m bs=128K count=782; mkswap /mnt/swap100m; swapon /mnt/swap100m" &
+
 
     # Wrap-Cmd sudo fdisk -l BLOCK ONLY
     Say "mdadm --create ..."
