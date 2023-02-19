@@ -227,7 +227,8 @@ echo "${RESET_FOLDERS_TO_RAID:-}" | awk -F';' '{ for(i=1; i<=NF; ++i) print $i; 
   sudo mount -t btrfs /dev/md0 "$folder" -o "defaults,noatime,nodiratime${COMPRESSION_OPTION},commit=2000,nodiscard,nobarrier,subvol=${sv}"
   test -z "$chmod" && sudo chmod -R "$chmod" "$folder"
   sudo chown -R "$(whoami)" "$folder"
-  echo "Subvolume '${sv}' successfully mounted as '${folder}'"
+  chmod="$(stat --format '%a' "$folder")"
+  echo "Subvolume '${sv}' successfully mounted as '${folder}', actual chmod is '$chmod'"
 fi; done
 else
   if [[ -n "${RESET_FOLDERS_TO_RAID:-}" ]]; then
