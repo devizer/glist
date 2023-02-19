@@ -159,15 +159,15 @@ Wrap-Cmd sudo cat /etc/mdadm/mdadm.conf
 Setup-Raid0-on-Loop
 
 if [[ -n "${MOVE_DOCKER_TO_RAID:-}" ]]; then
+  err=""
   echo "Moving docker to the raid ..."
   sudo mkdir -p "/raid-${LOOP_TYPE}/docker"
   # cat /etc/docker/daemon.json
   sudo systemctl stop docker
   tmp="$(mktemp)"
   echo "Apply .data-root='/raid-${LOOP_TYPE}/docker' for docker daemon config"
-  jq '."data-root" = "/raid-'${LOOP_TYPE}'/docker"' /etc/docker/daemon.json > "$tmp" && sudo mv -f "$tmp" /etc/docker/daemon.json
+  jq '."data-root" = "/raid-'${LOOP_TYPE}'/docker"' /etc/docker/daemon.json > "$tmp" && sudo mv -f "$tmp" /etc/docker/daemon.json || err="fail"
   # cat /etc/docker/daemon.json
-  err=""
   sudo systemctl start docker || err="fail"
   if [[ -n "${err:-}" ]]; then
     Say --Display-As=Error "Docker start failed"
