@@ -29,7 +29,7 @@ function Wrap-Cmd() {
     LOG_FILE="$fileName"
 }
 
-if [[ -z "$(command -v jq)" ]]; then
+if [[ -z "$(command -v jq)" ]] && [[ "$FS" = *"BTRFS"* ]]; then
   Say --Display-As=Error "Warning! jq is not found. docker data can not be moved to raid"
 fi
 
