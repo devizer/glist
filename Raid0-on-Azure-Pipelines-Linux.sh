@@ -214,4 +214,8 @@ echo "${RESET_FOLDERS_TO_RAID:-}" | awk -F';' '{ for(i=1; i<=NF; ++i) print $i; 
   sudo mount -t btrfs /dev/md0 "$folder" -o "defaults,noatime,nodiratime,compress-force=lzo:1,commit=2000,nodiscard,nobarrier,subvol=${sv}"
   sudo chown -R "$(whoami)" "$folder"
 fi; done
+else
+  if [[ -n "${RESET_FOLDERS_TO_RAID:-}" ]]; then
+    Say --Display-As=Error "Unable to reset folders '${RESET_FOLDERS_TO_RAID:-}' to raid. It is supported on BTRFS or BTRFS-Compressed file system"
+  fi
 fi
