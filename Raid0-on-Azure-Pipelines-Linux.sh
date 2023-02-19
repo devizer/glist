@@ -180,12 +180,12 @@ Setup-Raid0-on-Loop
 if [[ -n "${MOVE_DOCKER_TO_RAID:-}" ]]; then
   err=""
   echo "Moving docker to the raid ..."
-  sudo mkdir -p "/raid-${LOOP_TYPE}/docker"
+  sudo mkdir -p "/raid-${LOOP_TYPE}/docker-file-system"
   # cat /etc/docker/daemon.json
   sudo systemctl stop docker
   tmp="$(mktemp)"
   echo "Apply .data-root='/raid-${LOOP_TYPE}/docker' for docker daemon config"
-  jq '."data-root" = "/raid-'${LOOP_TYPE}'/docker"' /etc/docker/daemon.json > "$tmp" && sudo mv -f "$tmp" /etc/docker/daemon.json || err="fail"
+  jq '."data-root" = "/raid-'${LOOP_TYPE}'/docker-file-system"' /etc/docker/daemon.json > "$tmp" && sudo mv -f "$tmp" /etc/docker/daemon.json || err="fail"
   # cat /etc/docker/daemon.json
   sudo systemctl start docker || err="fail"
   if [[ -n "${err:-}" ]]; then
@@ -203,6 +203,9 @@ echo "${RESET_FOLDERS_TO_RAID:-}" | awk -F';' '{ for(i=1; i<=NF; ++i) print $i; 
   sv="${folder//[\/]/-}"; sv="${sv//[:]/-}"; sv="${sv//[\ ]/-}"
   Say "Create subvolume for '$folder': [$sv]"
   sudo btrfs subvolume create /raid-${LOOP_TYPE}/${sv}
-  sudo btrfs subvolume list /raid-${LOOP_TYPE} | less
+  sudo btrfs subvolume list /raid-${LOOP_TYPE} | sort
+  sudo rm -rf "/raid-${LOOP_TYPE}/${sv}"
+  sudo mount -t btrfs /dev/md0 "$folder" -o defaults,noatime,nodiratime,compress-force=lzo:1,commit=2000,nodiscard,nobarrier,subvol="${sv}"
+  sudo chown -R "$(whoami)" "$folder"
 fi; done
 fi
