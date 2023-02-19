@@ -178,6 +178,7 @@ function Setup-Raid0-on-Loop() {
 Setup-Raid0-on-Loop
 
 if [[ -n "${MOVE_DOCKER_TO_RAID:-}" ]]; then
+  # TODO: Create sub-volume /docker if BTRFS or BTRFS-Compressed
   err=""
   echo "Moving docker to the raid ..."
   sudo mkdir -p "/raid-${LOOP_TYPE}/docker-file-system"
