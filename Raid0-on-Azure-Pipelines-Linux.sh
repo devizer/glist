@@ -62,7 +62,7 @@ w
     sleep 1
     Say "Creating swap on '${sdb_path}1'"
     sudo mkswap -f "${sdb_path}1" || true # DEBUG ONLY
-    sudo swapon -f "${sdb_path}1" || true # DEBUG ONLY
+    sudo swapon "${sdb_path}1" || true # DEBUG ONLY
     Say "swapon"
     sudo swapon
     sdb2size="$(sudo fdisk -l ${sdb_path} | grep "${sdb_path}2" | awk '{printf "%5.0f\n", ($3-$2)/2}')"
