@@ -43,6 +43,7 @@ function Download-Essentials {
   foreach($file in $files) {
     $fullUrl="$baseurl/$($file)?viasf=1"
     Write-Host "Full Url: [$fullUrl]"
+    # TODO: Try and Retry
     $d=new-object System.Net.WebClient; $d.DownloadFile("$baseurl/$($file)?viasf=1","$Essentials\$file");
   }
   pushd $Essentials
