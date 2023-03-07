@@ -4,6 +4,7 @@
 
 NODE_VER=${NODE_VER:-v14.19.1}
 NODE_VER_JESSIE=${NODE_VER_JESSIE:-v10.21.0}
+# SKIP_NPM_UPGRADE="${SKIP_NPM_UPGRADE:True}"
 
 set -e
 set -u
@@ -185,7 +186,8 @@ function install_node() {
   printf "\n\n"'export PATH="'$nodePath':$PATH"'"\n\n" | tee -a ~/.bashrc >/dev/null
 
   header "Upgrading and installing" 'npm & yarn (latest)'
-  sudo bash -c "PATH=\"$nodePath:$PATH\"; npm install yarn npm-check-updates --global"
+  other_packages="npm-check-updates"; if [[ -n "${SKIP_NPM_UPGRADE:-}" ]]; then other_packages=""; fi
+  sudo bash -c "PATH=\"$nodePath:$PATH\"; npm install yarn $other_packages --global"
   sudo rm -rf ~/.npm
   add_symlinks 'node*/bin/*' /opt/node
 }
