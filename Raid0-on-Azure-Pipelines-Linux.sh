@@ -118,14 +118,14 @@ function Setup-Raid0-on-Loop() {
     if [[ "$SECOND_DISK_MODE" == "LOOP" ]]; then
       Say "Creating loop-file '/mnt/disk-on-mnt' sized as ${size}M"
       sudo fallocate -l "${size}M" /mnt/disk-on-mnt
-      sudo losetup --direct-io=${LOOP_DIRECT_IO} /dev/loop21 /mnt/disk-on-mnt
+      sudo losetup --direct-io=${LOOP_DIRECT_IO:-off} /dev/loop21 /mnt/disk-on-mnt
       second_raid_disk="/dev/loop21"
     else
       second_raid_disk="${sdb_path}2"
     fi
     Say "Creating loop-file '/disk-on-root' sized as ${size}M"
     sudo fallocate -l "${size}M" /disk-on-root
-    sudo losetup --direct-io=${LOOP_DIRECT_IO} /dev/loop22 /disk-on-root
+    sudo losetup --direct-io=${LOOP_DIRECT_IO:-off} /dev/loop22 /disk-on-root
     sudo losetup -a | grep "loop21\|loop22"
     # Wrap-Cmd sudo mdadm --zero-superblock --verbose --force /dev/loop{21,22}
 
