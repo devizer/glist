@@ -1,6 +1,6 @@
 @echo off
 
-set v=2012-DEV
+set v=2022-DEV
 set KEY=SQL-%v%
 
 if Not Defined NEW_SQL_INSTANCE_NAME (
@@ -12,6 +12,8 @@ echo DOWNLOADING SQL %v% BOOTSTRAPPER
 set url=https://download.microsoft.com/download/e/9/5/e95d4bc4-1834-477f-8444-09d848202c87/SQL2022-SSEI-Eval.exe
 rem set url=https://download.microsoft.com/download/4/1/b/41b9a8c3-c2b4-4fcc-a3d5-62feed9e6885/SQL2022-SSEI-Eval.exe?culture=en-us^&country=us
 set url=https://download.microsoft.com/download/4/1/b/41b9a8c3-c2b4-4fcc-a3d5-62feed9e6885/SQL2022-SSEI-Eval.exe
+rem DEV: SQLServer2022-DEV-x64-ENU.exe, EVAL: SQLServer2022-x64-ENU.exe
+set url=https://download.microsoft.com/download/c/c/9/cc9c6797-383c-4b24-8920-dc057c1de9d3/SQL2022-SSEI-Dev.exe
 set outfile=%AppData%\Temp\%KEY%.exe
 mkdir "%AppData%\Temp" 1>nul 2>&1
 echo [System.Net.ServicePointManager]::ServerCertificateValidationCallback={$true}; $d=new-object System.Net.WebClient; $d.DownloadFile("$Env:url","$Env:outfile") | powershell -command -
@@ -19,10 +21,11 @@ echo [System.Net.ServicePointManager]::ServerCertificateValidationCallback={$tru
 echo DOWNLOADING SQL %v%
 echo Y | "%outfile%" /ENU /Q /Action=Download /MEDIATYPE=CAB /MEDIAPATH="%AppData%\Temp\%KEY%"
 set file=SQLEXPR_x64_ENU.exe
-echo "DIR CONTENT"
+echo "Extracting Content"
 dir "%AppData%\Temp\%KEY%"
-"%AppData%\Temp\%KEY%\SQLServer2022-x64-ENU.exe" /qs /x:"%AppData%\Temp\%KEY%\extracted"
-del /q "%AppData%\Temp\%KEY%\SQLServer2022-x64-ENU.exe" >nul 2>&1
+"%AppData%\Temp\%KEY%\SQLServer2022-DEV-x64-ENU.exe" /qs /x:"%AppData%\Temp\%KEY%\extracted"
+del /q "%AppData%\Temp\%KEY%\SQLServer2022-DEV-x64-ENU.exe" >nul 2>&1
+                              
 
 rem The supported features on Windows Server Core are: 
 rem   Database Engine Services, 
