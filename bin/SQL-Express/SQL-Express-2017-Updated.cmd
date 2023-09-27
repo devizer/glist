@@ -20,10 +20,12 @@ set file=SQLEXPR_x64_ENU.exe
 dir "%AppData%\Temp\%KEY%\SQLEXPR_x64_ENU.exe"
 "%AppData%\Temp\%KEY%\SQLEXPR_x64_ENU.exe" /qs /x:"%AppData%\Temp\%KEY%\extracted"
 
+REM Prev Fuatures: SQLENGINE,REPLICATION,SQL,RS,Tools,LocalDB
+
 "%AppData%\Temp\%KEY%\extracted\Setup.exe" /QUIETSIMPLE /ENU /INDICATEPROGRESS /ACTION=Install ^
   /IAcceptSQLServerLicenseTerms /IACCEPTROPENLICENSETERMS ^
   /UpdateEnabled=True ^
-  /FEATURES=SQLENGINE,REPLICATION,SQL,RS,Tools,LocalDB ^
+  /FEATURES=SQLENGINE,REPLICATION,FullText ^
   /INSTANCENAME="%NEW_SQL_INSTANCE_NAME%" ^
   /INSTANCEDIR="%SystemDrive%\SQL" ^
   /INSTALLSHAREDDIR="%SystemDrive%\SQL\x64" ^
