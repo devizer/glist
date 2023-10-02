@@ -21,9 +21,9 @@ $Sql_Servers_Definition = @(
       Keys = @("Express", "2016", "SqlServer", "x64");
       Script = ".\SQL-Express-2016-Updated.cmd"
    },
-  @{  Title = "SQL SERVER 2014 SP2 x86 (Express)";
+  @{  Title = "SQL SERVER 2014 SP3 x86 (Express)";
       Keys = @("Express", "2014", "SqlServer", "x86");
-      Script = ".\SQL-Express-2014-SP2-x86.cmd"
+      Script = ".\SQL-Express-2014-SP3-x86.cmd"
    },
   @{  Title = "SQL SERVER 2012 SP4 (Express)";
       Keys = @("Express", "2012", "SqlServer", "x86", "x64");
@@ -240,7 +240,7 @@ if ($Env:SQL_SETUP_BOOTSTRAP_TEST) {
       @{ Args = @("SqlServer", "2017", "Developer");  Expected="SQL SERVER 2017 (Developer)" },
       @{ Args = @("SqlServer", "2017", "Express");    Expected="SQL SERVER 2017 (Express)" },
       @{ Args = @("SqlServer", "2016", "Express");    Expected="SQL SERVER 2016 (Express)" },
-      @{ Args = @("SqlServer", "2014", "Express");    Expected="SQL SERVER 2014 SP2 x86 (Express)" },
+      @{ Args = @("SqlServer", "2014", "Express");    Expected="SQL SERVER 2014 SP3 x86 (Express)" },
       @{ Args = @("SqlServer", "2012", "Express");    Expected="SQL SERVER 2012 SP4 (Express)" },
       @{ Args = @("SqlServer", "2008R2", "Express");  Expected="SQL SERVER 2008 R2 SP2 x86 (Express)" },
       @{ Args = @("SqlServer", "2008R2", "Express", "Advanced");  Expected="SQL SERVER 2008 R2 SP2 x64+x86 (Advanced Express)" },
