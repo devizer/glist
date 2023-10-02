@@ -6,7 +6,7 @@ $Sql_Servers_Definition = @(
       Script = ".\SQL-2019-RTM.cmd"
    },
   @{  Title = "SQL SERVER 2022 (Developer)";
-      Keys = @("Developer", "2022", "SqlServer", "Preview", "x64");
+      Keys = @("Developer", "2022", "SqlServer", "x64");
       Script = ".\SQL-2022.cmd"
    },
   @{  Title = "SQL SERVER 2017 (Developer)";
@@ -236,11 +236,12 @@ if ($Env:SQL_SETUP_BOOTSTRAP_TEST) {
     $Sql_Servers_Definition | % { $_ | ft }
     $testCases = @(
       @{ Args = @("SqlServer", "2019");               Expected="SQL SERVER 2019 (Developer)" },
+      @{ Args = @("SqlServer", "2022");               Expected="SQL SERVER 2022 (Developer)" },
       @{ Args = @("SqlServer", "2017", "Developer");  Expected="SQL SERVER 2017 (Developer)" },
       @{ Args = @("SqlServer", "2017", "Express");    Expected="SQL SERVER 2017 (Express)" },
       @{ Args = @("SqlServer", "2016", "Express");    Expected="SQL SERVER 2016 (Express)" },
       @{ Args = @("SqlServer", "2014", "Express");    Expected="SQL SERVER 2014 SP2 x86 (Express)" },
-      @{ Args = @("SqlServer", "2012", "Express");    Expected="SQL SERVER 2012 SP3 (Express)" },
+      @{ Args = @("SqlServer", "2012", "Express");    Expected="SQL SERVER 2012 SP4 (Express)" },
       @{ Args = @("SqlServer", "2008R2", "Express");  Expected="SQL SERVER 2008 R2 SP2 x86 (Express)" },
       @{ Args = @("SqlServer", "2008R2", "Express", "Advanced");  Expected="SQL SERVER 2008 R2 SP2 x64+x86 (Advanced Express)" },
       @{ Args = @("SqlServer", "2008", "Express");    Expected="SQL SERVER 2008 SP3 (Express)" },
