@@ -25,9 +25,9 @@ $Sql_Servers_Definition = @(
       Keys = @("Express", "2014", "SqlServer", "x86");
       Script = ".\SQL-Express-2014-SP2-x86.cmd"
    },
-  @{  Title = "SQL SERVER 2012 SP3 (Express)";
+  @{  Title = "SQL SERVER 2012 SP4 (Express)";
       Keys = @("Express", "2012", "SqlServer", "x86", "x64");
-      Script = ".\SQL-Express-2012-SP3.cmd"
+      Script = ".\SQL-Express-2012-SP4.cmd"
    },
   @{  Title = "SQL SERVER 2008 R2 SP2 x86 (Express)";
       Keys = @("Express", "2008R2", "SqlServer", "x86");

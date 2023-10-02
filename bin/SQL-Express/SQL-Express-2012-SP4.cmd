@@ -1,14 +1,18 @@
 @echo off
 
-set KEY=SQL-Express-2012-SP3-x64
+set KEY=SQL-Express-2012-SP4-x64
 
 if Not Defined NEW_SQL_INSTANCE_NAME (
-  set NEW_SQL_INSTANCE_NAME=SQL_2012_SP3
+  set NEW_SQL_INSTANCE_NAME=SQL_2012_SP4
 )
 echo Installing new instance [%NEW_SQL_INSTANCE_NAME%] of [%KEY%]
 
 echo DOWNLOADING %KEY%.exe
+rem SP3
 set url=https://download.microsoft.com/download/F/6/7/F673709C-D371-4A64-8BF9-C1DD73F60990/ENU/x64/SQLEXPR_x64_ENU.exe
+rem SP4
+set url=https://download.microsoft.com/download/B/D/E/BDE8FAD6-33E5-44F6-B714-348F73E602B6/SQLEXPR_x86_ENU.exe
+set url=https://download.microsoft.com/download/B/D/E/BDE8FAD6-33E5-44F6-B714-348F73E602B6/SQLEXPR_x64_ENU.exe
 set outfile=%AppData%\Temp\%KEY%.exe
 mkdir "%AppData%\Temp" 1>nul 2>&1
 rem echo [System.Net.ServicePointManager]::ServerCertificateValidationCallback={$true}; $d=new-object System.Net.WebClient; $d.DownloadFile("$Env:url","$Env:outfile") | powershell -command -

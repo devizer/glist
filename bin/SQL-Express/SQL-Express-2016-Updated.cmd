@@ -10,6 +10,8 @@ if Not Defined NEW_SQL_INSTANCE_NAME (
 echo Installing new instance [%NEW_SQL_INSTANCE_NAME%] of [%KEY%]
 
 set url=https://download.microsoft.com/download/9/0/7/907AD35F-9F9C-43A5-9789-52470555DB90/ENU/SQLEXPR_x64_ENU.exe
+rem SP3
+set url=https://download.microsoft.com/download/f/9/8/f982347c-fee3-4b3e-a8dc-c95383aa3020/sql16_sp3_dlc/en-us/SQLEXPR_x64_ENU.exe
 set outfile=%AppData%\Temp\%KEY%.exe
 mkdir "%AppData%\Temp" 1>nul 2>&1
 rem echo [System.Net.ServicePointManager]::ServerCertificateValidationCallback={$true}; $d=new-object System.Net.WebClient; $d.DownloadFile("$Env:url","$Env:outfile") | powershell -command -
@@ -18,6 +20,7 @@ echo [System.Net.ServicePointManager]::ServerCertificateValidationCallback={$tru
 echo EXTRACTING SQL Express %v%
 "%outfile%" /qs /x:"%AppData%\Temp\%KEY%\extracted"
 
+echo Starting Setup.exe
 "%AppData%\Temp\%KEY%\extracted\Setup.exe" /QUIETSIMPLE /ENU /INDICATEPROGRESS /ACTION=Install ^
   /IAcceptSQLServerLicenseTerms /IACCEPTROPENLICENSETERMS ^
   /UpdateEnabled=True ^
