@@ -106,7 +106,8 @@ $Sql_Servers_Definition = @(
             Say "Installing the '$($description.Title)'$instanceNameInfo"
             $Env:NEW_SQL_INSTANCE_NAME=$description.InstanceName
             pushd $Global:SQL_SETUP_WORK
-            Invoke-Expression $description.Script *> "$($Env:SQL_SETUP_LOG_FOLDER)\Setup $($description.Title).log"
+            # Invoke-Expression $description.Script *> "$($Env:SQL_SETUP_LOG_FOLDER)\Setup $($description.Title).log"
+            Invoke-Expression $description.Script | Out-String -OutVariable out
             popd
         } 
         
