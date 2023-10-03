@@ -30,7 +30,7 @@ del /F /Q "%outfile%"
 Echo Install %KEY%
 rem # https://docs.microsoft.com/en-us/previous-versions/sql/sql-server-2008/ms144259(v=sql.100)
 rem /INDICATEPROGRESS
-"%AppData%\Temp\%KEY%\Setup\Setup.exe" /Q /Action=Install ^
+"%AppData%\Temp\%KEY%\Setup\Setup.exe" /Q /INDICATEPROGRESS /Action=Install ^
   /ADDCURRENTUSERASSQLADMIN ^
   /FEATURES=SQL ^
   /INSTANCENAME=%NEW_SQL_INSTANCE_NAME% ^
