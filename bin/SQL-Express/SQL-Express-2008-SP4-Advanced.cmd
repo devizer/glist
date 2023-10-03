@@ -23,7 +23,7 @@ set outfile=%AppData%\Temp\%KEY%\ServicePack.exe
 mkdir "%AppData%\Temp" 1>nul 2>&1
 echo [System.Net.ServicePointManager]::ServerCertificateValidationCallback={$true}; for ($i=1; $i -le 3; $i++) { $d=new-object System.Net.WebClient; try { $d.DownloadFile("$Env:url","$Env:outfile"); exit 0; } catch { Write-Host $_; Write-Host "Try $i of 3 failed for $($Env:url)" -ForegroundColor DarkRed; } } Exit 1  | powershell -command -
 echo Extracting Service Pack %KEY%
-"%outfile%" /q /x:"%AppData%\Temp\%KEY%\Service\Pack"
+"%outfile%" /q /x:"%AppData%\Temp\%KEY%\ServicePack"
 del /F /Q "%outfile%"
 
 
