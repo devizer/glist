@@ -41,6 +41,10 @@ $Sql_Servers_Definition = @(
       Keys = @("Express", "2008", "SqlServer", "x86", "x64");
       Script = ".\SQL-Express-2008-SP3-x64.cmd"
    },
+  @{  Title = "SQL SERVER 2008 SP4 Advanced Express";
+      Keys = @("Express", "2008", "SqlServer", "x86", "x64", "Advanced");
+      Script = ".\SQL-Express-2008-SP4-Advanced.cmd"
+   },
   @{  Title = "SQL SERVER 2005 SP4 x86 (Express)"; 
       Keys = @("Express", "2005", "SqlServer", "x86");
       Script = '.\SQL-Express-2005-SP4-x86.cmd; @(${Env:ProgramFiles(x86)}, $Env:ProgramFiles) | % { $log_dir="$($_)\Microsoft SQL Server\90\Setup Bootstrap\LOG"; if (Test-Path $log_dir) { Write-Host "Store $log_dir as [Sql 2005 SP4 Setup Log.7z]"; & 7z a -t7z -mx=3 "$($Env:SQL_SETUP_LOG_FOLDER)\Sql 2005 SP4 Setup Log.7z" "$log_dir" *> "$Env:TEMP\_" } }'
@@ -235,23 +239,24 @@ $Sql_Servers_Definition = @(
 if ($Env:SQL_SETUP_BOOTSTRAP_TEST) {
     $Sql_Servers_Definition | % { $_ | ft }
     $testCases = @(
-      @{ Args = @("SqlServer", "2019");               Expected="SQL SERVER 2019 (Developer)" },
-      @{ Args = @("SqlServer", "2022");               Expected="SQL SERVER 2022 (Developer)" },
-      @{ Args = @("SqlServer", "2017", "Developer");  Expected="SQL SERVER 2017 (Developer)" },
-      @{ Args = @("SqlServer", "2017", "Express");    Expected="SQL SERVER 2017 (Express)" },
-      @{ Args = @("SqlServer", "2016", "Express");    Expected="SQL SERVER 2016 (Express)" },
-      @{ Args = @("SqlServer", "2014", "Express");    Expected="SQL SERVER 2014 SP3 x86 (Express)" },
-      @{ Args = @("SqlServer", "2012", "Express");    Expected="SQL SERVER 2012 SP4 (Express)" },
-      @{ Args = @("SqlServer", "2008R2", "Express");  Expected="SQL SERVER 2008 R2 SP2 x86 (Express)" },
-      @{ Args = @("SqlServer", "2008R2", "Express", "Advanced");  Expected="SQL SERVER 2008 R2 SP2 x64+x86 (Advanced Express)" },
-      @{ Args = @("SqlServer", "2008", "Express");    Expected="SQL SERVER 2008 SP3 (Express)" },
-      @{ Args = @("SqlServer", "2005", "Express");    Expected="SQL SERVER 2005 SP4 x86 (Express)" },
-      @{ Args = @("SqlServer");                       Expected="SQL SERVER 2019 (Developer)" },
-      @{ Args = @("LocalDB", "2019");                 Expected="SQL SERVER LocalDB 2019" },
-      @{ Args = @("LocalDB", "2017");                 Expected="SQL SERVER LocalDB 2017" },
-      @{ Args = @("LocalDB", "2016");                 Expected="SQL SERVER LocalDB 2016 SP2" }
-      @{ Args = @("LocalDB");                         Expected="SQL SERVER LocalDB 2019" },
-      @{ Args = @("No Such SQL Server");              Expected=""; }
+      @{ Args = @("SqlServer", "2019");                          Expected="SQL SERVER 2019 (Developer)" },
+      @{ Args = @("SqlServer", "2022");                          Expected="SQL SERVER 2022 (Developer)" },
+      @{ Args = @("SqlServer", "2017", "Developer");             Expected="SQL SERVER 2017 (Developer)" },
+      @{ Args = @("SqlServer", "2017", "Express");               Expected="SQL SERVER 2017 (Express)" },
+      @{ Args = @("SqlServer", "2016", "Express");               Expected="SQL SERVER 2016 (Express)" },
+      @{ Args = @("SqlServer", "2014", "Express");               Expected="SQL SERVER 2014 SP3 x86 (Express)" },
+      @{ Args = @("SqlServer", "2012", "Express");               Expected="SQL SERVER 2012 SP4 (Express)" },
+      @{ Args = @("SqlServer", "2008R2", "Express");             Expected="SQL SERVER 2008 R2 SP2 x86 (Express)" },
+      @{ Args = @("SqlServer", "2008R2", "Express", "Advanced"); Expected="SQL SERVER 2008 R2 SP2 x64+x86 (Advanced Express)" },
+      @{ Args = @("SqlServer", "2008", "Express");               Expected="SQL SERVER 2008 SP3 (Express)" },
+      @{ Args = @("SqlServer", "2008", "Advanced", "Express");   Expected="SQL SERVER 2008 SP4 Advanced Express" },
+      @{ Args = @("SqlServer", "2005", "Express");               Expected="SQL SERVER 2005 SP4 x86 (Express)" },
+      @{ Args = @("SqlServer");                                  Expected="SQL SERVER 2019 (Developer)" },
+      @{ Args = @("LocalDB", "2019");                            Expected="SQL SERVER LocalDB 2019" },
+      @{ Args = @("LocalDB", "2017");                            Expected="SQL SERVER LocalDB 2017" },
+      @{ Args = @("LocalDB", "2016");                            Expected="SQL SERVER LocalDB 2016 SP2" }
+      @{ Args = @("LocalDB");                                    Expected="SQL SERVER LocalDB 2019" },
+      @{ Args = @("No Such SQL Server");                         Expected=""; }
     )
 
     $errors = 0;
