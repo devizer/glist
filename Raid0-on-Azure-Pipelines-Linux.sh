@@ -199,6 +199,7 @@ if [[ -n "${MOVE_DOCKER_TO_RAID:-}" ]]; then
   sudo systemctl stop docker
   tmp="$(mktemp)"
   echo "Apply .data-root='$docker_data' for docker daemon config"
+  if [[ ! -f /etc/docker/daemon.json ]]; then echo '{}' | sudo tee /etc/docker/daemon.json >/dev/null; fi
   jq '."data-root" = "'"$docker_data"'"' /etc/docker/daemon.json > "$tmp" && sudo mv -f "$tmp" /etc/docker/daemon.json || err="fail"
   # cat /etc/docker/daemon.json
   sudo systemctl start docker || err="fail"
