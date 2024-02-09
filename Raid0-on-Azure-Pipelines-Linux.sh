@@ -222,6 +222,7 @@ echo "${RESET_FOLDERS_TO_RAID:-}" | awk -F';' '{ for(i=1; i<=NF; ++i) print $i; 
   chmod="$(sudo stat --format '%a' "$folder")"
   uowner="$(sudo stat -c '%U' "$folder")"
   gowner="$(sudo stat -c '%G' "$folder")"
+  nohup sudo rm -rf "$folder"/* &
   Say "Creating subvolume [/raid-${LOOP_TYPE}/$sv] for '$folder' (chmod is '$chmod', owner is '$uowner:$gowner')"
   sudo btrfs subvolume create /raid-${LOOP_TYPE}/${sv}
   echo "Subvolume '${sv}' successfully created. Mounting ..."
