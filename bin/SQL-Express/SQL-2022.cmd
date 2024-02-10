@@ -1,4 +1,5 @@
 @echo off
+SetLocal EnableDelayedExpansion 
 
 set v=2022-DEV
 set KEY=SQL-%v%
@@ -14,17 +15,29 @@ rem set url=https://download.microsoft.com/download/4/1/b/41b9a8c3-c2b4-4fcc-a3d
 set url=https://download.microsoft.com/download/4/1/b/41b9a8c3-c2b4-4fcc-a3d5-62feed9e6885/SQL2022-SSEI-Eval.exe
 rem DEV: SQLServer2022-DEV-x64-ENU.exe, EVAL: SQLServer2022-x64-ENU.exe
 set url=https://download.microsoft.com/download/c/c/9/cc9c6797-383c-4b24-8920-dc057c1de9d3/SQL2022-SSEI-Dev.exe
-set outfile=%AppData%\Temp\%KEY%.exe
-mkdir "%AppData%\Temp" 1>nul 2>&1
-echo [System.Net.ServicePointManager]::ServerCertificateValidationCallback={$true}; $d=new-object System.Net.WebClient; $d.DownloadFile("$Env:url","$Env:outfile") | powershell -command -
+
+If Defined TEMP (
+  set Work=%TEMP%\%KEY%
+  Rem echo Creating Archive and Setup Folder "%TEMP%\%KEY%"
+  mkdir "%TEMP%\%KEY%" 1>nul 2>&1
+)
+If Not Exist "%Work%" Set "Work="
+If Not Defined Work (
+  If Defined LocalAppData (Set Work=%LocalAppData%\Temp\%KEY%) Else (Set Work=%AppData%\Temp\%KEY%)
+  mkdir "%Work%" 1>nul 2>&1
+)
+
+set outfile=%Work%\%KEY%.exe
+echo %KEY% Archive and Setup Folder: [%Work%]
+echo [System.Net.ServicePointManager]::ServerCertificateValidationCallback={$true}; for ($i=1; $i -le 3; $i++) { $d=new-object System.Net.WebClient; try { $d.DownloadFile("$Env:url","$Env:outfile"); exit 0; } catch { Write-Host $_; Write-Host "Try $i of 3 failed for $($Env:url)" -ForegroundColor DarkRed; } } Exit 1  | powershell -command -
 
 echo DOWNLOADING SQL %v%
-echo Y | "%outfile%" /ENU /Q /Action=Download /MEDIATYPE=CAB /MEDIAPATH="%AppData%\Temp\%KEY%"
+echo Y | "%outfile%" /ENU /Q /Action=Download /MEDIATYPE=CAB /MEDIAPATH="%Work%\SETUPFILES"
 set file=SQLEXPR_x64_ENU.exe
 echo "Extracting Content"
-dir "%AppData%\Temp\%KEY%"
-"%AppData%\Temp\%KEY%\SQLServer2022-DEV-x64-ENU.exe" /qs /x:"%AppData%\Temp\%KEY%\extracted"
-del /q "%AppData%\Temp\%KEY%\SQLServer2022-DEV-x64-ENU.exe" >nul 2>&1
+dir "%Work%\SETUPFILES"
+"%Work%\SETUPFILES\SQLServer2022-DEV-x64-ENU.exe" /qs /x:"%Work%\SETUPFILES\extracted"
+del /q "%Work%\SETUPFILES\SQLServer2022-DEV-x64-ENU.exe" >nul 2>&1
                               
 
 rem The supported features on Windows Server Core are: 
@@ -39,7 +52,7 @@ rem   and SQL Client Connectivity SDK.
 for /f "delims=;" %%i in ('powershell -command "(Get-WmiObject -Class Win32_Group | where { $_.SID -eq \"S-1-5-32-545\" }).Name"') DO set users=%%i
 If Not Defined users Set users=Users
 
-"%AppData%\Temp\%KEY%\extracted\Setup.exe" /QUIETSIMPLE /ENU /INDICATEPROGRESS /ACTION=Install ^
+"%Work%\SETUPFILES\extracted\Setup.exe" /QUIETSIMPLE /ENU /INDICATEPROGRESS /ACTION=Install ^
   /IAcceptSQLServerLicenseTerms /IACCEPTROPENLICENSETERMS ^
   /UpdateEnabled=True ^
   /FEATURES=SQLENGINE,REPLICATION,FullText ^
@@ -56,4 +69,4 @@ If Not Defined users Set users=Users
   /SQLSYSADMINACCOUNTS="BUILTIN\%USERS%" ^
   /TCPENABLED=1 /NPENABLED=1
 
-rd /q /s "%AppData%\Temp\%KEY%"
+rd /q /s "%Work%"
