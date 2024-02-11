@@ -29,11 +29,11 @@ echo %KEY% Archive and Setup Folder: [%Work%]
 echo [System.Net.ServicePointManager]::ServerCertificateValidationCallback={$true}; for ($i=1; $i -le 3; $i++) { $d=new-object System.Net.WebClient; try { $d.DownloadFile("$Env:url","$Env:outfile"); exit 0; } catch { Write-Host $_; Write-Host "Try $i of 3 failed for $($Env:url)" -ForegroundColor DarkRed; } } Exit 1  | powershell -command -
 
 echo EXTRACTING SQL %v%
-"%outfile%" /qs /x:"%Work%\SETUPFILES\extracted"
+"%outfile%" /qs /x:"%Work%"
 del /q "%outfile%" >nul 2>&1
 
 echo Starting Setup.exe
-"%Work%\SETUPFILES\extracted\Setup.exe" /QUIETSIMPLE /ENU /INDICATEPROGRESS /ACTION=Install ^
+"%Work%\Setup.exe" /QUIETSIMPLE /ENU /INDICATEPROGRESS /ACTION=Install ^
   /IAcceptSQLServerLicenseTerms /IACCEPTROPENLICENSETERMS ^
   /UpdateEnabled=True ^
   /FEATURES=SQLENGINE,REPLICATION,SQL ^
