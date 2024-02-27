@@ -11,6 +11,6 @@ sudo curl -ksfSL -o "$f" "$url" || sudo curl -ksfSL -o "$f" "$url" || sudo curl 
 
 echo '#!/bin/sh
 mono '$f' "$@"
-' | sudo tee /usr/local/bin/nuget
+' | sudo tee /usr/local/bin/nuget >/dev/null
 sudo chmod +x /usr/local/bin/nuget 
 
