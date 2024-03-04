@@ -15,7 +15,7 @@ fi
 SECOND_DISK_MODE="${SECOND_DISK_MODE:-LOOP}"
 LOOP_TYPE="${LOOP_TYPE:-0}"
 FS="${FS:-BTRFS-Compressed}"
-COMPRESSION_OPTION=""; if [[ "$FS" == "BTRFS-Compressed" ]]; then COMPRESSION_OPTION=",compress-force=lzo:1"; fi
+COMPRESSION_OPTION=""; if [[ "$FS" == "BTRFS-Compressed" ]]; then COMPRESSION_OPTION=",compress-force=${BTRFS_COMPRESS_MODE:-lzo}"; fi
 
 function Wrap-Cmd() {
     local cmd="$*"
