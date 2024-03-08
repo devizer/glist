@@ -10,6 +10,7 @@ echo "Downloading '$url' as '$f'"
 sudo curl -ksfSL -o "$f" "$url" || sudo curl -ksfSL -o "$f" "$url" || sudo curl -ksfSL -o "$f" "$url" || sudo rm -f "$f"
 
 echo '#!/bin/sh
+set -e
 mono '$f' "$@"
 ' | sudo tee /usr/local/bin/nuget >/dev/null
 sudo chmod +x /usr/local/bin/nuget 
