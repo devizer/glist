@@ -25,7 +25,7 @@ function download_file() {
   local url="$1"
   local file="$2";
   local progress1="" progress2="" progress3="" 
-  if [[ "${DOWNLOAD_SHOW_PROGRESS:-" != "True" ]] || [[ ! -t 1 ]]; then
+  if [[ "${DOWNLOAD_SHOW_PROGRESS:-}" != "True" ]] || [[ ! -t 1 ]]; then
     progress1="-q -nv"       # wget
     progress2="-s"           # curl
     progress3="--quiet=true" # aria2c
@@ -76,4 +76,13 @@ function Install_LibSSL11() {
   sudo ldconfig
 }
 
-Install_LibSSL11
+function Conditional_Install_LibSSL11() {
+  if [[ -n "$(command -v ldconfig)" ]] && [[ -z "$(ldconfig -p | grep libssl.so.1.1)" ]]; then
+    echo "libssl.so.1.1 not found. Installing custom libssl 1.1"
+    Install_LibSSL11
+  else
+    echo "Exists preinstalled libssl.so.1.1. Skipping installing custom libssl 1.1"
+  fi
+}
+
+Conditional_Install_LibSSL11
