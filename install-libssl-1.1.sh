@@ -25,7 +25,7 @@ function download_file() {
   local url="$1"
   local file="$2";
   local progress1="" progress2="" progress3="" 
-  if [[ "$DOWNLOAD_SHOW_PROGRESS" != "True" ]] || [[ ! -t 1 ]]; then
+  if [[ "${DOWNLOAD_SHOW_PROGRESS:-" != "True" ]] || [[ ! -t 1 ]]; then
     progress1="-q -nv"       # wget
     progress2="-s"           # curl
     progress3="--quiet=true" # aria2c
@@ -38,7 +38,7 @@ function download_file() {
   fi
   if [[ "$(command -v curl)" != "" ]]; then
     [[ -n "${try1:-}" ]] && try1="$try1 || "
-    try1="${try1:-} curl $progress2 -f -kSL -o '$file' '$url'"
+    try1="${try1:-} curl $progress2 -f -kfSL -o '$file' '$url'"
   fi
   if [[ "$(command -v wget)" != "" ]]; then
     [[ -n "${try1:-}" ]] && try1="$try1 || "
