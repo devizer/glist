@@ -66,7 +66,7 @@ function Install_LibSSL11() {
   fi
 
   url="https://raw.githubusercontent.com/devizer/KernelManagementLab/master/Dependencies/libssl-1.1-${suffix}.tar.xz"
-  tmp="$(mktemp -d)"; test -n "$tmp" && tmp="$TMPDIR"
+  tmp="$(mktemp -d)"; test -z "$tmp" && tmp="$TMPDIR"
   file="$tmp/libssl-1.1-${suffix}.tar.xz"
   echo "Installing libssl 1.1.1m into $INSTALL_DIR"
   echo "Url is ${url}"
