@@ -31,7 +31,7 @@ export NET_TEST_RUNNERS_INSTALL_DIR
 export LINKS_FOLDER
 
 
-export NET_TEST_RUNNERS_INSTALL_DIR=/opt;
+# export NET_TEST_RUNNERS_INSTALL_DIR=/opt;
 tmp="${TMPDIR:-/tmp}"
 archive=https://raw.githubusercontent.com/devizer/glist/master/bin/net-test-runners.tar.gz;
 cmd="(wget -O $tmp/net-test-runners.tar.gz --no-check-certificate $archive 2>/dev/null || curl -o $tmp/net-test-runners.tar.gz -kSL $archive)"
