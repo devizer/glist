@@ -1,0 +1,9 @@
+set NEW_SQL_INSTANCE_NAME=
+call SQL-2022.cmd
+
+set NEW_SQL_INSTANCE_NAME=
+call SQL-2019-RTM.cmd
+
+set NEW_SQL_INSTANCE_NAME=
+call all.cmd
+

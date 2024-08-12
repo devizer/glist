@@ -35,6 +35,9 @@ $Sql_Servers_Definition = @(
   @{  Title = "SQL SERVER 2008 R2 SP2 x86 (Express)";
       Keys = @("Express", "2008R2", "SqlServer", "x86");
       Script = ".\SQL-Express-2008-R2-SP2-x86.cmd"
+      # SP3 Unattended
+      # SQLServer2008R2SP3-KB2979597-x86-ENU.exe /QS /Action=Patch /IACCEPTSQLSERVERLICENSETERMS /ENU /INSTANCENAME=SQL_2008_R2_X86
+      # Optionally /AllInstances
    },
   @{  Title = "SQL SERVER 2008 R2 SP2 x64+x86 (Advanced Express)";
       Keys = @("Express", "2008R2", "SqlServer", "x86", "x64", "Advanced");
