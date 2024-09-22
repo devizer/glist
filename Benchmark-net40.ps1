@@ -1,0 +1,1 @@
+& curl.exe -ksfSL -o "$($ENV:TEMP)\Benchmark-net40.exe" "https://raw.githubusercontent.com/devizer/glist/master/Benchmark-net40.exe"; & mono "$($ENV:TEMP)\Benchmark-net40.exe"
