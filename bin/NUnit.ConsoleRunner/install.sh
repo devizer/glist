@@ -2,9 +2,9 @@
 # url=https://raw.githubusercontent.com/devizer/glist/master/bin/NUnit.ConsoleRunner/install.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -sSL $url) | bash
 
 if [[ -z "${NUNIT_TEST_RUNNER_INSTALL_DIR:-}" ]]; then
-  defult_target_dir=/opt
+  defult_target_dir=/opt/nunit.consolerunner
   if [[ -n "${TERMUX_VERSION}" ]] && [[ -n "${PREFIX}" ]] && [[ -d "${PREFIX}" ]]; then
-    defult_target_dir="$PREFIX/share/nunit.consoleRunner"
+    defult_target_dir="$PREFIX/share/nunit.consolerunner"
   fi
 
   if [[ "$(uname -s)" == *"MINGW"* ]] && [[ -d "C:\\Windows" ]]; then
