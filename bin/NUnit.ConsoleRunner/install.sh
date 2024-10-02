@@ -31,12 +31,12 @@ export NUNIT_TEST_RUNNER_VERSION="${NUNIT_TEST_RUNNER_VERSION:-3.18.2}"
 export NUNIT_TEST_RUNNER_INSTALL_DIR="${NUNIT_TEST_RUNNER_INSTALL_DIR}/$NUNIT_TEST_RUNNER_VERSION"
 export LINKS_FOLDER
 
-echo "Downloading NUnit.ConsoleRunner v$NUNIT_TEST_RUNNER_VERSION to '$NUNIT_TEST_RUNNER_INSTALL_DIR' with link as $LINKS_FOLDER/nunit3-console"
+echo "Downloading NUnit.ConsoleRunner v$NUNIT_TEST_RUNNER_VERSION to '$NUNIT_TEST_RUNNER_INSTALL_DIR' with shell-link as $LINKS_FOLDER/nunit3-console"
 
 # export NET_TEST_RUNNERS_INSTALL_DIR=/opt;
 tmp="${TMPDIR:-/tmp}"
-archive=https://raw.githubusercontent.com/devizer/glist/master/bin/net-test-runners.tar.gz;
-cmd="(wget -O $tmp/nunit.testrunner.tar.gz --no-check-certificate $archive 2>/dev/null || curl -o nunit.testrunner.tar.gz -kfSL $archive)"
+archive="https://raw.githubusercontent.com/devizer/glist/master/bin/NUnit.ConsoleRunner/NUnit.ConsoleRunner-v$NUNIT_TEST_RUNNER_VERSION.tar.gz";
+cmd="(wget -O $tmp/nunit.testrunner.tar.gz --no-check-certificate "$archive" 2>/dev/null || curl -o nunit.testrunner.tar.gz -kfSL "$archive")"
 eval "$cmd" || eval "$cmd" || eval "$cmd" || rm -f $tmp/nunit.testrunner.tar.gz
 sudo mkdir -p "$NUNIT_TEST_RUNNER_INSTALL_DIR"
 set -eu
