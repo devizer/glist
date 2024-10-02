@@ -36,13 +36,14 @@ echo "Downloading NUnit.ConsoleRunner v$NUNIT_TEST_RUNNER_VERSION to '$NUNIT_TES
 
 # export NET_TEST_RUNNERS_INSTALL_DIR=/opt;
 tmp="${TMPDIR:-/tmp}"
-archive=https://raw.githubusercontent.com/devizer/glist/master/bin/net-test-runners.tar.gz;
-cmd="(wget -O $tmp/nunit.testrunner.tar.gz --no-check-certificate $archive 2>/dev/null || curl -o nunit.testrunner.tar.gz -kfSL $archive)"
-eval "$cmd" || eval "$cmd" || eval "$cmd" || rm -f $tmp/nunit.testrunner.tar.gz
+archive="https://raw.githubusercontent.com/devizer/glist/master/bin/NUnit.ConsoleRunner/NUnit.ConsoleRunner-v${NUNIT_TEST_RUNNER_VERSION}.tar.gz";
+cmd="(wget -O "$tmp/nunit.consolerunner.tar.gz" --no-check-certificate "$archive" 2>/dev/null || curl -o "$tmp/nunit.consolerunner.tar.gz" -kfSL "$archive")"
+eval "$cmd" || eval "$cmd" || eval "$cmd" || rm -f "$tmp/nunit.consolerunner.tar.gz"
 sudo mkdir -p "$NUNIT_TEST_RUNNER_INSTALL_DIR"
 set -eu
 pushd "$NUNIT_TEST_RUNNER_INSTALL_DIR" >/dev/null
-sudo tar xzf $tmp/nunit.testrunner.tar.gz
+sudo tar xzf "$tmp/nunit.consolerunner.tar.gz"
+rm -f "$tmp/nunit.consolerunner.tar.gz"
 echo '#!/usr/bin/env bash
       set -e; mono "'$NUNIT_TEST_RUNNER_INSTALL_DIR'/nunit3-console.exe" "$@" 
 ' | sudo tee "$LINKS_FOLDER/nunit3-console" > /dev/null
@@ -52,4 +53,3 @@ v="/tmp/nunit3c.hlp.$RANDOM"
 nunit3-console > "$v"
 echo "Version Installed: $(cat "$v" | head -1)"
 rm -f "$v"
-
