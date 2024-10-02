@@ -43,7 +43,7 @@ set -eu
 pushd "$NUNIT_TEST_RUNNER_INSTALL_DIR" >/dev/null
 sudo tar xzf $tmp/nunit.testrunner.tar.gz
 echo '#!/usr/bin/env bash
-      mono $NUNIT_TEST_RUNNER_INSTALL_DIR/nunit3-console "$@" 
+      mono "'$NUNIT_TEST_RUNNER_INSTALL_DIR'/nunit3-console" "$@" 
 ' | sudo tee "$LINKS_FOLDER/nunit3-console" > /dev/null
 sudo chmod +x "$LINKS_FOLDER/nunit3-console"
 popd >/dev/null
