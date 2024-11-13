@@ -114,6 +114,12 @@ function Get-Working-Set-for-Directory-in-KB() {
 function Setup-Raid0-on-Loop() {
     local freeSpace="$(Get-Free-Space-For-Directory-in-KB "/mnt")"
     local size=$(((freeSpace-500*1000)/1024))
+    if [[ -n "${EACH_DISK_SIZE:-}" ]]; then
+      echo "Warning"
+      echo "Maximum each disk size in raid is $size MB"
+      echo "But it is overriden as ${EACH_DISK_SIZE:-}"
+      size=${EACH_DISK_SIZE:-}
+    fi
     # size=$((12*1025))
     if [[ "$SECOND_DISK_MODE" == "LOOP" ]]; then
       Say "Creating loop-file '/mnt/disk-on-mnt' sized as ${size}M"
