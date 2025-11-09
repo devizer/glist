@@ -33,6 +33,13 @@ if [[ -z "$(command -v jq)" ]] && [[ "$FS" = *"BTRFS"* ]]; then
   Say --Display-As=Error "Warning! jq is not found. docker data can not be moved to raid"
 fi
 
+Say "Creating raid"
+echo VOLUMES
+df -h 
+echo;
+echo DISKS
+sudo fdisk -l
+
 sdb_path="/dev/sdb"
 sdb_path="$(sudo df | grep "/mnt" | awk '{print $1}')"
 sdb_path="${sdb_path::-1}"
