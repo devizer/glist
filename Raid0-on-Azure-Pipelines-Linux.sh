@@ -133,6 +133,7 @@ function Setup-BTRFS-on-Root() {
     local freeSpace="$(Get-Free-Space-For-Directory-in-KB "/")"
     FREE_ROOT_SPACE_MB="${FREE_ROOT_SPACE_MB:-3000}"
     local size=$(((freeSpace-FREE_ROOT_SPACE_MB*1000)/1024))
+    echo "FREE_ROOT_SPACE_MB: $FREE_ROOT_SPACE_MB MB, disk size: $size KB"
     if [[ -n "${EACH_DISK_SIZE:-}" ]]; then
       echo "Warning"
       echo "Maximum each disk size in raid is $size MB"
