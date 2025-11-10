@@ -40,8 +40,9 @@ echo;
 echo DISKS
 sudo fdisk -l
 
+set +e
 sdb_path="/dev/sdb"
-sdb_path="$(sudo df | grep "/mnt" | awk '{print $1}')"
+sdb_path="$(sudo df | grep "/mnt" | awk '{print $1}' || true)"
 echo "1) sdb_path = $sdb_path"
 [[ -n "$sdb_path" ]] && sdb_path="${sdb_path::-1}"
 echo "2) sdb_path = $sdb_path"
@@ -49,6 +50,7 @@ sda_path="/dev/sda"; [[ "$sdb_path" == "/dev/sda" ]] && sda_path="/dev/sdb";
 echo "3) sdb_path = $sdb_path"
 Say "/mnt disk: [${sdb_path}1]; / (the root) disk: ${sda_path}1"
 sudo mount | grep "/ \|/mnt " || true
+set -e
 
 if [[ -f /mnt/swapfile ]]; then 
   echo; echo "SWAPOFF and DELETE /mnt/swapfile"
