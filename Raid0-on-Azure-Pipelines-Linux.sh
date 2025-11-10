@@ -173,7 +173,7 @@ function Setup-BTRFS-on-Root() {
     sudo chown -R "$(whoami)" /raid-${LOOP_TYPE}
     # ls -la /raid-${LOOP_TYPE}
 
-    Say "Setup-Raid0 on /raid-${LOOP_TYPE} completed"
+    Say "Setup BTRFS on /raid-${LOOP_TYPE} completed"
 }
 
 
@@ -252,8 +252,10 @@ function Setup-Raid0-on-Loop() {
 # Wrap-Cmd sudo cat /etc/mdadm/mdadm.conf
 if [[ -n "$sdb_path" ]]; then
   Setup-Raid0-on-Loop
+  theRoot='/dev/md0'
 else
   Setup-BTRFS-on-Root
+  theRoot="/raid-${LOOP_TYPE}"
 fi
 
 if [[ -n "${MOVE_DOCKER_TO_RAID:-}" ]]; then
@@ -269,7 +271,7 @@ if [[ -n "${MOVE_DOCKER_TO_RAID:-}" ]]; then
     echo "Create docker-data subvolume for $docker_data folder ..."
     sudo mkdir -p "$docker_data"
     sudo btrfs subvolume create /raid-${LOOP_TYPE}/docker-data
-    sudo mount -t btrfs /dev/md0 "$docker_data" -o "defaults,noatime,nodiratime${COMPRESSION_OPTION},commit=2000,nodiscard,nobarrier,subvol=docker-data"
+    sudo mount -t btrfs "$theRoot" "$docker_data" -o "defaults,noatime,nodiratime${COMPRESSION_OPTION},commit=2000,nodiscard,nobarrier,subvol=docker-data"
   fi
   # cat /etc/docker/daemon.json
   sudo systemctl stop docker
@@ -306,7 +308,7 @@ echo "${RESET_FOLDERS_TO_RAID:-}" | awk -F';' '{ for(i=1; i<=NF; ++i) print $i; 
   # echo "DO NOT RM /raid-${LOOP_TYPE}/${sv} ????"
   # sudo rm -rf "/raid-${LOOP_TYPE}/${sv}"
   # size="$(sudo du -h -d 0 "$folder" | awk '{print $1}')"; echo "Original size: '$size'"
-  sudo mount -t btrfs /dev/md0 "$folder" -o "defaults,noatime,nodiratime${COMPRESSION_OPTION},commit=2000,nodiscard,nobarrier,subvol=${sv}"
+  sudo mount -t btrfs "$theRoot" "$folder" -o "defaults,noatime,nodiratime${COMPRESSION_OPTION},commit=2000,nodiscard,nobarrier,subvol=${sv}"
   test -n "$chmod" && sudo chmod -R "$chmod" "$folder"
   sudo chown -R "$(whoami)" "$folder"
   chmod="$(sudo stat --format '%a' "$folder")"
@@ -320,3 +322,6 @@ else
     Say --Display-As=Error "Unable to reset folders '${RESET_FOLDERS_TO_RAID:-}' to raid. It is supported on BTRFS or BTRFS-Compressed file system"
   fi
 fi
+
+Say "FINAL VOLUMES"
+sudo df -h -T
