@@ -40,26 +40,15 @@ echo;
 echo DISKS
 sudo fdisk -l
 
-set +e
 sdb_path="/dev/sdb"
-sdb_path="$(sudo df | grep "/mnt" | awk '{print $1}' || true)"
-echo "1) sdb_path = $sdb_path"
-[[ -n "$sdb_path" ]] && sdb_path="${sdb_path::-1}"
-echo "2) sdb_path = $sdb_path"
+sdb_path="$(sudo df | grep "/mnt" | awk '{print $1}')"
+sdb_path="${sdb_path::-1}"
 sda_path="/dev/sda"; [[ "$sdb_path" == "/dev/sda" ]] && sda_path="/dev/sdb";
-echo "3) sdb_path = $sdb_path"
-[[ -n "$sdb_path" ]] && Say "SECOND DISK /mnt disk: [${sdb_path}1]"
-Say "ROOT DISK '/': ${sda_path}1"
-sudo mount | grep "/ \|/mnt " || true
-set -e
+Say "/mnt disk: [${sdb_path}1]; / (the root) disk: ${sda_path}1"
+sudo mount | grep "/ \|/mnt "
 
-if [[ -f /mnt/swapfile ]]; then 
-  echo; echo "SWAPOFF and DELETE /mnt/swapfile"
-  sudo swapoff /mnt/swapfile
-  sudo rm -f /mnt/swapfile
-else
-  echo "Missing /mnt/swapfile. New Image Detected"
-fi
+sudo swapoff /mnt/swapfile
+sudo rm -f /mnt/swapfile
 
 function Create-New-Swap() {
   sudo dd if=/dev/zero of=/mnt/swap100m bs=128K count=782
@@ -111,7 +100,7 @@ w
 # sudo apt-get install util-linux fio tree -y -qq >/dev/null
 Wrap-Cmd sudo tree -a -h -u /mnt
 Wrap-Cmd sudo swapon
-sudo cp -f /mnt/*.txt "$SYSTEM_ARTIFACTSDIRECTORY/" || true
+sudo cp -f /mnt/*.txt "$SYSTEM_ARTIFACTSDIRECTORY/"
 
 function Get-Free-Space-For-Directory-in-KB() {
     local dir="${1}"
@@ -128,54 +117,6 @@ function Get-Working-Set-for-Directory-in-KB() {
     if [[ "$ret" -gt "$maxKb" ]]; then ret="$maxKb"; fi
     echo "$ret";
 }
-
-function Setup-BTRFS-on-Root() {
-    local freeSpace="$(Get-Free-Space-For-Directory-in-KB "/")"
-    local size=$(((freeSpace-5000*1000)/1024))
-    if [[ -n "${EACH_DISK_SIZE:-}" ]]; then
-      echo "Warning"
-      echo "Maximum each disk size in raid is $size MB"
-      echo "But it is overriden as ${EACH_DISK_SIZE:-}"
-      size=${EACH_DISK_SIZE:-}
-    fi
-    # size=$((12*1025))
-    Say "Creating loop-file '/disk-on-root' sized as ${size}M"
-    sudo fallocate -l "${size}M" /disk-on-root
-    sudo losetup --direct-io=${LOOP_DIRECT_IO:-off} /dev/loop22 /disk-on-root
-    sudo losetup -a | grep "loop21\|loop22"
-    # Wrap-Cmd sudo mdadm --zero-superblock --verbose --force /dev/loop{21,22}
-
-    Say "Async creating 100Mb swap as '/mnt/swap100m'"
-    nohup sudo bash -c "dd if=/dev/zero of=/mnt/swap100m bs=128K count=805; mkswap /mnt/swap100m; swapon /mnt/swap100m" &
-
-
-    sudo mkdir -p /raid-${LOOP_TYPE}
-    # wrap next two lines to parameters
-    if [[ "$FS" == EXT2 ]]; then
-      Wrap-Cmd sudo mkfs.ext2 /dev/loop22
-      Wrap-Cmd sudo mount -o defaults,noatime,nodiratime /dev/loop22 /raid-${LOOP_TYPE}
-    elif [[ "$FS" == EXT4 ]]; then
-      Wrap-Cmd sudo mkfs.ext4 /dev/loop22
-      Wrap-Cmd sudo mount -o defaults,noatime,nodiratime,commit=2000,barrier=0,data=writeback /dev/loop22 /raid-${LOOP_TYPE}
-    elif [[ "$FS" == BTRFS ]]; then
-      Wrap-Cmd sudo mkfs.btrfs -m single -d single -f -O ^extref,^skinny-metadata /dev/loop22
-      Wrap-Cmd sudo mount -t btrfs /dev/loop22 /raid-${LOOP_TYPE} -o defaults,noatime,nodiratime,commit=2000,nodiscard,nobarrier
-    elif [[ "$FS" == BTRFS-Compressed ]]; then
-      # slower? 
-      Wrap-Cmd sudo mkfs.btrfs -K -m single -d single -f -O ^extref,^skinny-metadata /dev/loop22
-      Wrap-Cmd sudo mount -t btrfs /dev/loop22 /raid-${LOOP_TYPE} -o "defaults,noatime,nodiratime${COMPRESSION_OPTION},commit=2000,nodiscard,nobarrier"
-    else
-      echo "WRONG FS [$FS]. Aborting"
-      exit 77
-    fi
-    Say "FREE SPACE AFTER MOUNTING of the RAID"
-    sudo df -h -T
-    sudo chown -R "$(whoami)" /raid-${LOOP_TYPE}
-    # ls -la /raid-${LOOP_TYPE}
-
-    Say "Setup BTRFS on /raid-${LOOP_TYPE} completed"
-}
-
 
 function Setup-Raid0-on-Loop() {
     local freeSpace="$(Get-Free-Space-For-Directory-in-KB "/mnt")"
@@ -250,15 +191,7 @@ function Setup-Raid0-on-Loop() {
 }
 
 # Wrap-Cmd sudo cat /etc/mdadm/mdadm.conf
-if [[ -n "$sdb_path" ]]; then
-  Setup-Raid0-on-Loop
-  theDevice="/dev/md0"
-else
-  Setup-BTRFS-on-Root
-  # theRoot="/dev/loop22"
-  theDevice="/dev/loop22"
-fi
-theRoot="/raid-${LOOP_TYPE}"
+Setup-Raid0-on-Loop
 
 if [[ -n "${MOVE_DOCKER_TO_RAID:-}" ]]; then
   err=""
@@ -273,8 +206,7 @@ if [[ -n "${MOVE_DOCKER_TO_RAID:-}" ]]; then
     echo "Create docker-data subvolume for $docker_data folder ..."
     sudo mkdir -p "$docker_data"
     sudo btrfs subvolume create /raid-${LOOP_TYPE}/docker-data
-    # sudo mount -t btrfs "$theRoot" "$docker_data" -o "defaults,noatime,nodiratime${COMPRESSION_OPTION},commit=2000,nodiscard,nobarrier,subvol=docker-data"
-    sudo mount -t btrfs "$theDevice" "$docker_data" -o "defaults,noatime,nodiratime${COMPRESSION_OPTION},commit=2000,nodiscard,nobarrier,subvol=docker-data"
+    sudo mount -t btrfs /dev/md0 "$docker_data" -o "defaults,noatime,nodiratime${COMPRESSION_OPTION},commit=2000,nodiscard,nobarrier,subvol=docker-data"
   fi
   # cat /etc/docker/daemon.json
   sudo systemctl stop docker
@@ -305,14 +237,13 @@ echo "${RESET_FOLDERS_TO_RAID:-}" | awk -F';' '{ for(i=1; i<=NF; ++i) print $i; 
   gowner="$(sudo stat -c '%G' "$folder")"
   nohup sudo rm -rf "$folder"/* &
   Say "Creating subvolume [/raid-${LOOP_TYPE}/$sv] for '$folder' (chmod is '$chmod', owner is '$uowner:$gowner')"
-  # sudo btrfs subvolume create /raid-${LOOP_TYPE}/${sv}
-  sudo btrfs subvolume create "raid-${LOOP_TYPE}/${sv}"
+  sudo btrfs subvolume create /raid-${LOOP_TYPE}/${sv}
   echo "Subvolume '${sv}' successfully created. Mounting ..."
   # sudo btrfs subvolume list /raid-${LOOP_TYPE} | sort
   # echo "DO NOT RM /raid-${LOOP_TYPE}/${sv} ????"
   # sudo rm -rf "/raid-${LOOP_TYPE}/${sv}"
   # size="$(sudo du -h -d 0 "$folder" | awk '{print $1}')"; echo "Original size: '$size'"
-  sudo mount -t btrfs "$theDevice" "$folder" -o "defaults,noatime,nodiratime${COMPRESSION_OPTION},commit=2000,nodiscard,nobarrier,subvol=${sv}"
+  sudo mount -t btrfs /dev/md0 "$folder" -o "defaults,noatime,nodiratime${COMPRESSION_OPTION},commit=2000,nodiscard,nobarrier,subvol=${sv}"
   test -n "$chmod" && sudo chmod -R "$chmod" "$folder"
   sudo chown -R "$(whoami)" "$folder"
   chmod="$(sudo stat --format '%a' "$folder")"
@@ -326,6 +257,3 @@ else
     Say --Display-As=Error "Unable to reset folders '${RESET_FOLDERS_TO_RAID:-}' to raid. It is supported on BTRFS or BTRFS-Compressed file system"
   fi
 fi
-
-Say "FINAL VOLUMES"
-sudo df -h -T
