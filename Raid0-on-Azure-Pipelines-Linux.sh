@@ -256,6 +256,7 @@ if [[ -n "$sdb_path" ]]; then
 else
   Setup-BTRFS-on-Root
   theRoot="/raid-${LOOP_TYPE}"
+  theRoot="/dev/loop22"
 fi
 
 if [[ -n "${MOVE_DOCKER_TO_RAID:-}" ]]; then
@@ -302,7 +303,8 @@ echo "${RESET_FOLDERS_TO_RAID:-}" | awk -F';' '{ for(i=1; i<=NF; ++i) print $i; 
   gowner="$(sudo stat -c '%G' "$folder")"
   nohup sudo rm -rf "$folder"/* &
   Say "Creating subvolume [/raid-${LOOP_TYPE}/$sv] for '$folder' (chmod is '$chmod', owner is '$uowner:$gowner')"
-  sudo btrfs subvolume create /raid-${LOOP_TYPE}/${sv}
+  # sudo btrfs subvolume create /raid-${LOOP_TYPE}/${sv}
+  sudo btrfs subvolume create "$theRoot/${sv}"
   echo "Subvolume '${sv}' successfully created. Mounting ..."
   # sudo btrfs subvolume list /raid-${LOOP_TYPE} | sort
   # echo "DO NOT RM /raid-${LOOP_TYPE}/${sv} ????"
