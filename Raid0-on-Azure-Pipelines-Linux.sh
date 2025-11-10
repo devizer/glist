@@ -129,6 +129,54 @@ function Get-Working-Set-for-Directory-in-KB() {
     echo "$ret";
 }
 
+function Setup-BTRFS-on-Root() {
+    local freeSpace="$(Get-Free-Space-For-Directory-in-KB "/")"
+    local size=$(((freeSpace-5000*1000)/1024))
+    if [[ -n "${EACH_DISK_SIZE:-}" ]]; then
+      echo "Warning"
+      echo "Maximum each disk size in raid is $size MB"
+      echo "But it is overriden as ${EACH_DISK_SIZE:-}"
+      size=${EACH_DISK_SIZE:-}
+    fi
+    # size=$((12*1025))
+    Say "Creating loop-file '/disk-on-root' sized as ${size}M"
+    sudo fallocate -l "${size}M" /disk-on-root
+    sudo losetup --direct-io=${LOOP_DIRECT_IO:-off} /dev/loop22 /disk-on-root
+    sudo losetup -a | grep "loop21\|loop22"
+    # Wrap-Cmd sudo mdadm --zero-superblock --verbose --force /dev/loop{21,22}
+
+    Say "Async creating 100Mb swap as '/mnt/swap100m'"
+    nohup sudo bash -c "dd if=/dev/zero of=/mnt/swap100m bs=128K count=805; mkswap /mnt/swap100m; swapon /mnt/swap100m" &
+
+
+    sudo mkdir -p /raid-${LOOP_TYPE}
+    # wrap next two lines to parameters
+    if [[ "$FS" == EXT2 ]]; then
+      Wrap-Cmd sudo mkfs.ext2 /dev/loop22
+      Wrap-Cmd sudo mount -o defaults,noatime,nodiratime /dev/loop22 /raid-${LOOP_TYPE}
+    elif [[ "$FS" == EXT4 ]]; then
+      Wrap-Cmd sudo mkfs.ext4 /dev/loop22
+      Wrap-Cmd sudo mount -o defaults,noatime,nodiratime,commit=2000,barrier=0,data=writeback /dev/loop22 /raid-${LOOP_TYPE}
+    elif [[ "$FS" == BTRFS ]]; then
+      Wrap-Cmd sudo mkfs.btrfs -m single -d single -f -O ^extref,^skinny-metadata /dev/loop22
+      Wrap-Cmd sudo mount -t btrfs /dev/loop22 /raid-${LOOP_TYPE} -o defaults,noatime,nodiratime,commit=2000,nodiscard,nobarrier
+    elif [[ "$FS" == BTRFS-Compressed ]]; then
+      # slower? 
+      Wrap-Cmd sudo mkfs.btrfs -K -m single -d single -f -O ^extref,^skinny-metadata /dev/loop22
+      Wrap-Cmd sudo mount -t btrfs /dev/loop22 /raid-${LOOP_TYPE} -o "defaults,noatime,nodiratime${COMPRESSION_OPTION},commit=2000,nodiscard,nobarrier"
+    else
+      echo "WRONG FS [$FS]. Aborting"
+      exit 77
+    fi
+    Say "FREE SPACE AFTER MOUNTING of the RAID"
+    sudo df -h -T
+    sudo chown -R "$(whoami)" /raid-${LOOP_TYPE}
+    # ls -la /raid-${LOOP_TYPE}
+
+    Say "Setup-Raid0 on /raid-${LOOP_TYPE} completed"
+}
+
+
 function Setup-Raid0-on-Loop() {
     local freeSpace="$(Get-Free-Space-For-Directory-in-KB "/mnt")"
     local size=$(((freeSpace-500*1000)/1024))
@@ -202,7 +250,11 @@ function Setup-Raid0-on-Loop() {
 }
 
 # Wrap-Cmd sudo cat /etc/mdadm/mdadm.conf
-Setup-Raid0-on-Loop
+if [[ -n "$sdb_path" ]]; then
+  Setup-Raid0-on-Loop
+else
+  Setup-BTRFS-on-Root
+fi
 
 if [[ -n "${MOVE_DOCKER_TO_RAID:-}" ]]; then
   err=""
