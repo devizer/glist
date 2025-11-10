@@ -48,7 +48,8 @@ echo "1) sdb_path = $sdb_path"
 echo "2) sdb_path = $sdb_path"
 sda_path="/dev/sda"; [[ "$sdb_path" == "/dev/sda" ]] && sda_path="/dev/sdb";
 echo "3) sdb_path = $sdb_path"
-Say "/mnt disk: [${sdb_path}1]; / (the root) disk: ${sda_path}1"
+[[ -n "$sdb_path" ]] && Say "SECOND DISK /mnt disk: [${sdb_path}1]"
+Say "ROOT DISK '/': ${sda_path}1"
 sudo mount | grep "/ \|/mnt " || true
 set -e
 
@@ -110,7 +111,7 @@ w
 # sudo apt-get install util-linux fio tree -y -qq >/dev/null
 Wrap-Cmd sudo tree -a -h -u /mnt
 Wrap-Cmd sudo swapon
-sudo cp -f /mnt/*.txt "$SYSTEM_ARTIFACTSDIRECTORY/"
+sudo cp -f /mnt/*.txt "$SYSTEM_ARTIFACTSDIRECTORY/" || true
 
 function Get-Free-Space-For-Directory-in-KB() {
     local dir="${1}"
