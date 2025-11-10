@@ -255,8 +255,8 @@ if [[ -n "$sdb_path" ]]; then
   theRoot='/dev/md0'
 else
   Setup-BTRFS-on-Root
+  # theRoot="/dev/loop22"
   theRoot="/raid-${LOOP_TYPE}"
-  theRoot="/dev/loop22"
 fi
 
 if [[ -n "${MOVE_DOCKER_TO_RAID:-}" ]]; then
