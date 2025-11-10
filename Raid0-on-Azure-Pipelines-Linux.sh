@@ -47,8 +47,13 @@ sda_path="/dev/sda"; [[ "$sdb_path" == "/dev/sda" ]] && sda_path="/dev/sdb";
 Say "/mnt disk: [${sdb_path}1]; / (the root) disk: ${sda_path}1"
 sudo mount | grep "/ \|/mnt "
 
-sudo swapoff /mnt/swapfile
-sudo rm -f /mnt/swapfile
+if [[ -f /mnt/swapfile ]]; then 
+  echo; echo "SWAPOFF and DELETE /mnt/swapfile"
+  sudo swapoff /mnt/swapfile
+  sudo rm -f /mnt/swapfile
+else
+  echo "Missing /mnt/swapfile. New Image Detected"
+fi
 
 function Create-New-Swap() {
   sudo dd if=/dev/zero of=/mnt/swap100m bs=128K count=782
