@@ -55,8 +55,8 @@ set -e
 
 if [[ -f /mnt/swapfile ]]; then 
   echo; echo "SWAPOFF and DELETE /mnt/swapfile"
-  sudo swapoff /mnt/swapfile
-  sudo rm -f /mnt/swapfile
+  sudo swapoff /mnt/swapfile || true
+  sudo rm -f /mnt/swapfile || true
 else
   echo "Missing /mnt/swapfile. New Image Detected"
 fi
