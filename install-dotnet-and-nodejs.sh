@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Here is one line installer 
+# Here is one line installer : export NODE_VER=v16.20.2
 # script=https://raw.githubusercontent.com/devizer/glist/master/install-dotnet-and-nodejs.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash -s dotnet node pwsh
 
 NODE_VER=${NODE_VER:-v14.19.1}
