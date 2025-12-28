@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# file=/usr/local/bin/DevOps-Lib.sh; sudo mkdir -p "$(basename "$file")"; url=https://raw.githubusercontent.com/devizer/glist/master/DevOps-Lib.sh; (wget -q -nv --no-check-certificate -O "$file" $url 2>/dev/null || curl -o "$file" -ksSL $url); . $file;
+# V1
+# file=/usr/local/bin/DevOps-Lib.sh; sudo mkdir -p "$(dirname "$file")"; url=https://raw.githubusercontent.com/devizer/glist/master/DevOps-Lib.sh; (wget -q -nv --no-check-certificate -O "$file" $url 2>/dev/null || curl -o "$file" -ksSL $url); . $file; printf "\n\ntest -f $file && . $file" > ~/.bashrc
 set -eu; set -o pipefail
 
 # Include Directive: [ ..\Includes\*.sh ]
