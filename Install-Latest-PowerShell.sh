@@ -44,7 +44,7 @@ function Install_PowerShell() {
   local system="$(uname -s)"
   local uname="$(uname -m)"
   local suf
-  local ext="gz"
+  local ext="tar.gz"
   local isWindows="";
   if [[ "$system" == "Darwin" ]]; then
     suf=osx-x64; [[ "$uname" == arm* ]] && suf=osx-arm64 # x86_64 for intel
@@ -59,7 +59,7 @@ function Install_PowerShell() {
     [[ "$uname" == aarch64 ]] && suf=linux-arm64
     [[ "$uname" == armv7* ]] && suf=linux-arm32
   fi
-  local url="https://github.com/PowerShell/PowerShell/releases/download/v$PSVER/powershell-$PSVER-$suf.tar.${ext}"
+  local url="https://github.com/PowerShell/PowerShell/releases/download/v$PSVER/powershell-$PSVER-$suf.${ext}"
   local file="$(basename $url)"
   Say  "Downloading PowerShell [$PSVER] for [$(uname -m)] into [$PSDIR]"
   echo "       url: $url"
