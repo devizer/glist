@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# export PSVER=7.2.1 PSDIR=/opt/pwsh
+# export PSVER=7.4.12 PSDIR=/opt/pwsh
 # url=https://raw.githubusercontent.com/devizer/glist/master/Install-Latest-PowerShell.sh; (wget -q -nv --no-check-certificate -O - $url 2>/dev/null || curl -ksSL $url) | bash
 
 function download_file() {
@@ -44,15 +44,22 @@ function Install_PowerShell() {
   local system="$(uname -s)"
   local uname="$(uname -m)"
   local suf
+  local ext="gz"
+  local isWindows="";
   if [[ "$system" == "Darwin" ]]; then
     suf=osx-x64; [[ "$uname" == arm* ]] && suf=osx-arm64 # x86_64 for intel
+  elif [[ "$system" == "MSYS"* || "$system" == "MINGW"* ]]; then
+    # todo: x86 | arm64
+    suf="win-x64"
+    ext="zip"
+    isWindows=True;
   else
     # Linux?
     suf=linux-x64; 
-    [[ "$uname" == aarch64 ]] && suf=linux-arm64; 
+    [[ "$uname" == aarch64 ]] && suf=linux-arm64
     [[ "$uname" == armv7* ]] && suf=linux-arm32
   fi
-  local url="https://github.com/PowerShell/PowerShell/releases/download/v$PSVER/powershell-$PSVER-$suf.tar.gz"
+  local url="https://github.com/PowerShell/PowerShell/releases/download/v$PSVER/powershell-$PSVER-$suf.tar.${ext}"
   local file="$(basename $url)"
   Say  "Downloading PowerShell [$PSVER] for [$(uname -m)] into [$PSDIR]"
   echo "       url: $url"
@@ -60,9 +67,15 @@ function Install_PowerShell() {
   # try-and-retry curl -kSL -o "$tmp/$file" "$url" || try-and-retry wget --no-check-certificate -O "$tmp/$file" "$url" || rm -f "$tmp/$file"
   DOWNLOAD_SHOW_PROGRESS=True
   download_file "$url" "$tmp/$file"
-  sudo mkdir -p "$PSDIR"
+  sudo="sudo"; if [[ -z "$(command -v sudo)" ]] || [[ "$isWindows" == True ]]; then sudo=""; fi
+  $sudo mkdir -p "$PSDIR"
   pushd $PSDIR >/dev/null
-  if [[ -n "$(command -v pv)" ]]; then pv "$tmp/$file" | sudo tar xzf -; else sudo tar xzf "$tmp/$file"; fi
+  if [[ -z "$isWindows" ]]; then
+    if [[ -n "$(command -v pv)" ]]; then pv "$tmp/$file" | $sudo tar xzf -; else $sudo tar xzf "$tmp/$file"; fi
+  else
+    # todo: what if 7z is missing on windows
+    7z x -bsp0 -bso0 -y "$tmp/$file"
+  fi
   popd >/dev/null
   rm -f "$tmp/$file"
   sudo chmod +x "$PSDIR/pwsh" 2>/dev/null
