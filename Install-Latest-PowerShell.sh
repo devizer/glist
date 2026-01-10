@@ -78,9 +78,13 @@ function Install_PowerShell() {
   fi
   popd >/dev/null
   rm -f "$tmp/$file"
-  sudo chmod +x "$PSDIR/pwsh" 2>/dev/null
-  test -s "$PSDIR/pwsh" && sudo ln -f -s "$PSDIR/pwsh" /usr/local/bin/pwsh
-  Say "PowerShell version: $(pwsh --version)"
+  if [[ "$isWindows" != True ]]; then
+    $sudo chmod +x "$PSDIR/pwsh" 2>/dev/null
+    test -s "$PSDIR/pwsh" && $sudo ln -f -s "$PSDIR/pwsh" /usr/local/bin/pwsh
+    Say "PowerShell version: $(pwsh --version)"
+  else
+    Say "PowerShell version: $("$PSDIR"/pwsh --version)"
+  fi
 }
 
 Install_PowerShell
