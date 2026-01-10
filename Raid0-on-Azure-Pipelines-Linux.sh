@@ -182,12 +182,15 @@ function Setup-BTRFS-on-Root() {
 function Setup-Raid0-on-Loop() {
     FREE_ROOT_SPACE_MB="${FREE_ROOT_SPACE_MB:-3000}" # 1600 is not enough
     local freeSpace="$(Get-Free-Space-For-Directory-in-KB "/mnt")"
-    local freeSpaceAligned=$(freeSpace-500*1000)
+    local freeSpaceAligned=$((freeSpace-500*1000))
     local freeSpaceOnRoot="$(Get-Free-Space-For-Directory-in-KB "/")"
-    local freeSpaceOnRootAligned=$(freeSpaceOnRoot-FREE_ROOT_SPACE_MB*1000)
+    local freeSpaceOnRootAligned=$((freeSpaceOnRoot-FREE_ROOT_SPACE_MB*1000))
     local freeSpaceMin=$(( freeSpaceAligned < freeSpaceOnRootAligned ? freeSpaceAligned : freeSpaceOnRootAligned ))
 
-    local size=$(freeSpaceMin/1024)
+    echo "Free Space on the Second Drive '/mnt' = ${freeSpace} Kb, allowed = ${freeSpaceAligned} Kb"
+    echo "Free Space on the Root Drive '/' = ${freeSpaceOnRoot} Kb, allowed = ${freeSpaceOnRootAligned} Kb"
+
+    local size=$((freeSpaceMin/1024))
     if [[ -n "${EACH_DISK_SIZE:-}" ]]; then
       echo "Warning"
       echo "Maximum each disk size in raid is $size MB"
