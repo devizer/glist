@@ -178,6 +178,12 @@ function Setup-BTRFS-on-Root() {
     Say "Setup BTRFS on /raid-${LOOP_TYPE} completed"
 }
 
+function Format_Thousand() {
+  local num="$1"
+  # LC_NUMERIC=en_US.UTF-8 printf "%'.0f\n" "$num" # but it is locale dependent
+  # Next is locale independent version for positive integers
+  awk -v n="$num" 'BEGIN { len=length(n); res=""; for (i=0;i<=len;i++) { res=substr(n,len-i+1,1) res; if (i > 0 && i < len && i % 3 == 0) { res = "," res } }; print res }' 2>/dev/null || echo "$num"
+}
 
 function Setup-Raid0-on-Loop() {
     FREE_ROOT_SPACE_MB="${FREE_ROOT_SPACE_MB:-3000}" # 1600 is not enough
@@ -187,8 +193,8 @@ function Setup-Raid0-on-Loop() {
     local freeSpaceOnRootAligned=$((freeSpaceOnRoot-FREE_ROOT_SPACE_MB*1000))
     local freeSpaceMin=$(( freeSpaceAligned < freeSpaceOnRootAligned ? freeSpaceAligned : freeSpaceOnRootAligned ))
 
-    echo "Free Space on the Second Drive '/mnt' = ${freeSpace} Kb, allowed = ${freeSpaceAligned} Kb"
-    echo "Free Space on the Root Drive '/' = ${freeSpaceOnRoot} Kb, allowed = ${freeSpaceOnRootAligned} Kb"
+    echo "Free Space on the Second Drive '/mnt' = $(Format_Thousand "$freeSpace") Kb, allowed = $(Format_Thousand "$freeSpaceAligned") Kb"
+    echo "Free Space on the Root Drive '/' =  $(Format_Thousand "$freeSpaceOnRoot") Kb, allowed = $(Format_Thousand "$freeSpaceOnRootAligned") Kb"
 
     local size=$((freeSpaceMin/1024))
     if [[ -n "${EACH_DISK_SIZE:-}" ]]; then
@@ -197,6 +203,7 @@ function Setup-Raid0-on-Loop() {
       echo "But it is overriden as ${EACH_DISK_SIZE:-}"
       size=${EACH_DISK_SIZE:-}
     fi
+    echo "Each Raid Drive Size: $(Format_Thousand "$size") MB"
     # size=$((12*1025))
     if [[ "$SECOND_DISK_MODE" == "LOOP" ]]; then
       Say "Creating loop-file '/mnt/disk-on-mnt' sized as ${size}M"
