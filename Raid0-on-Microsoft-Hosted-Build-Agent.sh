@@ -36,16 +36,18 @@ RAID_MODE=${RAID_MODE^^}
 FREE_ROOT_SPACE_MB="${FREE_ROOT_SPACE_MB:-3000}"
 FREE_SECOND_DRIVE_SPACE_MB="${FREE_SECOND_DRIVE_SPACE_MB:-500}"
 LOOP_TYPE="${LOOP_TYPE:-0}"
+LOOP_DIRECT_IO="${LOOP_DIRECT_IO:-off}"
 FS="${FS:-BTRFS-Compressed}"
 BTRFS_COMPRESS_MODE="${BTRFS_COMPRESS_MODE:-lzo}"
 SECOND_DISK_MODE="${SECOND_DISK_MODE:-LOOP}"
 COMPRESSION_OPTION=""; if [[ "$FS" == "BTRFS-Compressed" ]]; then COMPRESSION_OPTION=",compress-force=${BTRFS_COMPRESS_MODE:-lzo}"; fi
 Colorize LightGreen "Raid0-on-Microsoft-Hosted-Build-Agent.sh Actual Arguments:"
-Colorize LightGreen "     RAID_MODE: $RAID_MODE (Linear|Raid0)"
+Colorize LightGreen "     RAID_MODE: $RAID_MODE (Linear|RAID0)"
 Colorize LightGreen "     FREE_ROOT_SPACE_MB: $FREE_ROOT_SPACE_MB"
 Colorize LightGreen "     FREE_SECOND_DRIVE_SPACE_MB: $FREE_SECOND_DRIVE_SPACE_MB"
+Colorize LightGreen "     LOOP_DIRECT_IO: $LOOP_DIRECT_IO (on|off)"
 Colorize LightGreen "     FS: $FS (EXT2|EXT4|BTRFS|BTRFS-Compressed)"
-Colorize LightGreen "     BTRFS_COMPRESS_MODE: $BTRFS_COMPRESS_MODE (lzo|zstd:1|zstd:7, only for compressed btrfs)"
+Colorize LightGreen "     BTRFS_COMPRESS_MODE: $BTRFS_COMPRESS_MODE (lzo|zstd:1|..., only for compressed btrfs)"
 Colorize LightGreen "     RESET_FOLDERS_TO_RAID (btrfs only): ${RESET_FOLDERS_TO_RAID:-}"
 
 
