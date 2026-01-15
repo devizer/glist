@@ -100,13 +100,6 @@ else
   echo "Missing /mnt/swapfile. New Image Detected"
 fi
 
-function Create-New-Swap() {
-  sudo dd if=/dev/zero of=/mnt/swap100m bs=128K count=782
-  sudo mkswap /mnt/swap100m
-  sudo swapon /mnt/swap100m
-}
-# Create-New-Swap &
-
 
 Say "sudo fdisk -l"
 sudo fdisk -l | grep "Disk /dev/sd"
@@ -186,7 +179,7 @@ function Setup-BTRFS-on-Root() {
     # Wrap-Cmd sudo mdadm --zero-superblock --verbose --force /dev/loop{21,22}
 
     Say "Async creating ${SSD_SWAP_MB}Mb swap as '/mnt/swap${SSD_SWAP_MB}m'"
-    nohup sudo bash -c "dd if=/dev/zero of=/mnt/swap100m bs=1024K count=${SSD_SWAP_MB}; mkswap /mnt/swap${SSD_SWAP_MB}m; swapon /mnt/swap${SSD_SWAP_MB}m" &
+    nohup sudo bash -c "dd if=/dev/zero of=/mnt/swap"${SSD_SWAP_MB}"m bs=1024K count=${SSD_SWAP_MB}; mkswap /mnt/swap${SSD_SWAP_MB}m; swapon /mnt/swap${SSD_SWAP_MB}m" &
 
 
     sudo mkdir -p /raid-${LOOP_TYPE}
