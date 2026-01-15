@@ -282,7 +282,9 @@ function Setup-Raid0-on-Loop() {
     Say "mdadm --create ..."
     local argLevel="linear"; [[ "$RAID_MODE" == RAID0 ]] && argLevel="0"
     local err=0
-    yes | sudo mdadm --create /dev/md0 --chunk=128 --level=$argLevel --raid-devices=2 "$second_raid_disk" /dev/loop22 || err=$?
+    cmd="sudo mdadm --create /dev/md0 --chunk=128 --level=$argLevel --raid-devices=2 "$second_raid_disk" /dev/loop22"
+    echo "Create COMMAND: [$cmd]"
+    yes | $cmd  || err=$?
     if [[ $? -eq 0 ]]; then
       Say "Success: mdadm --create"
     elif [[ $? -eq 141 ]]; then
