@@ -276,11 +276,11 @@ function Setup-Raid0-on-Loop() {
     sudo losetup -a | grep "loop21\|loop22"
     # Wrap-Cmd sudo mdadm --zero-superblock --verbose --force /dev/loop{21,22}
 
-    Say "Async creating 100Mb swap as '/mnt/swap100m'"
-    nohup sudo bash -c "dd if=/dev/zero of=/mnt/swap100m bs=128K count=805; mkswap /mnt/swap100m; swapon /mnt/swap100m" &
-
 
     # Wrap-Cmd sudo fdisk -l BLOCK ONLY
+    time sudo mdadm --zero-superblock /dev/loop21 /dev/loop22 || true
+    time sudo modprobe linear || true
+
     Say "mdadm --create ..."
     local argsCreate="--level=linear"; [[ "$RAID_MODE" == RAID0 ]] && argsCreate="--chunk=128 --level=0"
     local err=0
@@ -298,6 +298,9 @@ function Setup-Raid0-on-Loop() {
 
     # sleep 1
     Wrap-Cmd sudo mdadm --detail /dev/md0
+
+    Say "Async creating ${SSD_SWAP_MB}Mb swap as '/mnt/swap${SSD_SWAP_MB}m'"
+    nohup sudo bash -c "dd if=/dev/zero of=/mnt/swap${SSD_SWAP_MB}m bs=1024K count=${SSD_SWAP_MB}; mkswap /mnt/swap${SSD_SWAP_MB}m; swapon /mnt/swap${SSD_SWAP_MB}m" &
 
     sudo mkdir -p /raid-${LOOP_TYPE}
     # wrap next two lines to parameters
