@@ -227,10 +227,10 @@ function Setup-Raid0-on-Loop() {
     RAID_MODE=${RAID_MODE^^}
     # second
     local freeSpace="$(Get-Free-Space-For-Directory-in-KB "/mnt")"
-    local freeSpaceAligned=$((freeSpace-FREE_SECOND_DRIVE_SPACE_MB))
+    local freeSpaceAligned=$((freeSpace-FREE_SECOND_DRIVE_SPACE_MB*1024))
     # root
     local freeSpaceOnRoot="$(Get-Free-Space-For-Directory-in-KB "/")"
-    local freeSpaceOnRootAligned=$((freeSpaceOnRoot-FREE_ROOT_SPACE_MB*1000))
+    local freeSpaceOnRootAligned=$((freeSpaceOnRoot-FREE_ROOT_SPACE_MB*1024))
 
     # ok for RAID0
     local freeSpaceMin=$(( freeSpaceAligned < freeSpaceOnRootAligned ? freeSpaceAligned : freeSpaceOnRootAligned ))
@@ -244,6 +244,8 @@ function Setup-Raid0-on-Loop() {
       sizeRoot="$freeSpaceMin"
       sizeSecond="$freeSpaceMin"
     fi
+    sizeRoot=$((sizeRoot/1024))
+    sizeSecond=$(($sizeSecond/1024))
 
     echo "Free Space on the Second Drive '/mnt' = $(Format_Thousand "$freeSpace") Kb, allowed = $(Format_Thousand "$freeSpaceAligned") Kb"
     echo "Free Space on the Root Drive '/' =  $(Format_Thousand "$freeSpaceOnRoot") Kb, allowed = $(Format_Thousand "$freeSpaceOnRootAligned") Kb"
