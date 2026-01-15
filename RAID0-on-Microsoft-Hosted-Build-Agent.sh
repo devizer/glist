@@ -280,7 +280,7 @@ function Setup-Raid0-on-Loop() {
 
     # Wrap-Cmd sudo fdisk -l BLOCK ONLY
     Say "mdadm --create ..."
-    local argLevel="linear"; [[ "$RAID_MODE" == LINEAR ]] && argLevel="0"
+    local argLevel="linear"; [[ "$RAID_MODE" == RAID0 ]] && argLevel="0"
     local err=0
     yes | sudo mdadm --create /dev/md0 --chunk=128 --level=$argLevel --raid-devices=2 "$second_raid_disk" /dev/loop22 || err=$?
     if [[ $? -eq 0 ]]; then
