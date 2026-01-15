@@ -38,7 +38,6 @@ FREE_ROOT_SPACE_MB="${FREE_ROOT_SPACE_MB:-3000}"
 FREE_SECOND_DRIVE_SPACE_MB="${FREE_SECOND_DRIVE_SPACE_MB:-500}"
 LOOP_TYPE="${LOOP_TYPE:-0}"
 LOOP_DIRECT_IO="${LOOP_DIRECT_IO:-off}"
-SSD_SWAP_MB="${SSD_SWAP_MB:-100}"
 FS="${FS:-BTRFS-Compressed}"
 BTRFS_COMPRESS_MODE="${BTRFS_COMPRESS_MODE:-lzo}"
 SECOND_DISK_MODE="${SECOND_DISK_MODE:-LOOP}"
@@ -47,7 +46,6 @@ Colorize LightGreen "Raid0-on-Microsoft-Hosted-Build-Agent.sh Actual Arguments:"
 Colorize LightGreen "     RAID_MODE: $RAID_MODE (Linear|RAID0)"
 Colorize LightGreen "     FREE_ROOT_SPACE_MB: $FREE_ROOT_SPACE_MB"
 Colorize LightGreen "     FREE_SECOND_DRIVE_SPACE_MB: $FREE_SECOND_DRIVE_SPACE_MB"
-Colorize LightGreen "     SSD_SWAP_MB: $SSD_SWAP_MB"
 Colorize LightGreen "     LOOP_DIRECT_IO: $LOOP_DIRECT_IO (on|off)"
 Colorize LightGreen "     FS: $FS (EXT2|EXT4|BTRFS|BTRFS-Compressed)"
 Colorize LightGreen "     BTRFS_COMPRESS_MODE: $BTRFS_COMPRESS_MODE (lzo|zstd:1|..., only for compressed btrfs)"
@@ -170,7 +168,7 @@ function Get-Working-Set-for-Directory-in-KB() {
 
 function Setup-BTRFS-on-Root() {
     local freeSpace="$(Get-Free-Space-For-Directory-in-KB "/")"
-    local size=$(((freeSpace-(FREE_ROOT_SPACE_MB*1024)-(SSD_SWAP_MB*1024)/1024))
+    local size=$(((freeSpace-FREE_ROOT_SPACE_MB*1000)/1024))
     echo "FREE_ROOT_SPACE_MB: $FREE_ROOT_SPACE_MB MB, disk size: $size MB"
     if [[ -n "${EACH_DISK_SIZE:-}" ]]; then
       echo "Warning"
@@ -185,8 +183,8 @@ function Setup-BTRFS-on-Root() {
     sudo losetup -a | grep "loop21\|loop22"
     # Wrap-Cmd sudo mdadm --zero-superblock --verbose --force /dev/loop{21,22}
 
-    Say "Async creating ${SSD_SWAP_MB}Mb swap as '/mnt/swap${SSD_SWAP_MB}m'"
-    nohup sudo bash -c "dd if=/dev/zero of=/mnt/swap100m bs=1024K count=${SSD_SWAP_MB}; mkswap /mnt/swap${SSD_SWAP_MB}m; swapon /mnt/swap${SSD_SWAP_MB}m" &
+    Say "Async creating 100Mb swap as '/mnt/swap100m'"
+    nohup sudo bash -c "dd if=/dev/zero of=/mnt/swap100m bs=128K count=805; mkswap /mnt/swap100m; swapon /mnt/swap100m" &
 
 
     sudo mkdir -p /raid-${LOOP_TYPE}
@@ -230,7 +228,7 @@ function Setup-Raid0-on-Loop() {
     RAID_MODE=${RAID_MODE^^}
     # second
     local freeSpace="$(Get-Free-Space-For-Directory-in-KB "/mnt")"
-    local freeSpaceAligned=$((freeSpace-FREE_SECOND_DRIVE_SPACE_MB*1024-SSD_SWAP_MB*1024))
+    local freeSpaceAligned=$((freeSpace-FREE_SECOND_DRIVE_SPACE_MB*1024))
     # root
     local freeSpaceOnRoot="$(Get-Free-Space-For-Directory-in-KB "/")"
     local freeSpaceOnRootAligned=$((freeSpaceOnRoot-FREE_ROOT_SPACE_MB*1024))
@@ -404,9 +402,6 @@ else
     Say --Display-As=Error "Unable to reset folders '${RESET_FOLDERS_TO_RAID:-}' to raid. It is supported on BTRFS or BTRFS-Compressed file system"
   fi
 fi
-
-Say "FINAL MOUNTS"
-sudo mount
 
 Say "FINAL VOLUMES"
 sudo df -h -T
