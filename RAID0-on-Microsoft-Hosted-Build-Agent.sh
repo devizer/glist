@@ -170,7 +170,7 @@ function Get-Working-Set-for-Directory-in-KB() {
 
 function Setup-BTRFS-on-Root() {
     local freeSpace="$(Get-Free-Space-For-Directory-in-KB "/")"
-    local size=$(((freeSpace-(FREE_ROOT_SPACE_MB*1024)-(SSD_SWAP_MB*1024)/1024))
+    local size=$(((freeSpace-FREE_ROOT_SPACE_MB*1024-SSD_SWAP_MB*1024)/1024))
     echo "FREE_ROOT_SPACE_MB: $FREE_ROOT_SPACE_MB MB, disk size: $size MB"
     if [[ -n "${EACH_DISK_SIZE:-}" ]]; then
       echo "Warning"
@@ -248,7 +248,7 @@ function Setup-Raid0-on-Loop() {
       sizeSecond="$freeSpaceMin"
     fi
     sizeRoot=$((sizeRoot/1024))
-    sizeSecond=$(($sizeSecond/1024))
+    sizeSecond=$((sizeSecond/1024))
 
     echo "Free Space on the Second Drive '/mnt' = $(Format_Thousand "$freeSpace") Kb, allowed = $(Format_Thousand "$freeSpaceAligned") Kb"
     echo "Free Space on the Root Drive '/' =  $(Format_Thousand "$freeSpaceOnRoot") Kb, allowed = $(Format_Thousand "$freeSpaceOnRootAligned") Kb"
