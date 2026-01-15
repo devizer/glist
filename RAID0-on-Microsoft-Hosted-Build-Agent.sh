@@ -43,6 +43,14 @@ FS="${FS:-BTRFS-Compressed}"
 BTRFS_COMPRESS_MODE="${BTRFS_COMPRESS_MODE:-lzo}"
 SECOND_DISK_MODE="${SECOND_DISK_MODE:-LOOP}"
 COMPRESSION_OPTION=""; if [[ "$FS" == "BTRFS-Compressed" ]]; then COMPRESSION_OPTION=",compress-force=${BTRFS_COMPRESS_MODE:-lzo}"; fi
+
+version_id=""
+[[ -f /etc/os-release ]] && . /etc/os-release && version_id="${ID:-}:${VERSION_ID}"
+if [[ "$version_id" == "ubuntu:22.04" ]] && [[ "$RAID_MODE" == LINEAR ]] ; then
+  echo "Warning! Ubuntu 22.04 on Microsoft Hosted Build Agent does not support linear raid. Forced to RAID0."
+  RAID_MODE=RAID0
+fi
+
 Colorize LightGreen "Raid0-on-Microsoft-Hosted-Build-Agent.sh Actual Arguments:"
 Colorize LightGreen "     RAID_MODE: $RAID_MODE (Linear|RAID0)"
 Colorize LightGreen "     FREE_ROOT_SPACE_MB: $FREE_ROOT_SPACE_MB"
