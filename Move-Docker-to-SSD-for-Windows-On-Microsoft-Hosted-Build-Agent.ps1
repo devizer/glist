@@ -4,6 +4,11 @@
         # $old_dir = "$(& docker info --format "{{.DockerRootDir}}")"
         # Write-Line "Docker Existing Storage " -TextGreen "[$old_dir]"
 
+        if (-not (([System.Environment]::OSVersion.Platform) -like "Win*")) {
+          echo "Move-Docker-to-SSD-for-Windows-On-Microsoft-Hosted-Build-Agent.ps1: Skipping. Not a Windows."
+          exit 0;
+        };
+
         Select-WMI-Objects Win32_LogicalDisk | ?{ @(2, 3) -contains $_.DriveType } | 
               ? { $_.FreeSpace -or $_.Size } | 
               % { [pscustomobject] @{"Free (GB)" = [Math]::Round($_.FreeSpace / 1024/1024/1024.0,2); "Size (GB)" = [Math]::Round($_.Size/1024/1024/1024.0, 2); "  Mount"="   $($_.DeviceId)" ; "  Name"="   $($_.VolumeName)" }} |
