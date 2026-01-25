@@ -12,6 +12,8 @@ sudo mkdir -p "$(dirname "$f")"
 echo "Downloading '$url' as '$f'"
 sudo curl -ksfSL -o "$f" "$url" || sudo curl -ksfSL -o "$f" "$url" || sudo curl -ksfSL -o "$f" "$url" || sudo rm -f "$f"
 
+
+echo "Creating shell-link as /usr/local/bin/nuget"
 echo '#!/bin/sh
 set -e
 mono '$f' "$@"
@@ -21,4 +23,6 @@ sudo chmod +x /usr/local/bin/nuget
 if [[ -n "$(command -v mono)" ]]; then
   # Show nuget version
   nuget 2>&1 >/tmp/nuget.ver; cat /tmp/nuget.ver | head -1
+else
+  echo "Warning! nuget installed as /usr/local/bin/nuget but mono is missing"
 fi
