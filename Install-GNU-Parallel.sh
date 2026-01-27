@@ -16,7 +16,7 @@ cd $HOME/build/parallel/source
 tar xjf "$file"
 rm -f "$file" || true
 cd *
-time (./configure --prefix="${INSTALL_PREFIX:-/usr/local}" && make -j && sudo make install)
+time (./configure --prefix="${INSTALL_PREFIX:-/usr/local}" && make -j && "$(Get-Sudo-Command)" make install)
 rm -rf $HOME/build/parallel || true
 
 mkdir -p ~/.parallel && touch ~/.parallel/will-cite
