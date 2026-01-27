@@ -29,7 +29,7 @@ fi
 
 Test-Parallel() {
   Say "Test Parallel v1"
-  find /tmp | parallel -j 3 sh -c 'x=5; echo -n "T{%}: "; echo -n {}; echo -n " is "; echo {}' \;
+  find "${TMPDIR:-/tmp}" | parallel -j 3 sh -c 'x=5; echo -n "T{%}: "; echo -n {}; echo -n " is "; echo {}' \;
   Say "Test Parallel v2"
-  time (find /tmp | parallel -j 3 sh -c 'x=5; echo -n "T{%}: "; Colorize -NoNewLine Cyan {}; echo -n " "; if [[ -f "{}" ]]; then Colorize Green $(Get-File-Size "{}"); elif [[ -d "{}" ]]; then Colorize Green $(Get-Folder-Size "{}"); else echo; fi' \; )
+  time (find "${TMPDIR:-/tmp}" | parallel -j 3 sh -c 'x=5; echo -n "T{%}: "; Colorize -NoNewLine Cyan {}; echo -n " "; if [[ -f "{}" ]]; then Colorize Green $(Get-File-Size "{}"); elif [[ -d "{}" ]]; then Colorize Green $(Get-Folder-Size "{}"); else echo; fi' \; )
 }
