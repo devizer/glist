@@ -7,7 +7,7 @@ set -eu; set -o pipefail
 perf_version_long="$(perl --version | grep -v -e '^$' | head -1)"
 url='https://ftp.gnu.org/gnu/parallel/parallel-20220822.tar.bz2'
 Say "Installing parallel $(basename "$url"); Perl Version: [$perf_version_long]"
-echo "Minimum perl version 5.8 is required"
+echo "[Info] Minimum perl version 5.8 is required"
 dir="$(basename "$file")"
 mkdir -p $HOME/build/parallel/source
 file="$HOME/build/parallel/parallel-20220822.tar.bz2"
