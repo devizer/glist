@@ -11,12 +11,13 @@ echo "[Info] Minimum perl version 5.8 is required"
 mkdir -p $HOME/build/parallel/source
 file="$HOME/build/parallel/parallel-20220822.tar.bz2"
 try-and-retry curl -kSL -o "$file" "$url"
-cd $HOME/build/parallel/source
+pushd $HOME/build/parallel/source
 tar xjf "$file"
 rm -f "$file" || true
 cd *
 time (./configure --prefix="${INSTALL_PREFIX:-/usr/local}" && make -j && "$(Get-Sudo-Command)" make install)
 rm -rf $HOME/build/parallel || true
+popd >/dev/null
 
 mkdir -p ~/.parallel && touch ~/.parallel/will-cite
 if [[ -n "$(Get-Sudo-Command)" ]]; then
