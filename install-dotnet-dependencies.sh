@@ -78,5 +78,5 @@ if [[ -n "$(command -v apt-get)" ]]; then
   echo "Installing .NET Core dependencies: $packages"
   # libssl=$(apt-cache search libssl | grep -E '^libssl1\.0\.[0-9]* ' | awk '{print $1}')
   # The curl package here is a hack that installs correct version of both libssl and libcurl
-  smart_sudo "apt-get install -y -qq --allow-unauthenticated $packages"
+  smart_sudo "apt-get install -y -qq --allow-unauthenticated $packages" | { grep -v "(Reading database" || true; }
 fi
