@@ -15,7 +15,7 @@ pushd $HOME/build/parallel/source
 tar xjf "$file"
 rm -f "$file" || true
 cd *
-time (./configure --prefix="${INSTALL_PREFIX:-/usr/local}" && make -j && "$(Get-Sudo-Command)" make install)
+time (./configure --prefix="${PREFIX:-/usr/local}" && make -j && "$(Get-Sudo-Command)" make install)
 rm -rf $HOME/build/parallel || true
 popd >/dev/null
 
