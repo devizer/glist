@@ -4,9 +4,10 @@ set -eu; set -o pipefail
 # export PREFIX="${PREFIX:-/usr/local}"
 # Run-Remote-Script https://raw.githubusercontent.com/devizer/glist/master/Install-GNU-Parallel.sh;
 
-perf_version_long="$(perl --version | grep -v -e '^$' | head -1)"
+Install-GNU-Parallel-on-Linux() {
+perl_version_long="$(perl --version | grep -v -e '^$' | head -1)"
 url='https://ftp.gnu.org/gnu/parallel/parallel-20220822.tar.bz2'
-Say "Installing parallel $(basename "$url"); Perl Version: [$perf_version_long]"
+Say "Installing parallel $(basename "$url"); Perl Version: [$perl_version_long]"
 echo "[Info] Minimum perl version 5.8 is required"
 mkdir -p $HOME/build/parallel/source
 file="$HOME/build/parallel/parallel-20220822.tar.bz2"
@@ -18,6 +19,24 @@ cd *
 time (./configure --prefix="${PREFIX:-/usr/local}" && make -j && "$(Get-Sudo-Command)" make install)
 rm -rf $HOME/build/parallel || true
 popd >/dev/null
+}
+
+if [[ "$(uname -s)" == Linux ]]; then
+  Install-GNU-Parallel-on-Linux
+elif [[ "$(uname -s)" == Darwin ]]; then
+  if [[ -n "$(command -v brew)" ]]; then
+    brew install parallel
+  elif [[ -n "$(command -v port)" ]]; then
+    sudo port install parallel
+  else
+    Say --Display-As=Error "Abort. Missing brew and port. GNU Parallel cannot be installed"
+    return 1
+  fi
+else
+  Say --Display-As=Error "Abort. GNU Parallel on windows was not tested. Please create an issue."
+  return 1
+fi
+
 
 mkdir -p ~/.parallel && touch ~/.parallel/will-cite
 if [[ -n "$(Get-Sudo-Command)" ]]; then
