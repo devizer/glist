@@ -40,7 +40,7 @@
            $config = Get-Content -Raw -Path $jsonFile | ConvertFrom-Json
            $config | Add-Member -MemberType NoteProperty -Name "data-root" -Value $new_data_root -Force
            $cpuCount=$([Environment]::ProcessorCount)
-           $config | Add-Member -MemberType NoteProperty -Name "cpu-count" -Value $cpuCount -Force
+           # $config | Add-Member -MemberType NoteProperty -Name "cpu-count" -Value $cpuCount -Force
            # $config | Add-Member -MemberType NoteProperty -Name "memory" -Value 4096 -Force
            $new_json = $config | ConvertTo-Json -Depth 10
            [System.IO.File]::WriteAllText($jsonFile, $new_json, (New-Object System.Text.UTF8Encoding($false)))
