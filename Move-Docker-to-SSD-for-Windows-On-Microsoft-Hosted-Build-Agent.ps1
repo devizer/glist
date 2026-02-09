@@ -39,7 +39,7 @@
 
            $config = Get-Content -Raw -Path $jsonFile | ConvertFrom-Json
            $config | Add-Member -MemberType NoteProperty -Name "data-root" -Value $new_data_root -Force
-           $cpuCount="$([Environment]::ProcessorCount)"
+           $cpuCount=$([Environment]::ProcessorCount)
            $config | Add-Member -MemberType NoteProperty -Name "default-cpu-count" -Value $cpuCount -Force
            $config | Add-Member -MemberType NoteProperty -Name "default-memory" -Value 4096 -Force
            $new_json = $config | ConvertTo-Json -Depth 10
