@@ -16,7 +16,7 @@
 
         $okDocker=$false; try { & docker --version *| out-null; $okDocker=$? } catch {}
         if ($okDocker) {
-           & docker version | out-host
+           # & docker version | out-host
            $dockerVersion = "$(docker --version)"
            Write-Host "Docker Version: [$dockerVersion]"
            # 17.06+: { "default-cpu-count": 4, "default-memory": 4096 }
