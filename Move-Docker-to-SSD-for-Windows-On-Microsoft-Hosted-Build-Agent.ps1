@@ -14,6 +14,15 @@
               % { [pscustomobject] @{"Free (GB)" = [Math]::Round($_.FreeSpace / 1024/1024/1024.0,2); "Size (GB)" = [Math]::Round($_.Size/1024/1024/1024.0, 2); "  Mount"="   $($_.DeviceId)" ; "  Name"="   $($_.VolumeName)" }} |
               ft -autosize | Out-String -Width 1234
 
+        $okDocker=$false; try { & docker --version *| out-null; $okDocker=$? } catch {}
+        if ($okDocker) {
+           & docker version | out-host
+           $dockerVersion = "$(docker --version)"
+           Write-Host "Docker Version: [$dockerVersion]"
+           # 17.06+: { "default-cpu-count": 4, "default-memory": 4096 }
+        }
+        
+
         if (Test-Path "D:\") {
            $new_data_root = "D:\Docker-Data"
            Write-Line -TextYellow "Upgrading Docker for maximum performance data-root = $($new_data_root)"
@@ -30,6 +39,9 @@
 
            $config = Get-Content -Raw -Path $jsonFile | ConvertFrom-Json
            $config | Add-Member -MemberType NoteProperty -Name "data-root" -Value $new_data_root -Force
+           $cpuCount="$([Environment]::ProcessorCount)"
+           $config | Add-Member -MemberType NoteProperty -Name "default-cpu-count" -Value $cpuCount -Force
+           $config | Add-Member -MemberType NoteProperty -Name "default-memory" -Value 4096 -Force
            $new_json = $config | ConvertTo-Json -Depth 10
            [System.IO.File]::WriteAllText($jsonFile, $new_json, (New-Object System.Text.UTF8Encoding($false)))
 
