@@ -27,13 +27,13 @@ while [[ $# -gt 0 ]]; do
     shift
 done
 
-# Проверка результата
-echo "Level:  $COMPRESSION_LEVEL"
-echo "Type:   $COMPRESS_TYPE"
-echo "Method: $COMPRESS_METHOD"
+# echo "Level:  $COMPRESSION_LEVEL"
+# echo "Type:   $COMPRESS_TYPE"
+# echo "Method: $COMPRESS_METHOD"
 
+method_string=", Method=$COMPRESS_METHOD"; [[ $COMPRESS_TYPE != "7z" ]] && method_string=""
 Say --Reset-Stopwatch
-Say "Pack Artifact Per Archive: [$(pwd -P)]; Compression Level = $COMPRESSION_LEVEL, Type = $COMPRESS_TYPE"
+Say "Pack Artifact Per Archive: [$(pwd -P)]; Compression Level = $COMPRESSION_LEVEL, Type = ${COMPRESS_TYPE}${method_string}"
 log=$(mktemp)
 list=$(mktemp)
 find . -maxdepth 1 -type d -not -path '.' > "$list"
