@@ -17,7 +17,7 @@ while [[ $# -gt 0 ]]; do
             COMPRESS_METHOD="${1#-}" 
             ;;
         # Тип
-        -7z|-xz|-zip|-gz) 
+        -7z|-tar.7z|-xz|-zip|-gz) 
             COMPRESS_TYPE="${1#-}" 
             ;;
         *) 
@@ -48,6 +48,9 @@ cat "$list" | while IFS= read -r line; do
     if [[ "$COMPRESS_TYPE" == "7z" ]]; then
         archive="${folder}.7z"
         7z a -ms=on -mqs=on -bd -m0=$COMPRESS_METHOD -mx=$COMPRESSION_LEVEL "$archive" "$folder" 2>&1 >"$log" || err=err
+    elif [[ "$COMPRESS_TYPE" == "tar.7z" ]]; then
+        archive="${folder}.tar.7z"
+        tar cf - "$folder" | 7z a -m0=$COMPRESS_METHOD -t7z -mmt=$(nproc) -mx=$COMPRESSION_LEVEL -si "$archive" 2>&1 >"$log" || err=err
     elif [[ "$COMPRESS_TYPE" == "xz" ]]; then
         archive="${folder}.tar.xz"
         tar cf - "$folder" | 7z a dummy -txz -mmt=$(nproc) -mx=$COMPRESSION_LEVEL -si -so > "$archive" || err=err
