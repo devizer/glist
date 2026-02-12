@@ -9,8 +9,9 @@ list=$(mktemp)
 find . -maxdepth 1 -type d -not -path '.' > "$list"
 count=$(cat "$list" | wc -l)
 index=0
-cat "$list" | while IFS= read -r folder; do
+cat "$list" | while IFS= read -r line; do
     index=$((index+1))
+    folder="$(basename "$line")"
     echo "[$index of $count] Processing folder $folder"
     startAt=$(Get-Global-Seconds)
     err=""
