@@ -50,7 +50,7 @@ cat "$list" | while IFS= read -r line; do
         7z a -ms=on -mqs=on -bd -m0=$COMPRESS_METHOD -mx=$COMPRESSION_LEVEL "$archive" "$folder" 2>&1 >"$log" || err=err
     elif [[ "$COMPRESS_TYPE" == "xz" ]]; then
         archive="${folder}.tar.xz"
-        tar cf - "$folder" | 7z a dummy -txz -mx=$COMPRESSION_LEVEL -si -so > "$archive" || err=err
+        tar cf - "$folder" | 7z a dummy -txz -mmt=$(nproc) -mx=$COMPRESSION_LEVEL -si -so > "$archive" || err=err
     else
        Colorize Red "Compression Type '$COMPRESS_TYPE' is unknown"
        return 2
