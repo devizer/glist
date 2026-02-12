@@ -7,7 +7,7 @@ Say "Pack Artifact Per Archive: [$(pwd -P)]; Compression Level = $COMPRESSION_LE
 log=$(mktemp)
 list=$(mktemp)
 find . -maxdepth 1 -type d -not -path '.' > "$list"
-count=$(wc -l)
+count=$(cat "$list" | wc -l)
 index=0
 cat "$list" | while IFS= read -r folder; do
     index=$((index+1))
