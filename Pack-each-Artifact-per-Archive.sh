@@ -3,10 +3,19 @@
 set -eu; set -o pipefail
 COMPRESSION_LEVEL="${COMPRESSION_LEVEL:-6}"
 Say "Pack Artifact Per Archive: [$(pwd -P)]; Compression Level = $COMPRESSION_LEVEL"
-find . -maxdepth 1 -type d -not -path '.' | while read -r folder; do
+log=$(mktemp)
+find . -maxdepth 1 -type d -not -path '.' | while IFS= read -r folder; do
     echo "Processing folder $folder"
     startAt=$(Get-Global-Seconds)
-    7z a -ms=on -mqs=on -bd -mx=$COMPRESSION_LEVEL "${folder}.7z" "$folder"
+    err=""
+    7z a -ms=on -mqs=on -bd -mx=$COMPRESSION_LEVEL "${folder}.7z" "$folder" 2>&1 >"$log" || err=err
+    if [[ -n "$err" ]]; then
+      Colorize Red "7-zip compression failed"
+      cat "$log"
+      rm -f "$log" 2>/dev/null || true
+      return 1
+    fi
+    rm -f "$log" 2>/dev/null || true
     seconds=$(( $(Get-Global-Seconds) - startAt ))
     seconds_string="$seconds seconds"; [[ "$seconds" == "1" ]] && seconds_string="1 second"
     Colorize LightGreen "$(Format-Thousand "$(Get-File-Size "${folder}.7z")") bytes (took $seconds_string)"
