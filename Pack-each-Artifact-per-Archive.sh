@@ -33,7 +33,7 @@ echo "Type:   $COMPRESS_TYPE"
 echo "Method: $COMPRESS_METHOD"
 
 Say --Reset-Stopwatch
-Say "Pack Artifact Per Archive: [$(pwd -P)]; Compression Level = $COMPRESSION_LEVEL"
+Say "Pack Artifact Per Archive: [$(pwd -P)]; Compression Level = $COMPRESSION_LEVEL, Type = $COMPRESS_TYPE"
 log=$(mktemp)
 list=$(mktemp)
 find . -maxdepth 1 -type d -not -path '.' > "$list"
