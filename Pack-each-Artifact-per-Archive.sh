@@ -18,6 +18,6 @@ find . -maxdepth 1 -type d -not -path '.' | while IFS= read -r folder; do
     rm -f "$log" 2>/dev/null || true
     seconds=$(( $(Get-Global-Seconds) - startAt ))
     seconds_string="$seconds seconds"; [[ "$seconds" == "1" ]] && seconds_string="1 second"
-    Colorize LightGreen "$(Format-Thousand "$(Get-File-Size "${folder}.7z")") bytes (took $seconds_string)"
+    Colorize LightGreen "OK. ${folder}.7z is $(Format-Thousand "$(Get-File-Size "${folder}.7z")") bytes (took $seconds_string)"
     rm -rf "$folder" 2>/dev/null || rm -rf "$folder" 2>/dev/null || rm -rf "$folder"
 done
