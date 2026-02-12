@@ -31,7 +31,7 @@ done
 # echo "Type:   $COMPRESS_TYPE"
 # echo "Method: $COMPRESS_METHOD"
 
-method_string=", Method=$COMPRESS_METHOD"; [[ $COMPRESS_TYPE != "7z" && $COMPRESS_TYPE != "tar.7z" ]] && method_string=""
+method_string=", Method = $COMPRESS_METHOD"; [[ $COMPRESS_TYPE != "7z" && $COMPRESS_TYPE != "tar.7z" ]] && method_string=""
 Say --Reset-Stopwatch
 Say "Pack Artifact Per Archive: [$(pwd -P)]; Compression Level = $COMPRESSION_LEVEL, Type = ${COMPRESS_TYPE}${method_string}"
 log=$(mktemp)
