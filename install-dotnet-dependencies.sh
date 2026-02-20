@@ -61,7 +61,7 @@ fi
 
 # Debian 8-11. Ubuntu 12.04-20.04 including non-LTS versions
 if [[ -n "$(command -v apt-get)" ]]; then
-  if [[ "$UPDATE_REPOS" == "true" ]]; then $sudo apt-get update --allow-unauthenticated -y -q; fi
+  if [[ "$UPDATE_REPOS" == "true" ]]; then printf "Updating apt meta ... "; $sudo apt-get update --allow-unauthenticated -y -q | safe-grep "Fetched "; fi
   liblttng="$(apt-cache search liblttng-ust0 | awk '{print $1}' | safe-grep 'liblttng-ust0')"
   libicu="$(apt-cache search libicu | safe-grep -E '^libicu[0-9]* ' | awk '{print $1}' | head -1)"
   libunwind="$(apt-cache search libunwind | safe-grep -E '^libunwind[0-9]* ' | awk '{print $1}')"
