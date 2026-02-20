@@ -127,7 +127,7 @@ Install_LibSSL11() {
       else
           (cat /etc/ld.so.conf; printf "\n$INSTALL_DIR\n";) > "$conf"
       fi
-      cp -v "$conf" /etc/ld.so.conf
+      $sudo cp -v "$conf" /etc/ld.so.conf
       rm -f "$conf" || true
     fi
     $sudo ldconfig || true
