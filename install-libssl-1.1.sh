@@ -5,6 +5,31 @@ set -e
 set -u
 set -o pipefail
 
+INSTALL_DIR=""
+NEED_REGISTRATION="False"
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --target-folder)
+      if [ -z "${2:-}" ]; then
+        echo "Error: --target-folder requires a non-empty argument" >&2
+        exit 1
+      fi
+      INSTALL_DIR="$2"
+      shift 2
+      ;;
+    --register)
+      NEED_REGISTRATION="True"
+      shift 1
+      ;;
+    *)
+      shift
+      ;;
+  esac
+done
+
+sudo=$(command -v sudo || true)
+
 export TMPDIR="${TMPDIR:-/tmp}"
 if [[ -z "${INSTALL_DIR:-}" ]]; then
   if [[ -d /usr/local/lib ]]; then INSTALL_DIR=/usr/local/lib; 
@@ -12,16 +37,16 @@ if [[ -z "${INSTALL_DIR:-}" ]]; then
   else 
     echo "Warning! Neigher /usr/local/lib nor /usr/local/lib64 exists. Creating /usr/local/lib"
     INSTALL_DIR=/usr/local/lib
-    mkdir -p $INSTALL_DIR
+    $sudo mkdir -p $INSTALL_DIR
   fi
 fi
 
 if [[ "$(uname -s)" != Linux ]]; then
-  echo "A Linux OS is expected"
+  echo "A Linux OS is expected, platform is not supported"
   exit 0
 fi
 
-function download_file() {
+download_file() {
   local url="$1"
   local file="$2";
   local progress1="" progress2="" progress3="" 
@@ -52,7 +77,7 @@ function download_file() {
   # eval try-and-retry wget $progress1 --no-check-certificate -O '$file' '$url' || eval try-and-retry curl $progress2 -kSL -o '$file' '$url'
 }
 
-function Install_LibSSL11() {
+Install_LibSSL11() {
   local machine="$(uname -a)"
   local suffix="unknown";
   local long="$(getconf LONG_BIT)"
@@ -68,20 +93,32 @@ function Install_LibSSL11() {
   url="https://raw.githubusercontent.com/devizer/KernelManagementLab/master/Dependencies/libssl-1.1-${suffix}.tar.xz"
   tmp="$(mktemp -d)"; test -z "$tmp" && tmp="$TMPDIR"
   file="$tmp/libssl-1.1-${suffix}.tar.xz"
-  echo "Installing libssl 1.1.1m into $INSTALL_DIR"
-  echo "Url is ${url}"
-  echo "Download location is $file"
+  echo "Downloading libssl 1.1.1m binaries into '$INSTALL_DIR'"
+  echo "Download url is '${url}', archive is '$file'"
   download_file "$url" "$file"
-  sudo tar xJf "$file" -C "$INSTALL_DIR"
-  sudo ldconfig
+  $sudo tar xJf "$file" -C "$INSTALL_DIR"
+  $sudo sudo ldconfig || true
+
+  if [[ "$NEED_REGISTRATION" == True ]]; then
+    echo "Registering the '' folder by ldconfig using /etc/ld.so.conf"
+    printf "\n$INSTALL_DIR\n" | $sudo tee -a /etc/ld.so.conf >/dev/null || true
+    $sudo ldconfig || true
+    ldconfig || true
+    echo "Final libssl and libcrypto registed libraries"
+    ldconfig -p | { grep "libssl\|libcrypto" || true; } || true
+  fi
 }
 
-function Conditional_Install_LibSSL11() {
-  if [[ -n "$(command -v ldconfig)" ]] && [[ -z "$(ldconfig -p | grep libssl.so.1.1)" ]]; then
-    echo "libssl.so.1.1 not found. Installing custom libssl 1.1"
-    Install_LibSSL11
+Conditional_Install_LibSSL11() {
+  if [[ -n "$(command -v ldconfig)" ]]; then
+    if [[ -z "$(ldconfig -p | grep libssl.so.1.1)" ]]; then
+      echo "libssl.so.1.1 not found. Installing custom libssl 1.1"
+      Install_LibSSL11
+    else
+      echo "Exists preinstalled libssl.so.1.1. Skipping installing custom libssl 1.1"  
+    fi
   else
-    echo "Exists preinstalled libssl.so.1.1. Skipping installing custom libssl 1.1"
+    echo "Messing ldconfig, platform is not supported"
   fi
 }
 
