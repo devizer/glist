@@ -7,6 +7,7 @@ set -o pipefail
 
 INSTALL_DIR=""
 NEED_REGISTRATION="False"
+POS=First
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -22,6 +23,14 @@ while [ $# -gt 0 ]; do
       NEED_REGISTRATION="True"
       shift 1
       ;;
+    --first)
+      POS="First"
+      shift 1
+      ;;
+    --last)
+      POS="Last"
+      shift 1
+      ;;
     *)
       shift
       ;;
@@ -33,7 +42,7 @@ sudo=$(command -v sudo || true)
 export TMPDIR="${TMPDIR:-/tmp}"
 if [[ -z "${INSTALL_DIR:-}" ]]; then
   if [[ -d /usr/local/lib ]]; then INSTALL_DIR=/usr/local/lib; 
-  elif [[ -d /usr/local/lib64 ]]; then INSTALL_DIR=/usr/local/lib64; 
+  elif [[ -d /usr/local/lib64 ]]; then INSTALL_DIR=/usr/local/lib64;
   else 
     echo "Warning! Neigher /usr/local/lib nor /usr/local/lib64 exists. Creating /usr/local/lib"
     INSTALL_DIR=/usr/local/lib
@@ -102,9 +111,24 @@ Install_LibSSL11() {
   $sudo sudo ldconfig || true
 
   if [[ "$NEED_REGISTRATION" == True ]]; then
-    if [[ "$(cat /etc/ld.so.conf)" != *"$INSTALL_DIR"* ]]; then
-      echo "Registering the '"$INSTALL_DIR"' folder by ldconfig using /etc/ld.so.conf"
-      printf "\n$INSTALL_DIR\n" | $sudo tee -a /etc/ld.so.conf >/dev/null || true
+    found=False
+    while IFS= read -r line || [[ -n "$line" ]]; do
+        if [[ "$line" == "$INSTALL_DIR" ]]; then
+            found=True
+            break
+        fi
+    done < "ld.so.conf"
+    
+    if [[ "$found" == False ]]; then
+      echo "Registering the '"$INSTALL_DIR"' folder as $POS line by ldconfig using /etc/ld.so.conf"
+      conf=$(mktemp)
+      if [[ "$POS" == First ]]; then
+          (printf "$INSTALL_DIR\n"; cat /etc/ld.so.conf) > "$conf"
+      else
+          (cat /etc/ld.so.conf; printf "\n$INSTALL_DIR\n";) > "$conf"
+      fi
+      cp -v "$conf" /etc/ld.so.conf
+      rm -f "$conf" || true
     fi
     $sudo ldconfig || true
     echo "Final libssl and libcrypto registed so-libraries"
