@@ -96,6 +96,7 @@ Install_LibSSL11() {
   echo "Downloading libssl 1.1.1m binaries into '$INSTALL_DIR'"
   echo "Download url is '${url}', archive is '$file'"
   download_file "$url" "$file"
+  $sudo mkdir -p "$INSTALL_DIR"
   $sudo tar xJf "$file" -C "$INSTALL_DIR"
   $sudo sudo ldconfig || true
 
