@@ -83,11 +83,11 @@ Install_LibSSL11() {
   local long="$(getconf LONG_BIT)"
   if [[ "${machine:-}" =~ i?86 ]];    then suffix="linux-x86"; fi
   if [[ "${machine:-}" =~ aarch64 ]]; then 
-    if [[ "${long:-}" == "32" ]]; then suffix="linux-arm"; else suffix="linux-arm64"; fi
+    if [[ "${long:-}" == "32" ]];     then suffix="linux-arm"; else suffix="linux-arm64"; fi
   fi
   if [[ "${machine:-}" =~ armv ]];    then suffix="linux-arm"; fi
-  if [[ "${machine:-}" =~ x86\_64 ]]; then 
-    if [[ "${long:-}" == "32" ]]; then suffix="linux-x86"; else suffix="linux-x64"; fi
+  if [[ "${machine:-}" =~ x86\_64 ]]; then
+    if [[ "${long:-}" == "32" ]];     then suffix="linux-x86"; else suffix="linux-x64"; fi
   fi
 
   url="https://raw.githubusercontent.com/devizer/KernelManagementLab/master/Dependencies/libssl-1.1-${suffix}.tar.xz"
@@ -101,11 +101,12 @@ Install_LibSSL11() {
   $sudo sudo ldconfig || true
 
   if [[ "$NEED_REGISTRATION" == True ]]; then
-    echo "Registering the '' folder by ldconfig using /etc/ld.so.conf"
-    printf "\n$INSTALL_DIR\n" | $sudo tee -a /etc/ld.so.conf >/dev/null || true
+    if [[ "$(cat /etc/ld.so.conf)" != *"$INSTALL_DIR"* ]]; then
+      echo "Registering the '"$INSTALL_DIR"' folder by ldconfig using /etc/ld.so.conf"
+      printf "\n$INSTALL_DIR\n" | $sudo tee -a /etc/ld.so.conf >/dev/null || true
+    fi
     $sudo ldconfig || true
-    ldconfig || true
-    echo "Final libssl and libcrypto registed libraries"
+    echo "Final libssl and libcrypto registed so-libraries"
     ldconfig -p | { grep "libssl\|libcrypto" || true; } || true
   fi
 }
