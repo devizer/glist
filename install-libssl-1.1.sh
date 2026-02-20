@@ -117,7 +117,7 @@ Install_LibSSL11() {
             found=True
             break
         fi
-    done < "ld.so.conf"
+    done < "/etc/ld.so.conf"
     
     if [[ "$found" == False ]]; then
       echo "Registering the '"$INSTALL_DIR"' folder as $POS line by ldconfig using /etc/ld.so.conf"
