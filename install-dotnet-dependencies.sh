@@ -8,7 +8,9 @@ safe-grep() {
   grep "$@" || true
 }
 
+
 UPDATE_REPOS="${UPDATE_REPOS:-false}"
+if [[ "$*" == *"--update-repo"* ]]; then UPDATE_REPOS="true"; fi
 
 # Autotests: Open SUSE Leap 42/15 & Tumbleweed. 
 # Manual Tests: SLES 12 SP5, SLES 15 SP1
