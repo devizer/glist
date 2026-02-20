@@ -91,13 +91,14 @@ Install_LibSSL11() {
   fi
 
   url="https://raw.githubusercontent.com/devizer/KernelManagementLab/master/Dependencies/libssl-1.1-${suffix}.tar.xz"
-  tmp="$(mktemp -d)"; test -z "$tmp" && tmp="$TMPDIR"
+  tmp="$(mktemp -d || true)"; test -z "$tmp" && tmp="$TMPDIR/download-libssl-1.1.1m-$RANDOM"
   file="$tmp/libssl-1.1-${suffix}.tar.xz"
   echo "Downloading libssl 1.1.1m binaries into '$INSTALL_DIR'"
   echo "Download url is '${url}', archive is '$file'"
   download_file "$url" "$file"
   $sudo mkdir -p "$INSTALL_DIR"
   $sudo tar xJf "$file" -C "$INSTALL_DIR"
+  $sudo rm -rf "$tmp" || true
   $sudo sudo ldconfig || true
 
   if [[ "$NEED_REGISTRATION" == True ]]; then
