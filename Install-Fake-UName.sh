@@ -168,12 +168,12 @@ if [[ "$machine" == aarch64 || "$machine" == arm* ]] && [[ "$bit" == "32" ]]; th
 fi
 
 
-say Yellow "Installing FAKE UNAME for $(uname -m)]"
+say Yellow "Installing FAKE UNAME for [$(uname -m)]"
 say Green "Adjected machine: [${machine}]"
 echo ${machine} > /etc/system-uname-m
 uname="$(command -v uname)"
 sudo cp "${uname}" /usr/bin/uname-bak;
 script=https://raw.githubusercontent.com/devizer/glist/master/Fake-uname.sh;
-cmd="(wget --no-check-certificate -O /tmp/Fake-uname.sh $script 2>/dev/null || curl -kSL -o /tmp/Fake-uname.sh $script)"
+cmd="(wget --no-check-certificate -O /tmp/Fake-uname.sh $script 2>/dev/null || curl -kfSL -o /tmp/Fake-uname.sh $script)"
 eval "$cmd || $cmd || $cmd" && sudo cp /tmp/Fake-uname.sh /usr/bin/uname && sudo chmod +x /usr/bin/uname; echo "OK"
 say Green "FAKE UNAME Result: [$(uname -m)]"
