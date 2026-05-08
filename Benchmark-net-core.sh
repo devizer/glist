@@ -1,12 +1,12 @@
 file=Benchmark.cs
 url=https://raw.githubusercontent.com/devizer/glist/master/$file; curl -ksfSL -o /tmp/$file "$url";
 
-
 folder=/opt/benchmark-net-core
 dotnet new console -o $folder --force
 sudo cp -v /tmp/$file $folder/Program.cs
 pushd $folder
 dotnet build -c Release -o bin -p:AllowUnsafeBlocks=true
+# dotnet run -c Release -o bin -p:AllowUnsafeBlocks=true
 popd
 
 dotnet $folder/bin/benchmark-net-core.dll

@@ -36,7 +36,7 @@
 
 
             Write("Benchmark MB/s:");
-            Perform(12);
+            Perform(222); // 222 for net core profiler optimizer, 1 otherwise 
             int total = 4;
             float sum = 0;
             for (int i = 1; i <= total; i++)
