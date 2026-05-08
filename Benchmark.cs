@@ -36,7 +36,7 @@
 
 
             Write("Benchmark MB/s:");
-            Perform(1);
+            Perform(12);
             int total = 4;
             float sum = 0;
             for (int i = 1; i <= total; i++)
